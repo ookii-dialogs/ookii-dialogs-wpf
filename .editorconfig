@@ -1,0 +1,27 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+end_of_line = crlf
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.{proj,props,sln,targets,sql}]
+indent_style = tab
+
+[*.{dna,config,nuspec,xml,xsd,csproj,vcxproj,vcproj,targets,ps1,resx}]
+indent_size = 2
+
+[*.{cpp,h,def}]
+indent_style = tab
+
+[*.dotsettings]
+end_of_line = lf
+
+[*.sas]
+indent_style = tab
+end_of_line = lf
