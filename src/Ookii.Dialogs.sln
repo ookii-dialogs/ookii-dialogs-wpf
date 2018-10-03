@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Presentation Foundation", "Windows Presentation Foundation", "{E248E2C9-CE4A-41D2-91A0-8F61AAB69247}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.Sample", "Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf", "Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj", "{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
+	EndGlobalSection
+EndGlobal

@@ -1,5 +1,5 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
-// See LICENSE for details
+// See license.txt for details
 using System;
 using System.Collections.Generic;
 using System.Text;

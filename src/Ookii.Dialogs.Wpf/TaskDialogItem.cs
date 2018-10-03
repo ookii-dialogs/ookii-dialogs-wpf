@@ -1,5 +1,5 @@
-// Copyright (c) Sven Groot (Ookii.org) 2009
-// BSD license; see LICENSE for details.
+// Copyright © Sven Groot (Ookii.org) 2009
+// BSD license; see license.txt for details.
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;

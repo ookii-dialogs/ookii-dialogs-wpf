@@ -1,5 +1,5 @@
-// Copyright (c) Sven Groot (Ookii.org) 2009
-// BSD license; see LICENSE for details.
+// Copyright © Sven Groot (Ookii.org) 2009
+// BSD license; see license.txt for details.
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety static="true" instance="false" />
     [DefaultEvent("DoWork"), DefaultProperty("Text"), Description("Represents a dialog that can be used to report progress to the user.")]
-    public partial class ProgressDialog : Component , IProgress<int>, IProgress<string>
+    public partial class ProgressDialog : Component
     {
         private class ProgressChangedData
         {
@@ -42,7 +42,6 @@ namespace Ookii.Dialogs.Wpf
         private bool _useCompactPathsForDescription;
         private SafeModuleHandle _currentAnimationModuleHandle;
         private bool _cancellationPending;
-        private int _percentProgress;
 
         /// <summary>
         /// Event raised when the dialog is displayed.
@@ -490,37 +489,6 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Displays the progress dialog as a modal dialog.
         /// </summary>
-        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
-        /// <remarks>
-        /// <para>
-        ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
-        ///   The parent window will be disabled as with all modal dialogs.
-        /// </para>
-        /// <para>
-        ///   Although this function returns immediately, you cannot use the UI thread to do any processing. The dialog
-        ///   will not function correctly unless the UI thread continues to handle window messages, so that thread may
-        ///   not be blocked by some other activity. All processing related to the progress dialog must be done in
-        ///   the <see cref="DoWork"/> event handler.
-        /// </para>
-        /// <para>
-        ///   The progress dialog's window will appear in the taskbar. This behaviour is also contrary to most .Net dialogs,
-        ///   but is part of the underlying native progress dialog API so cannot be avoided.
-        /// </para>
-        /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
-        /// </para>
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
-        /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(IntPtr owner)
-        {
-            ShowDialog(owner, null);
-        }
-
-        /// <summary>
-        /// Displays the progress dialog as a modal dialog.
-        /// </summary>
         /// <param name="owner">The window that owns the dialog.</param>
         /// <param name="argument">A parameter for use by the background operation to be executed in the <see cref="DoWork"/> event handler.</param>
         /// <remarks>
@@ -548,56 +516,6 @@ namespace Ookii.Dialogs.Wpf
         public void ShowDialog(Window owner, object argument)
         {
             RunProgressDialog(owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle, argument);
-        }
-
-        /// <summary>
-        /// Displays the progress dialog as a modal dialog.
-        /// </summary>
-        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
-        /// <param name="argument">A parameter for use by the background operation to be executed in the <see cref="DoWork"/> event handler.</param>
-        /// <remarks>
-        /// <para>
-        ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
-        ///   The parent window will be disabled as with all modal dialogs.
-        /// </para>
-        /// <para>
-        ///   Although this function returns immediately, you cannot use the UI thread to do any processing. The dialog
-        ///   will not function correctly unless the UI thread continues to handle window messages, so that thread may
-        ///   not be blocked by some other activity. All processing related to the progress dialog must be done in
-        ///   the <see cref="DoWork"/> event handler.
-        /// </para>
-        /// <para>
-        ///   The progress dialog's window will appear in the taskbar. This behaviour is also contrary to most .Net dialogs,
-        ///   but is part of the underlying native progress dialog API so cannot be avoided.
-        /// </para>
-        /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
-        /// </para>
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
-        /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(IntPtr owner, object argument)
-        {
-            RunProgressDialog(owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner, argument);
-        }
-
-        /// <summary>
-        /// Updates the dialog's progress bar.
-        /// </summary>
-        /// <param name="value">The percentage, from 0 to 100, of the operation that is complete.</param>
-        void IProgress<int>.Report(int value)
-        {
-            ReportProgress(value, null, null, null);
-        }
-
-        /// <summary>
-        /// Updates the dialog's progress bar.
-        /// </summary>
-        /// <param name="value">The new value of the progress dialog's primary text message, or <see langword="null"/> to leave the value unchanged.</param>
-        void IProgress<string>.Report(string value)
-        {
-            ReportProgress(_percentProgress, value, null, null);
         }
 
         /// <summary>
@@ -650,10 +568,6 @@ namespace Ookii.Dialogs.Wpf
                 throw new ArgumentOutOfRangeException("percentProgress");
             if( _dialog == null )
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogNotRunningError);
-
-            // we need to cache the latest percentProgress so IProgress<string>.Report(text) can report the percent progress correctly.
-            _percentProgress = percentProgress;
-
             _backgroundWorker.ReportProgress(percentProgress, new ProgressChangedData() { Text = text, Description = description, UserState = userState });
         }
 
