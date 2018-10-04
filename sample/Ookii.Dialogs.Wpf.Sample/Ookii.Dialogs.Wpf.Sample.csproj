@@ -98,7 +98,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj">
+    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj">
       <Project>{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}</Project>
       <Name>Ookii.Dialogs.Wpf</Name>
     </ProjectReference>
