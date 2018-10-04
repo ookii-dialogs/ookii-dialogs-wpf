@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -9,7 +7,13 @@ using System.Windows;
 // associated with an assembly.
 [assembly: AssemblyTitle("Ookii.Dialogs.Wpf.Sample")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 [assembly: AssemblyCompany("Ookii.org")]
 [assembly: AssemblyProduct("Ookii.Dialogs.Wpf")]
 [assembly: AssemblyCopyright("Copyright (c) Sven Groot (Ookii.org) 2009")]
@@ -55,3 +59,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0")]
