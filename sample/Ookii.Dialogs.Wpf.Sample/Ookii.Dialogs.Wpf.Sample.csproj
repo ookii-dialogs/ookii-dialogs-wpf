@@ -16,8 +16,6 @@
     <WarningLevel>4</WarningLevel>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>ookii.ico</ApplicationIcon>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ookii.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -91,7 +89,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="app.manifest" />
-    <None Include="ookii.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -115,7 +112,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>IF "$(ConfigurationName)"=="Release" "$(FrameworkSDKDir)Bin\SignTool" sign /t http://timestamp.comodoca.com/authenticode "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
