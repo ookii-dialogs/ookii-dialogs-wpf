@@ -6,7 +6,7 @@
 
 ### Getting started
 
-Install the [Ookii.Dialogs.Wpf](https://www.nuget.org/packages/Ookii.Dialogs.Wpf/) package from NuGet:
+Install the [Ookii.Dialogs.Wpf.NETCore](https://www.nuget.org/packages/Ookii.Dialogs.Wpf.NETCore/) package from NuGet:
 
 ```powershell
 Install-Package Ookii.Dialogs.Wpf.NETCore
@@ -14,7 +14,7 @@ Install-Package Ookii.Dialogs.Wpf.NETCore
 
 The included sample application [`Ookii.Dialogs.Wpf.Sample`](sample/Ookii.Dialogs.Wpf.Sample/) demonstrate the dialogs for WPF. View the source of this application to see how to use the dialogs.
 
-N.B.: **Ookii.Dialogs.Wpf** requires the [.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0). The included source code is intended for use in Visual Studio.
+N.B.: **Ookii.Dialogs.Wpf.NETCore** requires the [.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0). The included source code is intended for use in Visual Studio.
 
 ### Windows Forms compatibility
 
@@ -23,6 +23,7 @@ If you're looking to use these common dialogs on a Windows Forms application, ch
 ## Included dialogs
 
 ### Task dialog
+(Quick note, since it keeps the same Namespace as the Caio's version, the same reference is used.)
 
 [Task dialogs](https://docs.microsoft.com/en-us/windows/desktop/Controls/task-dialogs-overview) are a new type of dialog first introduced in Windows Vista. They provide a superset of the message box functionality.
 
