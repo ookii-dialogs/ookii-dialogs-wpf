@@ -12,7 +12,7 @@
     <Description>A .NET Core port of Ookii.Dialogs (based on Caio Priotte's version).
 
 This library provides .NET Core powered WPF apps to access modern dialogs (File Open and Save, Folder Picker, etc.).</Description>
-    <PackageProjectUrl>https://github.com/acemod13/ookii-dialogs-wpf</PackageProjectUrl>
+    <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>.NET Core, WPF, Ookii</PackageTags>
