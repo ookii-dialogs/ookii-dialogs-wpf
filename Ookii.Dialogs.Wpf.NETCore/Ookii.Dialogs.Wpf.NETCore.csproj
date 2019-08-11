@@ -1,0 +1,96 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
+    <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
+    <PackageId>Ookii.Dialogs.Wpf.NETCore</PackageId>
+    <Version>2.0.0-preview1</Version>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Authors>Sven Groot, Caio Priotte, AceOfAces</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CredentialDialog.bmp" />
+    <None Remove="CustomDictionary.xml" />
+    <None Remove="ProgressDialog.bmp" />
+    <None Remove="TaskDialog.bmp" />
+    <None Remove="VistaFolderBrowserDialog.bmp" />
+    <None Remove="VistaOpenFileDialog.bmp" />
+    <None Remove="VistaSaveFileDialog.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CredentialDialog.bmp" />
+    <EmbeddedResource Include="ProgressDialog.bmp" />
+    <EmbeddedResource Include="TaskDialog.bmp" />
+    <EmbeddedResource Include="VistaFolderBrowserDialog.bmp" />
+    <EmbeddedResource Include="VistaOpenFileDialog.bmp" />
+    <EmbeddedResource Include="VistaSaveFileDialog.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0-preview7.19362.9" />
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview7.19362.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CredentialDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="CredentialDialog.designer.cs">
+      <DependentUpon>CredentialDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ProgressDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="ProgressDialog.designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="TaskDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TaskDialog.designer.cs">
+      <DependentUpon>TaskDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Update="TaskDialogButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TaskDialogItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TaskDialogItem.designer.cs">
+      <DependentUpon>TaskDialogItem.cs</DependentUpon>
+    </Compile>
+    <Compile Update="TaskDialogRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Ookii.Dialogs.Wpf.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+
+</Project>
