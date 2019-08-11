@@ -1,4 +1,4 @@
-# Ookii.Dialogs.Wpf [![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf/)
+# Ookii.Dialogs.Wpf [![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.NETCore.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf.NETCore/)
 
 ## Overview
 
