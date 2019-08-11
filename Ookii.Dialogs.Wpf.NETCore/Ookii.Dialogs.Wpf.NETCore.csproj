@@ -9,6 +9,20 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, Caio Priotte, AceOfAces</Authors>
+    <Description>A .NET Core port of Ookii.Dialogs (based on Caio Priotte's version).
+
+This library provides .NET Core powered WPF apps to access modern dialogs (File Open and Save, Folder Picker, etc.).</Description>
+    <PackageProjectUrl>https://github.com/acemod13/ookii-dialogs-wpf</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags>.NET Core, WPF, Ookii</PackageTags>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>2.0.19222.0</AssemblyVersion>
+    <FileVersion>2.0.19222.0</FileVersion>
+    <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
+    <Company>Studio ACE</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +33,10 @@
     <None Remove="VistaFolderBrowserDialog.bmp" />
     <None Remove="VistaOpenFileDialog.bmp" />
     <None Remove="VistaSaveFileDialog.bmp" />
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +54,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0-preview7.19362.9" />
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview7.19362.9" />
   </ItemGroup>
 
   <ItemGroup>

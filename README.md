@@ -2,19 +2,19 @@
 
 ## Overview
 
-**Ookii.Dialogs.Wpf** is a class library for .NET applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
+**Ookii.Dialogs.Wpf.NETCore** is a class library for .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
 
 ### Getting started
 
 Install the [Ookii.Dialogs.Wpf](https://www.nuget.org/packages/Ookii.Dialogs.Wpf/) package from NuGet:
 
 ```powershell
-Install-Package Ookii.Dialogs.Wpf
+Install-Package Ookii.Dialogs.Wpf.NETCore
 ```
 
-The included sample application [`Ookii.Dialogs.Sample.Wpf`](sample/Ookii.Dialogs.Wpf.Sample/) demonstrate the dialogs for WPF. View the source of this application to see how to use the dialogs.
+The included sample application [`Ookii.Dialogs.Wpf.Sample`](sample/Ookii.Dialogs.Wpf.Sample/) demonstrate the dialogs for WPF. View the source of this application to see how to use the dialogs.
 
-N.B.: **Ookii.Dialogs.Wpf** requires the [Microsoft .NET Framework 4.5](https://www.microsoft.com/en-us/download/details.aspx?id=30653). The included source code is intended for use in Visual Studio.
+N.B.: **Ookii.Dialogs.Wpf** requires the [.NET Core 3](https://www.microsoft.com/en-us/download/details.aspx?id=30653). The included source code is intended for use in Visual Studio.
 
 ### Windows Forms compatibility
 
