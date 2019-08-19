@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{85E0D2C3-A700-4A65-BFEA-1F9A29875419}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E248E2C9-CE4A-41D2-91A0-8F61AAB69247}"
 EndProject
@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{B2AB57
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.NETCore", "Ookii.Dialogs.Wpf.NETCore\Ookii.Dialogs.Wpf.NETCore.csproj", "{D72C6E31-B4BB-4238-B44F-FD73CD29DF48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.NETCore", "src\Ookii.Dialogs.Wpf.NETCore\Ookii.Dialogs.Wpf.NETCore.csproj", "{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,17 +31,17 @@ Global
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D72C6E31-B4BB-4238-B44F-FD73CD29DF48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D72C6E31-B4BB-4238-B44F-FD73CD29DF48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D72C6E31-B4BB-4238-B44F-FD73CD29DF48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D72C6E31-B4BB-4238-B44F-FD73CD29DF48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1} = {85E0D2C3-A700-4A65-BFEA-1F9A29875419}
-		{D72C6E31-B4BB-4238-B44F-FD73CD29DF48} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
+		{0D36DCD7-E3A5-40A0-8DDD-E4C0D0047111} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C17C6EF5-4A5E-45BB-AFB9-2D0547C4D682}
