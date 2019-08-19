@@ -16,7 +16,7 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>ookii dialogs; wpf; windows-presentation-foundation; progress-dialog; task-dialog; credential-dialog; common-file-dialog</PackageTags>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>2.0.19231.0</AssemblyVersion>
