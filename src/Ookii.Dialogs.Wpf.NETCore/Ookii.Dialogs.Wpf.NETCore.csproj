@@ -19,8 +19,8 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.19222.0</AssemblyVersion>
-    <FileVersion>2.0.19222.0</FileVersion>
+    <AssemblyVersion>2.0.19231.0</AssemblyVersion>
+    <FileVersion>2.0.19231.0</FileVersion>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
     <Company>Studio ACE</Company>
   </PropertyGroup>
@@ -53,7 +53,7 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0-preview7.19362.9" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0-preview8.19405.3" />
   </ItemGroup>
 
   <ItemGroup>
