@@ -24,6 +24,8 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
     <Company>Studio ACE</Company>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+    <TieredCompilation>true</TieredCompilation>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
