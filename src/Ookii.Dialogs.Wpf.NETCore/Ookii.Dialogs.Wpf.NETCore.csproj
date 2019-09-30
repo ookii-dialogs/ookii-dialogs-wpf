@@ -5,7 +5,7 @@
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf.NETCore</PackageId>
-    <Version>2.0.0-preview1</Version>
+    <Version>2.0.0</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, Caio Proiete, AceOfAces</Authors>
@@ -19,10 +19,25 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.19231.19256</AssemblyVersion>
-    <FileVersion>2.0.19231.19256</FileVersion>
+    <AssemblyVersion>2.0.19273.0</AssemblyVersion>
+    <FileVersion>2.0.19273.0</FileVersion>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
     <Company>Studio ACE</Company>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.None.DateStamp.None</AssemblyVersionSettings>
+    <UpdatePackageVersion>True</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+    <AssemblyFileVersionSettings>None.None.DateStamp.None</AssemblyFileVersionSettings>
+    <PackageVersionSettings>AssemblyVersion.None.None</PackageVersionSettings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,7 +68,7 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0-preview9.19421.4" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
