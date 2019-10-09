@@ -608,17 +608,13 @@ namespace Ookii.Dialogs.Wpf
             // Set the default file name
             if( !(_fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0])) )
             {
-                string parent = Path.GetDirectoryName(_fileNames[0]);
-                if( parent == null || !Directory.Exists(parent) )
-                {
-                    dialog.SetFileName(_fileNames[0]);
-                }
-                else
-                {
-                    string folder = Path.GetFileName(_fileNames[0]);
-                    dialog.SetFolder(NativeMethods.CreateItemFromParsingName(parent));
-                    dialog.SetFileName(folder);
-                }
+                dialog.SetFileName(_fileNames[0]);
+            }
+
+            // Set the default directory
+            if( Directory.Exists(_initialDirectory) )
+            {
+                dialog.SetFolder(NativeMethods.CreateItemFromParsingName(_initialDirectory));
             }
 
             // Set the filter
@@ -641,13 +637,6 @@ namespace Ookii.Dialogs.Wpf
             if( _addExtension && !string.IsNullOrEmpty(_defaultExt) )
             {
                 dialog.SetDefaultExtension(_defaultExt);
-            }
-
-            // Initial directory
-            if( !string.IsNullOrEmpty(_initialDirectory) )
-            {
-                Ookii.Dialogs.Wpf.Interop.IShellItem item = NativeMethods.CreateItemFromParsingName(_initialDirectory);
-                dialog.SetDefaultFolder(item);
             }
 
             if( !string.IsNullOrEmpty(_title) )
