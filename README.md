@@ -4,7 +4,11 @@
 
 **Ookii.Dialogs.Wpf** is a class library for .NET applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
 
-### Getting started
+## Give a Star! :star:
+
+If you like or are using this project please give it a star. Thanks!
+
+## Getting started
 
 Install the [Ookii.Dialogs.Wpf](https://www.nuget.org/packages/Ookii.Dialogs.Wpf/) package from NuGet:
 
