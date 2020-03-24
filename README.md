@@ -74,6 +74,6 @@ The classes have been designed to resemble the original WPF classes to make it e
 
 Copyright (c) Sven Groot 2009
 
-Copyright (c) Caio Proiete 2018
+Copyright (c) Caio Proiete 2018-2020
 
 See [LICENSE](LICENSE) for details
