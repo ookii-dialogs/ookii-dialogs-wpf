@@ -24,7 +24,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety static="true" instance="false" />
     [DefaultEvent("DoWork"), DefaultProperty("Text"), Description("Represents a dialog that can be used to report progress to the user.")]
-    public partial class ProgressDialog : Component
+    public partial class ProgressDialog : Component , IProgress<int>, IProgress<string>
     {
         private class ProgressChangedData
         {
@@ -42,6 +42,7 @@ namespace Ookii.Dialogs.Wpf
         private bool _useCompactPathsForDescription;
         private SafeModuleHandle _currentAnimationModuleHandle;
         private bool _cancellationPending;
+        private int _percentProgress;
 
         /// <summary>
         /// Event raised when the dialog is displayed.
@@ -521,6 +522,24 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Updates the dialog's progress bar.
         /// </summary>
+        /// <param name="value">The percentage, from 0 to 100, of the operation that is complete.</param>
+        void IProgress<int>.Report(int value)
+        {
+            ReportProgress(value, null, null, null);
+        }
+
+        /// <summary>
+        /// Updates the dialog's progress bar.
+        /// </summary>
+        /// <param name="value">The new value of the progress dialog's primary text message, or <see langword="null"/> to leave the value unchanged.</param>
+        void IProgress<string>.Report(string value)
+        {
+            ReportProgress(_percentProgress, value, null, null);
+        }
+
+        /// <summary>
+        /// Updates the dialog's progress bar.
+        /// </summary>
         /// <param name="percentProgress">The percentage, from 0 to 100, of the operation that is complete.</param>
         /// <remarks>
         /// <para>
@@ -568,6 +587,10 @@ namespace Ookii.Dialogs.Wpf
                 throw new ArgumentOutOfRangeException("percentProgress");
             if( _dialog == null )
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogNotRunningError);
+
+            // we need to cache the latest percentProgress so IProgress<string>.Report(text) can report the percent progress correctly.
+            _percentProgress = percentProgress;
+
             _backgroundWorker.ReportProgress(percentProgress, new ProgressChangedData() { Text = text, Description = description, UserState = userState });
         }
 
