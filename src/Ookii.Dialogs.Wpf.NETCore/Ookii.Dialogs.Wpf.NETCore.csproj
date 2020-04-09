@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf.NETCore</PackageId>
@@ -17,7 +17,7 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <RepositoryType></RepositoryType>
     <PackageTags>ookii dialogs; wpf; windows-presentation-foundation; progress-dialog; task-dialog; credential-dialog; common-file-dialog</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>2.0.20100.0</AssemblyVersion>
     <FileVersion>2.0.20100.0</FileVersion>
@@ -26,6 +26,8 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
     <TieredCompilation>true</TieredCompilation>
+    <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
+    <PackageReleaseNotes>-Removed unnecessary Nuget package. NET Core 3 already covers this.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -50,6 +52,10 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <None Remove="VistaFolderBrowserDialog.bmp" />
     <None Remove="VistaOpenFileDialog.bmp" />
     <None Remove="VistaSaveFileDialog.bmp" />
+    <None Include="..\..\assets\ookii-dialogs-wpf-nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
