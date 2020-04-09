@@ -5,7 +5,7 @@
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf.NETCore</PackageId>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, Caio Proiete, AceOfAces</Authors>
@@ -19,8 +19,8 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://github.com/acemod13/ookii-dialogs-wpf/raw/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.19273.0</AssemblyVersion>
-    <FileVersion>2.0.19273.0</FileVersion>
+    <AssemblyVersion>2.0.20100.0</AssemblyVersion>
+    <FileVersion>2.0.20100.0</FileVersion>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
     <Company>Studio ACE</Company>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,6 +50,10 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <None Remove="VistaFolderBrowserDialog.bmp" />
     <None Remove="VistaOpenFileDialog.bmp" />
     <None Remove="VistaSaveFileDialog.bmp" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -67,10 +71,6 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <EmbeddedResource Include="VistaFolderBrowserDialog.bmp" />
     <EmbeddedResource Include="VistaOpenFileDialog.bmp" />
     <EmbeddedResource Include="VistaSaveFileDialog.bmp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

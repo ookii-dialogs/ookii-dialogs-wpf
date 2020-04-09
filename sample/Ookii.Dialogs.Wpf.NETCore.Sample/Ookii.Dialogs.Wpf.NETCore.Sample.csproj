@@ -13,8 +13,8 @@
     <Description>A sample app that demonstrates how Ookii.Dialogs works.</Description>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.19273</AssemblyVersion>
-    <FileVersion>1.0.0.19273</FileVersion>
+    <AssemblyVersion>1.0.0.20100</AssemblyVersion>
+    <FileVersion>1.0.0.20100</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject>Ookii.Dialogs.Wpf.Sample.App</StartupObject>
   </PropertyGroup>

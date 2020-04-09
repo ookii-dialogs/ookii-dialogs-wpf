@@ -1,7 +1,6 @@
 // Copyright (c) Sven Groot (Ookii.org) 2009
 // BSD license; see LICENSE for details.
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.IO;
@@ -80,8 +79,8 @@ namespace Ookii.Dialogs.Wpf
         /// One of the <see cref="System.Environment.SpecialFolder" /> values. The default is Desktop.
         /// </value>
         /// <exception cref="System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="System.Environment.SpecialFolder" /> values.</exception>
-        [Localizable(false), Description("The root folder where the browsing starts from. This property has no effect if the Vista style dialog is used."), Category("Folder Browsing"), Browsable(true), DefaultValue(typeof(System.Environment.SpecialFolder), "Desktop")]
-        public System.Environment.SpecialFolder RootFolder { get; set; }
+        [Localizable(false), Description("The root folder where the browsing starts from. This property has no effect if the Vista style dialog is used."), Category("Folder Browsing"), Browsable(true), DefaultValue(typeof(Environment.SpecialFolder), "Desktop")]
+        public Environment.SpecialFolder RootFolder { get; set; }
 	
         /// <summary>
         /// Gets or sets the path selected by the user.
@@ -163,10 +162,10 @@ namespace Ookii.Dialogs.Wpf
 
         private bool RunDialog(IntPtr owner)
         {
-            Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
+            IFileDialog dialog = null;
             try
             {
-                dialog = new Ookii.Dialogs.Wpf.Interop.NativeFileOpenDialog();
+                dialog = new NativeFileOpenDialog();
                 SetDialogProperties(dialog);
                 int result = dialog.Show(owner);
                 if( result < 0 )
@@ -174,7 +173,7 @@ namespace Ookii.Dialogs.Wpf
                     if( (uint)result == (uint)HRESULT.ERROR_CANCELLED )
                         return false;
                     else
-                        throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
+                        throw Marshal.GetExceptionForHR(result);
                 } 
                 GetResult(dialog);
                 return true;
@@ -182,7 +181,7 @@ namespace Ookii.Dialogs.Wpf
             finally
             {
                 if( dialog != null )
-                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
+                    Marshal.FinalReleaseComObject(dialog);
             }
         }
 
@@ -234,7 +233,7 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-        private void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        private void SetDialogProperties(IFileDialog dialog)
         {
             // Description
             if( !string.IsNullOrEmpty(_description) )
@@ -245,7 +244,7 @@ namespace Ookii.Dialogs.Wpf
                 }
                 else
                 {
-                    Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
+                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
                     customize.AddText(0, _description);
                 }
             }
@@ -268,9 +267,9 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-        private void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        private void GetResult(IFileDialog dialog)
         {
-            Ookii.Dialogs.Wpf.Interop.IShellItem item;
+            IShellItem item;
             dialog.GetResult(out item);
             item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
         }

@@ -1,8 +1,6 @@
 // Copyright (c) Sven Groot (Ookii.org) 2009
 // See LICENSE for details
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.IO;
 using System.ComponentModel;
 using Microsoft.Win32;
@@ -125,7 +123,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         /// <returns>The read/write file selected by the user.</returns>
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
-        public System.IO.Stream OpenFile()
+        public Stream OpenFile()
         {
             if( DownlevelDialog != null )
                 return ((SaveFileDialog)DownlevelDialog).OpenFile();
@@ -174,9 +172,9 @@ namespace Ookii.Dialogs.Wpf
 
         #region Internal Methods
 
-        internal override Ookii.Dialogs.Wpf.Interop.IFileDialog CreateFileDialog()
+        internal override IFileDialog CreateFileDialog()
         {
-            return new Ookii.Dialogs.Wpf.Interop.NativeFileSaveDialog();
+            return new NativeFileSaveDialog();
         }
 
         #endregion

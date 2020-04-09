@@ -1,8 +1,5 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See LICENSE for details
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ookii.Dialogs.Wpf.Interop
 {

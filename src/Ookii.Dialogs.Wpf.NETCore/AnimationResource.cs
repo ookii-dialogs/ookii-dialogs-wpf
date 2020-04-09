@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace Ookii.Dialogs.Wpf
@@ -20,10 +17,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="ArgumentNullException"><paramref name="resourceFile"/> is <see langword="null"/>.</exception>
         public AnimationResource(string resourceFile, int resourceId)
         {
-            if( resourceFile == null )
-                throw new ArgumentNullException("resourceFile");
-
-            ResourceFile = resourceFile;
+            ResourceFile = resourceFile ?? throw new ArgumentNullException("resourceFile");
             ResourceId = resourceId;
         }
 

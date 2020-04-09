@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Permissions;
-using System.Security;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -80,17 +75,19 @@ namespace Ookii.Dialogs.Wpf
 
                     if( manifestLoc != null && installDir != null )
                     {
-                        _enableThemingActivationContext = new NativeMethods.ACTCTX();
-                        _enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(NativeMethods.ACTCTX));
-                        _enableThemingActivationContext.lpSource = manifestLoc;
+                        _enableThemingActivationContext = new NativeMethods.ACTCTX
+                        {
+                            cbSize = Marshal.SizeOf(typeof(NativeMethods.ACTCTX)),
+                            lpSource = manifestLoc,
 
-                        // Set the lpAssemblyDirectory to the install
-                        // directory to prevent Win32 Side by Side from
-                        // looking for comctl32 in the application
-                        // directory, which could cause a bogus dll to be
-                        // placed there and open a security hole.
-                        _enableThemingActivationContext.lpAssemblyDirectory = installDir;
-                        _enableThemingActivationContext.dwFlags = NativeMethods.ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID;
+                            // Set the lpAssemblyDirectory to the install
+                            // directory to prevent Win32 Side by Side from
+                            // looking for comctl32 in the application
+                            // directory, which could cause a bogus dll to be
+                            // placed there and open a security hole.
+                            lpAssemblyDirectory = installDir,
+                            dwFlags = NativeMethods.ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID
+                        };
 
                         // Note this will fail gracefully if file specified
                         // by manifestLoc doesn't exist.
