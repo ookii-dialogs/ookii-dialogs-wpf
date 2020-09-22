@@ -48,7 +48,7 @@ The progress dialog's behaviour of the `ShowDialog` function is slightly differe
 
 The `ProgressDialog` class is supported on Windows XP and later versions of Windows. However, the progress dialog has a very different appearance on Windows Vista and later (the image above shows the Vista version), so it is recommended to test on both operating systems to see if it appears to your satisfaction.
 
-When using Windows 7, the `ProgressDialog` class automatically provides progress notification in the application's task bar button.
+When using Windows 7 or later, the `ProgressDialog` class automatically provides progress notification in the application's task bar button.
 
 ### Credential dialog
 
