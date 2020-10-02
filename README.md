@@ -22,7 +22,7 @@ N.B.: **Ookii.Dialogs.Wpf** requires the [Microsoft .NET Framework 4.5](https://
 
 ### Windows Forms compatibility
 
-If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/caioproiete/ookii-dialogs-winforms).
+If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/augustoproiete/ookii-dialogs-winforms).
 
 ## Included dialogs
 
