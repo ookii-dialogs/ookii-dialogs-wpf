@@ -154,6 +154,17 @@ namespace Ookii.Dialogs.Wpf
         public bool? ShowDialog(Window owner)
         {
             IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
+            return ShowDialog(ownerHandle);
+        }
+
+        /// <summary>
+        /// Displays the folder browser dialog.
+        /// </summary>
+        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
+        /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
+        public bool? ShowDialog(IntPtr owner)
+        {
+            IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
             return new bool?(IsVistaFolderDialogSupported ? RunDialog(ownerHandle) : RunDialogDownlevel(ownerHandle));
         }
 
