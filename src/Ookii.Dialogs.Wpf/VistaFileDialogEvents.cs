@@ -1,10 +1,12 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See LICENSE for details
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Ookii.Dialogs.Wpf
 {
-    class VistaFileDialogEvents : Interop.IFileDialogEvents, Interop.IFileDialogControlEvents
+    class VistaFileDialogEvents : Ookii.Dialogs.Wpf.Interop.IFileDialogEvents, Ookii.Dialogs.Wpf.Interop.IFileDialogControlEvents
     {
         const uint S_OK = 0;
         const uint S_FALSE = 1;
@@ -22,37 +24,37 @@ namespace Ookii.Dialogs.Wpf
 
         #region IFileDialogEvents Members
 
-        public Interop.HRESULT OnFileOk(Interop.IFileDialog pfd)
+        public Ookii.Dialogs.Wpf.Interop.HRESULT OnFileOk(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd)
         {
             if( _dialog.DoFileOk(pfd) )
-                return Interop.HRESULT.S_OK;
+                return Ookii.Dialogs.Wpf.Interop.HRESULT.S_OK;
             else
-                return Interop.HRESULT.S_FALSE;
+                return Ookii.Dialogs.Wpf.Interop.HRESULT.S_FALSE;
         }
 
-        public Interop.HRESULT OnFolderChanging(Interop.IFileDialog pfd, Interop.IShellItem psiFolder)
+        public Ookii.Dialogs.Wpf.Interop.HRESULT OnFolderChanging(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd, Ookii.Dialogs.Wpf.Interop.IShellItem psiFolder)
         {
-            return Interop.HRESULT.S_OK;
+            return Ookii.Dialogs.Wpf.Interop.HRESULT.S_OK;
         }
 
-        public void OnFolderChange(Interop.IFileDialog pfd)
-        {
-        }
-
-        public void OnSelectionChange(Interop.IFileDialog pfd)
+        public void OnFolderChange(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd)
         {
         }
 
-        public void OnShareViolation(Interop.IFileDialog pfd, Interop.IShellItem psi, out NativeMethods.FDE_SHAREVIOLATION_RESPONSE pResponse)
+        public void OnSelectionChange(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd)
+        {
+        }
+
+        public void OnShareViolation(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd, Ookii.Dialogs.Wpf.Interop.IShellItem psi, out NativeMethods.FDE_SHAREVIOLATION_RESPONSE pResponse)
         {
             pResponse = NativeMethods.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT;
         }
 
-        public void OnTypeChange(Interop.IFileDialog pfd)
+        public void OnTypeChange(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd)
         {
         }
 
-        public void OnOverwrite(Interop.IFileDialog pfd, Interop.IShellItem psi, out NativeMethods.FDE_OVERWRITE_RESPONSE pResponse)
+        public void OnOverwrite(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd, Ookii.Dialogs.Wpf.Interop.IShellItem psi, out NativeMethods.FDE_OVERWRITE_RESPONSE pResponse)
         {
             pResponse = NativeMethods.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT;
         }
@@ -61,19 +63,19 @@ namespace Ookii.Dialogs.Wpf
 
         #region IFileDialogControlEvents Members
 
-        public void OnItemSelected(Interop.IFileDialogCustomize pfdc, int dwIDCtl, int dwIDItem)
+        public void OnItemSelected(Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize pfdc, int dwIDCtl, int dwIDItem)
         {
         }
 
-        public void OnButtonClicked(Interop.IFileDialogCustomize pfdc, int dwIDCtl)
+        public void OnButtonClicked(Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize pfdc, int dwIDCtl)
         {
         }
 
-        public void OnCheckButtonToggled(Interop.IFileDialogCustomize pfdc, int dwIDCtl, bool bChecked)
+        public void OnCheckButtonToggled(Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize pfdc, int dwIDCtl, bool bChecked)
         {
         }
 
-        public void OnControlActivating(Interop.IFileDialogCustomize pfdc, int dwIDCtl)
+        public void OnControlActivating(Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize pfdc, int dwIDCtl)
         {
         }
 

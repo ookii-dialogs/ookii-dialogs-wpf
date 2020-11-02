@@ -2,6 +2,7 @@
 // BSD license; see LICENSE for details.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Security.Permissions;
 using System.Net;
@@ -40,7 +41,7 @@ namespace Ookii.Dialogs.Wpf
         private bool _isSaveChecked;
         private string _target;
 
-        private static readonly Dictionary<string, NetworkCredential> _applicationInstanceCredentialCache = new Dictionary<string, NetworkCredential>();
+        private static readonly Dictionary<string, System.Net.NetworkCredential> _applicationInstanceCredentialCache = new Dictionary<string, NetworkCredential>();
         private string _caption;
         private string _text;
         private string _windowTitle;
@@ -532,7 +533,7 @@ namespace Ookii.Dialogs.Wpf
                 {
                     lock( _applicationInstanceCredentialCache )
                     {
-                        _applicationInstanceCredentialCache[Target] = new NetworkCredential(UserName, Password);
+                        _applicationInstanceCredentialCache[Target] = new System.Net.NetworkCredential(UserName, Password);
                     }
                 }
 
@@ -584,18 +585,18 @@ namespace Ookii.Dialogs.Wpf
             c.TargetName = target;
             c.Persist = NativeMethods.CredPersist.Enterprise;
             byte[] encryptedPassword = EncryptPassword(credential.Password);
-            c.CredentialBlob = Marshal.AllocHGlobal(encryptedPassword.Length);
+            c.CredentialBlob = System.Runtime.InteropServices.Marshal.AllocHGlobal(encryptedPassword.Length);
             try
             {
-                Marshal.Copy(encryptedPassword, 0, c.CredentialBlob, encryptedPassword.Length);
+                System.Runtime.InteropServices.Marshal.Copy(encryptedPassword, 0, c.CredentialBlob, encryptedPassword.Length);
                 c.CredentialBlobSize = (uint)encryptedPassword.Length;
                 c.Type = NativeMethods.CredTypes.CRED_TYPE_GENERIC;
                 if( !NativeMethods.CredWrite(ref c, 0) )
-                    throw new CredentialException(Marshal.GetLastWin32Error());
+                    throw new CredentialException(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
             finally
             {
-                Marshal.FreeCoTaskMem(c.CredentialBlob);
+                System.Runtime.InteropServices.Marshal.FreeCoTaskMem(c.CredentialBlob);
             }
         }
 
@@ -630,14 +631,14 @@ namespace Ookii.Dialogs.Wpf
 
             IntPtr credential;
             bool result = NativeMethods.CredRead(target, NativeMethods.CredTypes.CRED_TYPE_GENERIC, 0, out credential);
-            int error = Marshal.GetLastWin32Error();
+            int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
             if( result )
             {
                 try
                 {
-                    NativeMethods.CREDENTIAL c = (NativeMethods.CREDENTIAL)Marshal.PtrToStructure(credential, typeof(NativeMethods.CREDENTIAL));
+                    NativeMethods.CREDENTIAL c = (NativeMethods.CREDENTIAL)System.Runtime.InteropServices.Marshal.PtrToStructure(credential, typeof(NativeMethods.CREDENTIAL));
                     byte[] encryptedPassword = new byte[c.CredentialBlobSize];
-                    Marshal.Copy(c.CredentialBlob, encryptedPassword, 0, encryptedPassword.Length);
+                    System.Runtime.InteropServices.Marshal.Copy(c.CredentialBlob, encryptedPassword, 0, encryptedPassword.Length);
                     cred = new NetworkCredential(c.UserName, DecryptPassword(encryptedPassword));
                 }
                 finally
@@ -677,7 +678,7 @@ namespace Ookii.Dialogs.Wpf
 
             lock( _applicationInstanceCredentialCache )
             {
-                NetworkCredential cred;
+                System.Net.NetworkCredential cred;
                 if( _applicationInstanceCredentialCache.TryGetValue(target, out cred) )
                 {
                     return cred;
@@ -847,7 +848,7 @@ namespace Ookii.Dialogs.Wpf
         private NativeMethods.CREDUI_INFO CreateCredUIInfo(IntPtr owner, bool downlevelText)
         {
             NativeMethods.CREDUI_INFO info = new NativeMethods.CREDUI_INFO();
-            info.cbSize = Marshal.SizeOf(info);
+            info.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(info);
             info.hwndParent = owner;
             if( downlevelText )
             {
@@ -893,7 +894,7 @@ namespace Ookii.Dialogs.Wpf
 
         private static byte[] EncryptPassword(string password)
         {
-            byte[] protectedData = System.Security.Cryptography.ProtectedData.Protect(Encoding.UTF8.GetBytes(password), null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+            byte[] protectedData = System.Security.Cryptography.ProtectedData.Protect(System.Text.Encoding.UTF8.GetBytes(password), null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
             return protectedData;
         }
 
@@ -901,7 +902,7 @@ namespace Ookii.Dialogs.Wpf
         {
             try
             {
-                return Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
+                return System.Text.Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
             }
             catch( System.Security.Cryptography.CryptographicException )
             {

@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace Ookii.Dialogs.Wpf.Interop
 {
     internal enum HRESULT : long

@@ -2,6 +2,9 @@
 // BSD license; see LICENSE for details.
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using System.Collections;
 
 namespace Ookii.Dialogs.Wpf

@@ -1,6 +1,8 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See LICENSE for details
-
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using System.ComponentModel;
 using Microsoft.Win32;
@@ -168,7 +170,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         /// <returns>A Stream that specifies the read-only file selected by the user.</returns>
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
-        public Stream OpenFile()
+        public System.IO.Stream OpenFile()
         {
             if( DownlevelDialog != null )
                 return ((OpenFileDialog)DownlevelDialog).OpenFile();
@@ -183,35 +185,35 @@ namespace Ookii.Dialogs.Wpf
 
         #region Internal Methods
 
-        internal override IFileDialog CreateFileDialog()
+        internal override Ookii.Dialogs.Wpf.Interop.IFileDialog CreateFileDialog()
         {
-            return new NativeFileOpenDialog();
+            return new Ookii.Dialogs.Wpf.Interop.NativeFileOpenDialog();
         }
 
-        internal override void SetDialogProperties(IFileDialog dialog)
+        internal override void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
             base.SetDialogProperties(dialog);
             if( _showReadOnly )
             {
-                IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
+                Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
                 customize.EnableOpenDropDown(_openDropDownId);
                 customize.AddControlItem(_openDropDownId, _openItemId, ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.OpenButton));
                 customize.AddControlItem(_openDropDownId, _readOnlyItemId, ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.ReadOnly));
             }
         }
 
-        internal override void GetResult(IFileDialog dialog)
+        internal override void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
             if( Multiselect )
             {
-                IShellItemArray results;
-                ((IFileOpenDialog)dialog).GetResults(out results);
+                Ookii.Dialogs.Wpf.Interop.IShellItemArray results;
+                ((Ookii.Dialogs.Wpf.Interop.IFileOpenDialog)dialog).GetResults(out results);
                 uint count;
                 results.GetCount(out count);
                 string[] fileNames = new string[count];
                 for( uint x = 0; x < count; ++x )
                 {
-                    IShellItem item;
+                    Ookii.Dialogs.Wpf.Interop.IShellItem item;
                     results.GetItemAt(x, out item);
                     string name;
                     item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out name);
@@ -225,7 +227,7 @@ namespace Ookii.Dialogs.Wpf
 
             if( ShowReadOnly )
             {
-                IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
+                Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
                 int selected;
                 customize.GetSelectedControlItem(_openDropDownId, out selected);
                 _readOnlyChecked = (selected == _readOnlyItemId);

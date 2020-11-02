@@ -1,4 +1,9 @@
-﻿namespace Ookii.Dialogs.Wpf
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Ookii.Dialogs.Wpf
 {
     /// <summary>
     /// Resource identifiers for default animations from shell32.dll.
