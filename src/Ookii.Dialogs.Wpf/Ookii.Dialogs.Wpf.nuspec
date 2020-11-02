@@ -26,8 +26,9 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="bin\$configuration$\Ookii.Dialogs.Wpf.dll" target="lib\net45\" />
-    <file src="bin\$configuration$\Ookii.Dialogs.Wpf.pdb" target="lib\net45\" />
-    <file src="bin\$configuration$\Ookii.Dialogs.Wpf.xml" target="lib\net45\" />
+    <file src="bin\$configuration$\net45\Ookii.Dialogs.Wpf.dll" target="lib\net45\" />
+    <file src="bin\$configuration$\net45\Ookii.Dialogs.Wpf.pdb" target="lib\net45\" />
+    <file src="bin\$configuration$\netcoreapp3.1\Ookii.Dialogs.Wpf.dll" target="lib\netcoreapp3.1\" />
+    <file src="bin\$configuration$\netcoreapp3.1\Ookii.Dialogs.Wpf.pdb" target="lib\netcoreapp3.1\" />
   </files>
 </package>

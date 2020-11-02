@@ -5,7 +5,6 @@
     <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ookii.ico</ApplicationIcon>
     <Version>1.0.0</Version>
     <Company>Ookii.org</Company>
@@ -16,6 +15,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>1.0.0.20307</AssemblyVersion>
     <FileVersion>1.0.0.20307</FileVersion>
+    <Company>Ookii.org</Company>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject></StartupObject>
     <AssemblyName>Ookii.Dialogs.Wpf.Sample</AssemblyName>

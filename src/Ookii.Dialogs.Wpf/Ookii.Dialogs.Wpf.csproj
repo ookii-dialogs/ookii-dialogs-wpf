@@ -5,31 +5,29 @@
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf</PackageId>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, Caio Proiete, AceOfAces</Authors>
-    <Description>A .NET Core port of Ookii.Dialogs (based on Caio Proiete's version).
-
-This library provides .NET Core powered WPF apps to access modern dialogs (File Open and Save, Folder Picker, etc.).</Description>
-    <PackageProjectUrl></PackageProjectUrl>
+    <Summary>Common dialog classes for WPF applications.</Summary>
+    <Description>Ookii.Dialogs.Wpf is a class library for .NET and .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
+    <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
     <RepositoryType></RepositoryType>
-    <PackageTags>ookii dialogs; wpf; windows-presentation-foundation; progress-dialog; task-dialog; credential-dialog; common-file-dialog</PackageTags>
+    <PackageTags>ookii dialogs wpf windows-presentation-foundation progress-dialog task-dialog credential-dialog common-file-dialog</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl></PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>2.1.20307.0</AssemblyVersion>
     <FileVersion>2.1.20307.0</FileVersion>
-    <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
-    <Company>Studio ACE</Company>
+    <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009.</Copyright>
+    <Company>Ookii.org</Company>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
     <TieredCompilation>true</TieredCompilation>
     <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
-    <PackageReleaseNotes>-[Breaking Change]Switched over to .NET Core 3.1.
--Removed unnecessary Nuget package. NET Core 3.1 already covers this.</PackageReleaseNotes>
+    <IncludeSymbols>true</IncludeSymbols>
+    <ContinousIntegrationBuild>true</ContinousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -59,10 +57,6 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
       <PackagePath></PackagePath>
     </None>
     <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
