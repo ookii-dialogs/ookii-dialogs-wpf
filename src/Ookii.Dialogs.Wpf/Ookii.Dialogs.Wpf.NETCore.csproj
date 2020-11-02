@@ -1,11 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf.NETCore</PackageId>
-    <Version>2.0.1</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>2.1.0</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, Caio Proiete, AceOfAces</Authors>
@@ -19,15 +20,16 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl></PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.20100.0</AssemblyVersion>
-    <FileVersion>2.0.20100.0</FileVersion>
+    <AssemblyVersion>2.1.20307.0</AssemblyVersion>
+    <FileVersion>2.1.20307.0</FileVersion>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009. .NET Core version by AceOfAces.</Copyright>
     <Company>Studio ACE</Company>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
     <TieredCompilation>true</TieredCompilation>
     <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
-    <PackageReleaseNotes>-Removed unnecessary Nuget package. NET Core 3 already covers this.</PackageReleaseNotes>
+    <PackageReleaseNotes>-[Breaking Change]Switched over to .NET Core 3.1.
+-Removed unnecessary Nuget package. NET Core 3.1 already covers this.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -80,15 +82,11 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="CredentialDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="CredentialDialog.cs" />
     <Compile Update="CredentialDialog.designer.cs">
       <DependentUpon>CredentialDialog.cs</DependentUpon>
     </Compile>
-    <Compile Update="ProgressDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="ProgressDialog.cs" />
     <Compile Update="ProgressDialog.designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
@@ -97,24 +95,16 @@ This library provides .NET Core powered WPF apps to access modern dialogs (File 
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="TaskDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="TaskDialog.cs" />
     <Compile Update="TaskDialog.designer.cs">
       <DependentUpon>TaskDialog.cs</DependentUpon>
     </Compile>
-    <Compile Update="TaskDialogButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="TaskDialogItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="TaskDialogButton.cs" />
+    <Compile Update="TaskDialogItem.cs" />
     <Compile Update="TaskDialogItem.designer.cs">
       <DependentUpon>TaskDialogItem.cs</DependentUpon>
     </Compile>
-    <Compile Update="TaskDialogRadioButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="TaskDialogRadioButton.cs" />
   </ItemGroup>
 
   <ItemGroup>

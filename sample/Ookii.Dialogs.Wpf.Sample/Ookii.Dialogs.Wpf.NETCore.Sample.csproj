@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>ookii.ico</ApplicationIcon>
     <Version>1.0.0</Version>
@@ -13,14 +14,14 @@
     <Description>A sample app that demonstrates how Ookii.Dialogs works.</Description>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.20100</AssemblyVersion>
-    <FileVersion>1.0.0.20100</FileVersion>
+    <AssemblyVersion>1.0.0.20307</AssemblyVersion>
+    <FileVersion>1.0.0.20307</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject>Ookii.Dialogs.Wpf.Sample.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf.NETCore\Ookii.Dialogs.Wpf.NETCore.csproj" />
+    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.NETCore.csproj" />
   </ItemGroup>
   
 
