@@ -4,12 +4,12 @@
     <id>Ookii.Dialogs.Wpf</id>
     <version>0.0.1-local</version>
     <authors>Sven Groot,Caio Proiete</authors>
-    <owners>caioproiete</owners>
+    <owners>augustoproiete</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/caioproiete/ookii-dialogs-wpf/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/caioproiete/ookii-dialogs-wpf</projectUrl>
-    <repository type="git" url="https://github.com/caioproiete/ookii-dialogs-wpf" />
-    <iconUrl>https://raw.githubusercontent.com/caioproiete/ookii-dialogs-wpf/master/assets/ookii-dialogs-wpf-nuget.png</iconUrl>
+    <licenseUrl>https://github.com/augustoproiete/ookii-dialogs-wpf/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</projectUrl>
+    <repository type="git" url="https://github.com/augustoproiete/ookii-dialogs-wpf" />
+    <iconUrl>https://raw.githubusercontent.com/augustoproiete/ookii-dialogs-wpf/master/assets/ookii-dialogs-wpf-nuget.png</iconUrl>
     <summary>Common dialog classes for WPF applications</summary>
     <description>Ookii.Dialogs.Wpf is a class library for .NET applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs</description>
     <tags>ookii dialogs wpf windows-presentation-foundation progress-dialog task-dialog credential-dialog common-file-dialog</tags>

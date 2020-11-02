@@ -440,6 +440,7 @@ namespace Ookii.Dialogs.Wpf
 		}
 	
 
+<<<<<<< HEAD
 		#endregion
 
 		#region Protected Properties
@@ -701,4 +702,278 @@ namespace Ookii.Dialogs.Wpf
 
 		#endregion
 	}
+=======
+        #endregion
+
+        #region Protected Properties
+
+        /// <summary>
+        /// Gets or sets the downlevel file dialog which is to be used if the Vista-style
+        /// dialog is not supported.
+        /// </summary>
+        /// <value>
+        /// The regular <see cref="FileDialog"/> that is used when the Vista-style file dialog
+        /// is not supported.
+        /// </value>
+        /// <remarks>
+        /// This property is set by classes that derive from <see cref="VistaFileDialog"/>.
+        /// </remarks>
+        [Browsable(false)]
+        protected FileDialog DownlevelDialog
+        {
+            get
+            {
+                return _downlevelDialog;
+            }
+            set
+            {
+                _downlevelDialog = value;
+                if( value != null )
+                {
+                    //value.HelpRequest += new EventHandler(DownlevelDialog_HelpRequest);
+                    value.FileOk += new System.ComponentModel.CancelEventHandler(DownlevelDialog_FileOk);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Internal Properties
+
+        internal string[] FileNamesInternal
+        {
+            private get
+            {
+                if( _fileNames == null )
+                {
+                    return new string[0];
+                }
+                return (string[])_fileNames.Clone();
+            }
+            set
+            {
+                _fileNames = value;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Resets all properties to their default values.
+        /// </summary>
+        public virtual void Reset()
+        {
+            if( DownlevelDialog != null )
+                DownlevelDialog.Reset();
+            else
+            {
+                _fileNames = null;
+                _filter = null;
+                _filterIndex = 1;
+                _addExtension = true;
+                _defaultExt = null;
+                _options = 0;
+                _title = null;
+                CheckPathExists = true;
+            }
+        }
+
+        /// <summary>
+        /// Displays the file dialog.
+        /// </summary>
+        /// <returns>If the user clicks the OK button of the dialog that is displayed (e.g. <see cref="VistaOpenFileDialog" />, <see cref="VistaSaveFileDialog" />), <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
+        public bool? ShowDialog()
+        {
+            return ShowDialog(null);
+        }
+
+        /// <summary>
+        /// Displays the file dialog.
+        /// </summary>
+        /// <param name="owner">Handle to the window that owns the dialog.</param>
+        /// <returns>If the user clicks the OK button of the dialog that is displayed (e.g. <see cref="VistaOpenFileDialog" />, <see cref="VistaSaveFileDialog" />), <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
+        public bool? ShowDialog(Window owner)
+        {
+            _owner = owner;
+            if( DownlevelDialog != null )
+                return DownlevelDialog.ShowDialog(owner);
+            else
+            {
+                IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
+                return ShowDialog(ownerHandle);
+            }
+        }
+
+        /// <summary>
+        /// Displays the file dialog.
+        /// </summary>
+        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
+        /// <returns>If the user clicks the OK button of the dialog that is displayed (e.g. <see cref="VistaOpenFileDialog" />, <see cref="VistaSaveFileDialog" />), <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
+        public bool? ShowDialog(IntPtr owner)
+        {
+            IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
+            return new bool?(RunFileDialog(ownerHandle));
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        internal void SetOption(NativeMethods.FOS option, bool value)
+        {
+            if( value )
+                _options |= option;
+            else
+                _options &= ~option;
+        }
+
+        internal bool GetOption(NativeMethods.FOS option)
+        {
+            return (_options & option) != 0;
+        }
+
+        internal virtual void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        {
+            if( !GetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT) )
+            {
+                _fileNames = new string[1];
+                Ookii.Dialogs.Wpf.Interop.IShellItem result;
+                dialog.GetResult(out result);
+                result.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out _fileNames[0]);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="FileOk" /> event.
+        /// </summary>
+        /// <param name="e">A <see cref="System.ComponentModel.CancelEventArgs" /> that contains the event data.</param>
+        protected virtual void OnFileOk(System.ComponentModel.CancelEventArgs e)
+        {
+            System.ComponentModel.CancelEventHandler handler = FileOk;
+            if( handler != null )
+                handler(this, e);
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal bool PromptUser(string text, MessageBoxButton buttons, MessageBoxImage icon, MessageBoxResult defaultResult)
+        {
+            string caption = string.IsNullOrEmpty(_title) ? 
+                (this is VistaOpenFileDialog ? ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.Open) : ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.ConfirmSaveAs)) : 
+                _title;
+            MessageBoxOptions options = 0;
+            if( System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft )
+                options |= MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading;
+            return MessageBox.Show(_owner, text, caption, buttons, icon, defaultResult, options) == MessageBoxResult.Yes;
+        }
+        
+        internal virtual void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        {
+            uint cookie;
+            dialog.Advise(new VistaFileDialogEvents(this), out cookie);
+
+            // Set the default file name
+            if( !(_fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0])) )
+            {
+                string parent = Path.GetDirectoryName(_fileNames[0]);
+                if( parent == null || !Directory.Exists(parent) )
+                {
+                    dialog.SetFileName(_fileNames[0]);
+                }
+                else
+                {
+                    string folder = Path.GetFileName(_fileNames[0]);
+                    dialog.SetFolder(NativeMethods.CreateItemFromParsingName(parent));
+                    dialog.SetFileName(folder);
+                }
+            }
+
+            // Set the filter
+            if( !string.IsNullOrEmpty(_filter) )
+            {
+                string[] filterElements = _filter.Split(new char[] { '|' });
+                NativeMethods.COMDLG_FILTERSPEC[] filter = new NativeMethods.COMDLG_FILTERSPEC[filterElements.Length / 2];
+                for( int x = 0; x < filterElements.Length; x += 2 )
+                {
+                    filter[x / 2].pszName = filterElements[x];
+                    filter[x / 2].pszSpec = filterElements[x + 1];
+                }
+                dialog.SetFileTypes((uint)filter.Length, filter);
+
+                if( _filterIndex > 0 && _filterIndex <= filter.Length )
+                    dialog.SetFileTypeIndex((uint)_filterIndex);
+            }
+
+            // Default extension
+            if( _addExtension && !string.IsNullOrEmpty(_defaultExt) )
+            {
+                dialog.SetDefaultExtension(_defaultExt);
+            }
+
+            // Initial directory
+            if( !string.IsNullOrEmpty(_initialDirectory) )
+            {
+                Ookii.Dialogs.Wpf.Interop.IShellItem item = NativeMethods.CreateItemFromParsingName(_initialDirectory);
+                dialog.SetDefaultFolder(item);
+            }
+
+            if( !string.IsNullOrEmpty(_title) )
+            {
+                dialog.SetTitle(_title);
+            }
+
+            dialog.SetOptions((_options | NativeMethods.FOS.FOS_FORCEFILESYSTEM));
+        }
+
+        internal abstract Ookii.Dialogs.Wpf.Interop.IFileDialog CreateFileDialog();
+
+        internal bool DoFileOk(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        {
+            GetResult(dialog);
+
+            System.ComponentModel.CancelEventArgs e = new System.ComponentModel.CancelEventArgs();
+            OnFileOk(e);
+            return !e.Cancel;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private bool RunFileDialog(IntPtr hwndOwner)
+        {
+            Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
+            try
+            {
+                dialog = CreateFileDialog();
+                SetDialogProperties(dialog);
+                int result = dialog.Show(hwndOwner);
+                if( result < 0 )
+                {
+                    if( (uint)result == (uint)HRESULT.ERROR_CANCELLED )
+                        return false;
+                    else
+                        throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
+                }
+                return true;
+            }
+            finally
+            {
+                if( dialog != null )
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
+            }
+        }
+
+        private void DownlevelDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            OnFileOk(e);
+        }
+
+        #endregion
+    }
+>>>>>>> eff9a9c73bdb91b8e7d50125d02f57d8afe47f08
 }

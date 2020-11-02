@@ -993,6 +993,7 @@ namespace Ookii.Dialogs.Wpf
 		}
 	
 
+<<<<<<< HEAD
 		#endregion
 
 		#region Public methods
@@ -1636,4 +1637,669 @@ namespace Ookii.Dialogs.Wpf
 
 		#endregion
 	}
+=======
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Shows the task dialog as a modeless dialog.
+        /// </summary>
+        /// <returns>The button that the user clicked. Can be <see langword="null" /> if the user cancelled the dialog using the
+        /// title bar close button.</returns>
+        /// <remarks>
+        /// <note>
+        ///   Although the dialog is modeless, this method does not return until the task dialog is closed.
+        /// </note>
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        /// <para>
+        ///   One of the properties or a combination of properties is not valid.
+        /// </para>
+        /// <para>
+        ///   -or-
+        /// </para>
+        /// <para>
+        ///   The dialog is already running.
+        /// </para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
+        public TaskDialogButton Show()
+        {
+            return ShowDialog(IntPtr.Zero);
+        }
+
+        /// <summary>
+        /// Shows the task dialog as a modal dialog.
+        /// </summary>
+        /// <returns>The button that the user clicked. Can be <see langword="null" /> if the user cancelled the dialog using the
+        /// title bar close button.</returns>
+        /// <remarks>
+        /// The dialog will use the active window as its owner. If the current process has no active window,
+        /// the dialog will be displayed as a modeless dialog (identical to calling <see cref="Show"/>).
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        /// <para>
+        ///   One of the properties or a combination of properties is not valid.
+        /// </para>
+        /// <para>
+        ///   -or-
+        /// </para>
+        /// <para>
+        ///   The dialog is already running.
+        /// </para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
+        public TaskDialogButton ShowDialog()
+        {
+            return ShowDialog((Window)null);
+        }
+
+        /// <summary>
+        /// Shows the task dialog as a modal dialog.
+        /// </summary>
+        /// <param name="owner">The <see cref="Window"/> that is the owner of this task dialog.</param>
+        /// <returns>The button that the user clicked. Can be <see langword="null" /> if the user cancelled the dialog using the
+        /// title bar close button.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <para>
+        ///   One of the properties or a combination of properties is not valid.
+        /// </para>
+        /// <para>
+        ///   -or-
+        /// </para>
+        /// <para>
+        ///   The dialog is already running.
+        /// </para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
+        public TaskDialogButton ShowDialog(Window owner)
+        {
+            IntPtr ownerHandle;
+            if( owner == null )
+                ownerHandle = NativeMethods.GetActiveWindow();
+            else
+                ownerHandle = new WindowInteropHelper(owner).Handle;
+            return ShowDialog(ownerHandle);
+        }
+
+        /// <summary>
+        /// Shows the task dialog as a modal dialog.
+        /// </summary>
+        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this task dialog.</param>
+        /// <returns>The button that the user clicked. Can be <see langword="null" /> if the user cancelled the dialog using the
+        /// title bar close button.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <para>
+        ///   One of the properties or a combination of properties is not valid.
+        /// </para>
+        /// <para>
+        ///   -or-
+        /// </para>
+        /// <para>
+        ///   The dialog is already running.
+        /// </para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if task dialog is already being displayed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if no buttons are present.</exception>
+        public TaskDialogButton ShowDialog(IntPtr owner)
+        {
+            if( !OSSupportsTaskDialogs )
+                throw new NotSupportedException(Properties.Resources.TaskDialogsNotSupportedError);
+
+            if( IsDialogRunning )
+                throw new InvalidOperationException(Properties.Resources.TaskDialogRunningError);
+
+            if( _buttons.Count == 0 )
+                throw new InvalidOperationException(Properties.Resources.TaskDialogNoButtonsError);
+
+            _config.hwndParent = owner;
+            _config.dwCommonButtons = 0;
+            _config.pButtons = IntPtr.Zero;
+            _config.cButtons = 0;
+            List<NativeMethods.TASKDIALOG_BUTTON> buttons = SetupButtons();
+            List<NativeMethods.TASKDIALOG_BUTTON> radioButtons = SetupRadioButtons();
+
+            SetupIcon();
+
+            try
+            {
+                MarshalButtons(buttons, out _config.pButtons, out _config.cButtons);
+                MarshalButtons(radioButtons, out _config.pRadioButtons, out _config.cRadioButtons);
+                int buttonId;
+                int radioButton;
+                bool verificationFlagChecked;
+                using( new ComCtlv6ActivationContext(true) )
+                {
+                    NativeMethods.TaskDialogIndirect(ref _config, out buttonId, out radioButton, out verificationFlagChecked);
+                }
+                IsVerificationChecked = verificationFlagChecked;
+
+                TaskDialogRadioButton selectedRadioButton;
+                if( _radioButtonsById.TryGetValue(radioButton, out selectedRadioButton) )
+                    selectedRadioButton.Checked = true;
+
+                TaskDialogButton selectedButton;
+                if( _buttonsById.TryGetValue(buttonId, out selectedButton) )
+                    return selectedButton;
+                else
+                    return null;
+            }
+            finally
+            {
+                CleanUpButtons(ref _config.pButtons, ref _config.cButtons);
+                CleanUpButtons(ref _config.pRadioButtons, ref _config.cRadioButtons);
+            }
+        }
+
+        /// <summary>
+        /// Simulates a click on the verification checkbox of the <see cref="TaskDialog"/>, if it exists.
+        /// </summary>
+        /// <param name="checkState"><see langword="true" /> to set the state of the checkbox to be checked; <see langword="false" /> to set it to be unchecked.</param>
+        /// <param name="setFocus"><see langword="true" /> to set the keyboard focus to the checkbox; otherwise <see langword="false" />.</param>
+        /// <exception cref="InvalidOperationException">The task dialog is not being displayed.</exception>
+        public void ClickVerification(bool checkState, bool setFocus)
+        {
+            if( !IsDialogRunning )
+                throw new InvalidOperationException(Properties.Resources.TaskDialogNotRunningError);
+
+            NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.ClickVerification, new IntPtr(checkState ? 1 : 0), new IntPtr(setFocus ? 1 : 0));
+        }
+
+        #endregion
+
+        #region Protected methods
+
+        /// <summary>
+        /// Raises the <see cref="HyperlinkClicked"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="HyperlinkClickedEventArgs"/> containing the data for the event.</param>
+        protected virtual void OnHyperlinkClicked(HyperlinkClickedEventArgs e)
+        {
+            if( HyperlinkClicked != null )
+                HyperlinkClicked(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="ButtonClicked"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="TaskDialogItemClickedEventArgs"/> containing the data for the event.</param>
+        protected virtual void OnButtonClicked(TaskDialogItemClickedEventArgs e)
+        {
+            if( ButtonClicked != null )
+                ButtonClicked(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="RadioButtonClicked"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="TaskDialogItemClickedEventArgs"/> containing the data for the event.</param>
+        protected virtual void OnRadioButtonClicked(TaskDialogItemClickedEventArgs e)
+        {
+            if( RadioButtonClicked != null )
+                RadioButtonClicked(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="VerificationClicked"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> containing the data for the event.</param>
+        protected virtual void OnVerificationClicked(EventArgs e)
+        {
+            if( VerificationClicked != null )
+                VerificationClicked(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Created"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> containing the data for the event.</param>
+        protected virtual void OnCreated(EventArgs e)
+        {
+            if( Created != null )
+                Created(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Timer"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="TimerEventArgs"/> containing the data for the event.</param>
+        protected virtual void OnTimer(TimerEventArgs e)
+        {
+            if( Timer != null )
+                Timer(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Destroyed"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> containing the data for the event.</param>
+        protected virtual void OnDestroyed(EventArgs e)
+        {
+            if( Destroyed != null )
+                Destroyed(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="ExpandButtonClicked"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="ExpandButtonClickedEventArgs"/> containing the data for the event.</param>
+        protected virtual void OnExpandButtonClicked(ExpandButtonClickedEventArgs e)
+        {
+            if( ExpandButtonClicked != null )
+                ExpandButtonClicked(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="HelpRequested"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> containing the data for the event.</param>
+        protected virtual void OnHelpRequested(EventArgs e)
+        {
+            if( HelpRequested != null )
+                HelpRequested(this, e);
+        }
+
+        #endregion
+
+        #region Internal Members
+
+        internal void SetItemEnabled(TaskDialogItem item)
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)(item is TaskDialogButton ? NativeMethods.TaskDialogMessages.EnableButton : NativeMethods.TaskDialogMessages.EnableRadioButton), new IntPtr(item.Id), new IntPtr(item.Enabled ? 1 : 0));
+            }
+        }
+
+        internal void SetButtonElevationRequired(TaskDialogButton button)
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetButtonElevationRequiredState, new IntPtr(button.Id), new IntPtr(button.ElevationRequired ? 1 : 0));
+            }
+        }
+
+        internal void ClickItem(TaskDialogItem item)
+        {
+            if( !IsDialogRunning )
+                throw new InvalidOperationException(Properties.Resources.TaskDialogNotRunningError);
+
+            NativeMethods.SendMessage(Handle, (int)(item is TaskDialogButton ? NativeMethods.TaskDialogMessages.ClickButton : NativeMethods.TaskDialogMessages.ClickRadioButton), new IntPtr(item.Id), IntPtr.Zero);
+        }
+
+        #endregion
+
+        #region Private members
+        
+        internal void UpdateDialog()
+        {
+            if( IsDialogRunning )
+            {
+                // If the navigate page message is sent from within the callback, the navigation won't
+                // take place until the callback returns. Any further messages sent after the navigate
+                // page message before the end of the callback will then be lost as the navigation occurs.
+                // For that reason, we defer it all the way until the end.
+                if( _inEventHandler > 0 )
+                    _updatePending = true;
+                else
+                {
+                    _updatePending = false;
+                    CleanUpButtons(ref _config.pButtons, ref _config.cButtons);
+                    CleanUpButtons(ref _config.pRadioButtons, ref _config.cRadioButtons);
+                    _config.dwCommonButtons = 0;
+
+                    List<NativeMethods.TASKDIALOG_BUTTON> buttons = SetupButtons();
+                    List<NativeMethods.TASKDIALOG_BUTTON> radioButtons = SetupRadioButtons();
+
+                    SetupIcon();
+
+                    MarshalButtons(buttons, out _config.pButtons, out _config.cButtons);
+                    MarshalButtons(radioButtons, out _config.pRadioButtons, out _config.cRadioButtons);
+
+                    int size = Marshal.SizeOf(_config);
+                    IntPtr memory = Marshal.AllocHGlobal(size);
+                    try
+                    {
+                        Marshal.StructureToPtr(_config, memory, false);
+                        NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.NavigatePage, IntPtr.Zero, memory);
+                    }
+                    finally
+                    {
+                        Marshal.DestroyStructure(memory, typeof(NativeMethods.TASKDIALOGCONFIG));
+                        Marshal.FreeHGlobal(memory);
+                    }
+                }
+            }
+        }
+
+        private bool IsDialogRunning
+        {
+            get 
+            { 
+                // Intentially not using the Handle property, since the cross-thread call check should not be performed here.
+                return _handle != IntPtr.Zero; 
+            }
+        }
+
+        private void SetElementText(NativeMethods.TaskDialogElements element, string text)
+        {
+            if( IsDialogRunning )
+            {
+                IntPtr newTextPtr = Marshal.StringToHGlobalUni(text);
+                try
+                {
+                    IntPtr result = NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetElementText, new IntPtr((int)element), newTextPtr);
+                }
+                finally
+                {
+                    if( newTextPtr != IntPtr.Zero )
+                        Marshal.FreeHGlobal(newTextPtr);
+                }
+            }
+        }
+
+        private void SetupIcon()
+        {
+            SetupIcon(MainIcon, CustomMainIcon, NativeMethods.TaskDialogFlags.UseHIconMain);
+            SetupIcon(FooterIcon, CustomFooterIcon, NativeMethods.TaskDialogFlags.UseHIconFooter);
+        }
+
+        private void SetupIcon(TaskDialogIcon icon, System.Drawing.Icon customIcon, NativeMethods.TaskDialogFlags flag)
+        {
+            SetFlag(flag, false);
+            if( icon == TaskDialogIcon.Custom )
+            {
+                if( customIcon != null )
+                {
+                    SetFlag(flag, true);
+                    if( flag == NativeMethods.TaskDialogFlags.UseHIconMain )
+                        _config.hMainIcon = customIcon.Handle;
+                    else
+                        _config.hFooterIcon = customIcon.Handle;
+                }
+            }
+            else
+            {
+                if( flag == NativeMethods.TaskDialogFlags.UseHIconMain )
+                    _config.hMainIcon = new IntPtr((int)icon);
+                else
+                    _config.hFooterIcon = new IntPtr((int)icon);
+            }
+        }
+
+        private static void CleanUpButtons(ref IntPtr buttons, ref uint count)
+        {
+            if( buttons != IntPtr.Zero )
+            {
+                int elementSize = Marshal.SizeOf(typeof(NativeMethods.TASKDIALOG_BUTTON));
+                for( int x = 0; x < count; ++x )
+                {
+                    // This'll be safe until they introduce 128 bit machines. :)
+                    // It's the only way to do it without unsafe code.
+                    IntPtr offset = new IntPtr(buttons.ToInt64() + x * elementSize);
+                    Marshal.DestroyStructure(offset, typeof(NativeMethods.TASKDIALOG_BUTTON));
+                }
+                Marshal.FreeHGlobal(buttons);
+                buttons = IntPtr.Zero;
+                count = 0;
+            }
+        }
+
+        private static void MarshalButtons(List<NativeMethods.TASKDIALOG_BUTTON> buttons, out IntPtr buttonsPtr, out uint count)
+        {
+            buttonsPtr = IntPtr.Zero;
+            count = 0;
+            if( buttons.Count > 0 )
+            {
+                int elementSize = Marshal.SizeOf(typeof(NativeMethods.TASKDIALOG_BUTTON));
+                buttonsPtr = Marshal.AllocHGlobal(elementSize * buttons.Count);
+                for( int x = 0; x < buttons.Count; ++x )
+                {
+                    // This'll be safe until they introduce 128 bit machines. :)
+                    // It's the only way to do it without unsafe code.
+                    IntPtr offset = new IntPtr(buttonsPtr.ToInt64() + x * elementSize);
+                    Marshal.StructureToPtr(buttons[x], offset, false);
+                }
+                count = (uint)buttons.Count;
+            }
+        }
+
+        private List<NativeMethods.TASKDIALOG_BUTTON> SetupButtons()
+        {
+            _buttonsById = new Dictionary<int, TaskDialogButton>();
+            List<NativeMethods.TASKDIALOG_BUTTON> buttons = new List<NativeMethods.TASKDIALOG_BUTTON>();
+            _config.nDefaultButton = 0;
+            foreach( TaskDialogButton button in Buttons )
+            {
+                if( button.Id < 1 )
+                    throw new InvalidOperationException(Properties.Resources.InvalidTaskDialogItemIdError);
+                _buttonsById.Add(button.Id, button);
+                if( button.Default )
+                    _config.nDefaultButton = button.Id;
+                if( button.ButtonType == ButtonType.Custom )
+                {
+                    if( string.IsNullOrEmpty(button.Text) )
+                        throw new InvalidOperationException(Properties.Resources.TaskDialogEmptyButtonLabelError);
+                    NativeMethods.TASKDIALOG_BUTTON taskDialogButton = new NativeMethods.TASKDIALOG_BUTTON();
+                    taskDialogButton.nButtonID = button.Id;
+                    taskDialogButton.pszButtonText = button.Text;
+                    if( ButtonStyle == TaskDialogButtonStyle.CommandLinks || ButtonStyle == TaskDialogButtonStyle.CommandLinksNoIcon && !string.IsNullOrEmpty(button.CommandLinkNote) )
+                        taskDialogButton.pszButtonText += "\n" + button.CommandLinkNote;
+                    buttons.Add(taskDialogButton);
+                }
+                else
+                {
+                    _config.dwCommonButtons |= button.ButtonFlag;
+                }
+            }
+            return buttons;
+        }
+
+        private List<NativeMethods.TASKDIALOG_BUTTON> SetupRadioButtons()
+        {
+            _radioButtonsById = new Dictionary<int, TaskDialogRadioButton>();
+            List<NativeMethods.TASKDIALOG_BUTTON> radioButtons = new List<NativeMethods.TASKDIALOG_BUTTON>();
+            _config.nDefaultRadioButton = 0;
+            foreach( TaskDialogRadioButton radioButton in RadioButtons )
+            {
+                if( string.IsNullOrEmpty(radioButton.Text) )
+                    throw new InvalidOperationException(Properties.Resources.TaskDialogEmptyButtonLabelError);
+                if( radioButton.Id < 1 )
+                    throw new InvalidOperationException(Properties.Resources.InvalidTaskDialogItemIdError);
+                _radioButtonsById.Add(radioButton.Id, radioButton);
+                if( radioButton.Checked )
+                    _config.nDefaultRadioButton = radioButton.Id;
+                NativeMethods.TASKDIALOG_BUTTON taskDialogButton = new NativeMethods.TASKDIALOG_BUTTON();
+                taskDialogButton.nButtonID = radioButton.Id;
+                taskDialogButton.pszButtonText = radioButton.Text;
+                radioButtons.Add(taskDialogButton);
+            }
+            SetFlag(NativeMethods.TaskDialogFlags.NoDefaultRadioButton, _config.nDefaultRadioButton == 0);
+            return radioButtons;
+        }
+
+        private void SetFlag(NativeMethods.TaskDialogFlags flag, bool value)
+        {
+            if( value )
+                _config.dwFlags |= flag;
+            else
+                _config.dwFlags &= ~flag;
+        }
+
+        private bool GetFlag(NativeMethods.TaskDialogFlags flag)
+        {
+            return (_config.dwFlags & flag) != 0;
+        }
+
+        private uint TaskDialogCallback(IntPtr hwnd, uint uNotification, IntPtr wParam, IntPtr lParam, IntPtr dwRefData)
+        {
+            Interlocked.Increment(ref _inEventHandler);
+            try
+            {
+                switch( (NativeMethods.TaskDialogNotifications)uNotification )
+                {
+                case NativeMethods.TaskDialogNotifications.Created:
+                    _handle = hwnd;
+                    DialogCreated();
+                    OnCreated(EventArgs.Empty);
+                    break;
+                case NativeMethods.TaskDialogNotifications.Destroyed:
+                    _handle = IntPtr.Zero;
+                    OnDestroyed(EventArgs.Empty);
+                    break;
+                case NativeMethods.TaskDialogNotifications.Navigated:
+                    DialogCreated();
+                    break;
+                case NativeMethods.TaskDialogNotifications.HyperlinkClicked:
+                    string url = Marshal.PtrToStringUni(lParam);
+                    OnHyperlinkClicked(new HyperlinkClickedEventArgs(url));
+                    break;
+                case NativeMethods.TaskDialogNotifications.ButtonClicked:
+                    TaskDialogButton button;
+                    if( _buttonsById.TryGetValue((int)wParam, out button) )
+                    {
+                        TaskDialogItemClickedEventArgs e = new TaskDialogItemClickedEventArgs(button);
+                        OnButtonClicked(e);
+                        if( e.Cancel )
+                            return 1;
+                    }
+                    break;
+                case NativeMethods.TaskDialogNotifications.VerificationClicked:
+                    IsVerificationChecked = ((int)wParam) == 1;
+                    OnVerificationClicked(EventArgs.Empty);
+                    break;
+                case NativeMethods.TaskDialogNotifications.RadioButtonClicked:
+                    TaskDialogRadioButton radioButton;
+                    if( _radioButtonsById.TryGetValue((int)wParam, out radioButton) )
+                    {
+                        radioButton.Checked = true; // there's no way to click a radio button without checking it, is there?
+                        TaskDialogItemClickedEventArgs e = new TaskDialogItemClickedEventArgs(radioButton);
+                        OnRadioButtonClicked(e);
+                    }
+                    break;
+                case NativeMethods.TaskDialogNotifications.Timer:
+                    TimerEventArgs timerEventArgs = new TimerEventArgs(wParam.ToInt32());
+                    OnTimer(timerEventArgs);
+                    return (uint)(timerEventArgs.ResetTickCount ? 1 : 0);
+                case NativeMethods.TaskDialogNotifications.ExpandoButtonClicked:
+                    OnExpandButtonClicked(new ExpandButtonClickedEventArgs(wParam.ToInt32() != 0));
+                    break;
+                case NativeMethods.TaskDialogNotifications.Help:
+                    OnHelpRequested(EventArgs.Empty);
+                    break;
+                }
+                return 0;
+            }
+            finally
+            {
+                Interlocked.Decrement(ref _inEventHandler);
+                if( _updatePending )
+                    UpdateDialog();
+            }
+        }
+
+        private void DialogCreated()
+        {
+            if( _config.hwndParent == IntPtr.Zero && _windowIcon != null )
+            {
+                NativeMethods.SendMessage(Handle, NativeMethods.WM_SETICON, new IntPtr(NativeMethods.ICON_SMALL), _windowIcon.Handle);
+            }
+
+            foreach( TaskDialogButton button in Buttons )
+            {
+                if( !button.Enabled )
+                    SetItemEnabled(button);
+                if( button.ElevationRequired )
+                    SetButtonElevationRequired(button);
+            }
+            UpdateProgressBarStyle();
+            UpdateProgressBarMarqueeSpeed();
+            UpdateProgressBarRange();
+            UpdateProgressBarValue();
+            UpdateProgressBarState();
+        }
+
+        private void UpdateProgressBarStyle()
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetMarqueeProgressBar, new IntPtr(ProgressBarStyle == ProgressBarStyle.MarqueeProgressBar ? 1 : 0), IntPtr.Zero);
+            }
+        }
+
+        private void UpdateProgressBarMarqueeSpeed()
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetProgressBarMarquee, new IntPtr(ProgressBarMarqueeAnimationSpeed > 0 ? 1 : 0), new IntPtr(ProgressBarMarqueeAnimationSpeed));
+            }
+        }
+
+        private void UpdateProgressBarRange()
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetProgressBarRange, IntPtr.Zero, new IntPtr(ProgressBarMaximum << 16 | ProgressBarMinimum));
+            }
+            if( ProgressBarValue < ProgressBarMinimum )
+                ProgressBarValue = ProgressBarMinimum;
+            if( ProgressBarValue > ProgressBarMaximum )
+                ProgressBarValue = ProgressBarMaximum;
+        }
+
+        private void UpdateProgressBarValue()
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetProgressBarPos, new IntPtr(ProgressBarValue), IntPtr.Zero);
+            }
+        }
+
+        private void UpdateProgressBarState()
+        {
+            if( IsDialogRunning )
+            {
+                NativeMethods.SendMessage(Handle, (int)NativeMethods.TaskDialogMessages.SetProgressBarState, new IntPtr((int)ProgressBarState + 1), IntPtr.Zero);
+            }
+        }
+
+        private void CheckCrossThreadCall()
+        {
+            IntPtr handle = _handle;
+            if( handle != IntPtr.Zero )
+            {
+                int processId;
+                int windowThreadId = NativeMethods.GetWindowThreadProcessId(handle, out processId);
+                int threadId = NativeMethods.GetCurrentThreadId();
+                if( windowThreadId != threadId )
+                    throw new InvalidOperationException(Properties.Resources.TaskDialogIllegalCrossThreadCallError);
+            }
+        }
+
+        #endregion
+
+        #region IWin32Window Members
+
+        /// <summary>
+        /// Gets the window handle of the task dialog.
+        /// </summary>
+        /// <value>
+        /// The window handle of the task dialog when it is being displayed, or <see cref="IntPtr.Zero"/> when the dialog
+        /// is not being displayed.
+        /// </value>
+        [Browsable(false)]
+        public IntPtr Handle
+        {
+            get
+            {
+                CheckCrossThreadCall();
+                return _handle;
+            }
+        }
+
+        #endregion
+    }
+>>>>>>> eff9a9c73bdb91b8e7d50125d02f57d8afe47f08
 }

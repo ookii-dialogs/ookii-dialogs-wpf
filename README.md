@@ -4,7 +4,11 @@
 
 **Ookii.Dialogs.Wpf** is a class library for .NET applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
 
-### Getting started
+## Give a Star! :star:
+
+If you like or are using this project please give it a star. Thanks!
+
+## Getting started
 
 Install the [Ookii.Dialogs.Wpf](https://www.nuget.org/packages/Ookii.Dialogs.Wpf/) package from NuGet:
 
@@ -18,7 +22,7 @@ N.B.: **Ookii.Dialogs.Wpf** requires the [Microsoft .NET Framework 4.5](https://
 
 ### Windows Forms compatibility
 
-If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/caioproiete/ookii-dialogs-winforms).
+If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/augustoproiete/ookii-dialogs-winforms).
 
 ## Included dialogs
 
@@ -44,7 +48,7 @@ The progress dialog's behaviour of the `ShowDialog` function is slightly differe
 
 The `ProgressDialog` class is supported on Windows XP and later versions of Windows. However, the progress dialog has a very different appearance on Windows Vista and later (the image above shows the Vista version), so it is recommended to test on both operating systems to see if it appears to your satisfaction.
 
-When using Windows 7, the `ProgressDialog` class automatically provides progress notification in the application's task bar button.
+When using Windows 7 or later, the `ProgressDialog` class automatically provides progress notification in the application's task bar button.
 
 ### Credential dialog
 
@@ -68,8 +72,8 @@ The classes have been designed to resemble the original WPF classes to make it e
 
 ---
 
-Copyright (c) Sven Groot 2009
+Copyright (c) Sven Groot 2009-2018
 
-Copyright (c) Caio Proiete 2018
+Copyright (c) Caio Proiete 2018-2020
 
 See [LICENSE](LICENSE) for details
