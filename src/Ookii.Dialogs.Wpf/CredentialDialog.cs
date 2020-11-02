@@ -902,7 +902,7 @@ namespace Ookii.Dialogs.Wpf
         {
             try
             {
-                return System.Text.Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
+                return Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
             }
             catch( System.Security.Cryptography.CryptographicException )
             {

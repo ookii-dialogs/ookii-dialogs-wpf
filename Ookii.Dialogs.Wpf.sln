@@ -19,11 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{B2AB57
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf", "src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj", "{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.NETCore", "src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.NETCore.csproj", "{FEFCD71C-E21C-4CA4-934B-A07F2E673D43}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.NETCore.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.NETCore.Sample.csproj", "{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +35,6 @@ Global
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEFCD71C-E21C-4CA4-934B-A07F2E673D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEFCD71C-E21C-4CA4-934B-A07F2E673D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEFCD71C-E21C-4CA4-934B-A07F2E673D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEFCD71C-E21C-4CA4-934B-A07F2E673D43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,8 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
 		{E38181B2-E8E5-466D-9099-33FE75B4CFA1} = {85E0D2C3-A700-4A65-BFEA-1F9A29875419}
-		{FEFCD71C-E21C-4CA4-934B-A07F2E673D43} = {E248E2C9-CE4A-41D2-91A0-8F61AAB69247}
-		{2D20CD5F-E3EA-4261-B4CA-F520295DDD0C} = {85E0D2C3-A700-4A65-BFEA-1F9A29875419}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C17C6EF5-4A5E-45BB-AFB9-2D0547C4D682}
