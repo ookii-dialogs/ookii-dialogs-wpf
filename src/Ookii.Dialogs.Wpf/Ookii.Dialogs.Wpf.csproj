@@ -27,7 +27,7 @@
     <TieredCompilation>true</TieredCompilation>
     <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
     <IncludeSymbols>true</IncludeSymbols>
-    <ContinousIntegrationBuild>true</ContinousIntegrationBuild>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
