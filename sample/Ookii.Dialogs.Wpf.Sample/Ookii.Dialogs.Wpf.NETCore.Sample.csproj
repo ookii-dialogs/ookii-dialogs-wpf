@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -17,7 +17,9 @@
     <AssemblyVersion>1.0.0.20307</AssemblyVersion>
     <FileVersion>1.0.0.20307</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <StartupObject>Ookii.Dialogs.Wpf.Sample.App</StartupObject>
+    <StartupObject></StartupObject>
+    <AssemblyName>Ookii.Dialogs.Wpf.Sample</AssemblyName>
+    <RootNamespace>Ookii.Dialogs.Wpf.Sample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
