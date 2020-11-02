@@ -3,7 +3,7 @@
   <metadata minClientVersion="3.3">
     <id>Ookii.Dialogs.Wpf</id>
     <version>0.0.1-local</version>
-    <authors>Sven Groot,Caio Proiete</authors>
+    <authors>Sven Groot,C. Augusto Proiete</authors>
     <owners>augustoproiete</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/augustoproiete/ookii-dialogs-wpf/blob/master/LICENSE</licenseUrl>
