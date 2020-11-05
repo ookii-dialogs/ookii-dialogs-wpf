@@ -54,7 +54,9 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Event raised when the <see cref="Password"/> property changes.
         /// </summary>
+#if NETFRAMEWORK
         [Category("Property Changed"), Description("Event raised when the value of the Password property changes.")]
+#endif
         public event EventHandler PasswordChanged;
 
         /// <summary>
@@ -120,6 +122,7 @@ namespace Ookii.Dialogs.Wpf
         /// The value of this property is only valid if the dialog box is displayed with a save checkbox.
         /// Set this property before showing the dialog to determine the initial checked value of the save checkbox.
         /// </remarks>
+
         [Category("Appearance"), Description("Indicates whether the \"Save password\" checkbox is checked."), DefaultValue(false)]
         public bool IsSaveChecked
         {
@@ -380,7 +383,9 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         /// <exception cref="CredentialException">An error occurred while showing the credentials dialog.</exception>
         /// <exception cref="InvalidOperationException"><see cref="Target"/> is an empty string ("").</exception>
+#if NETFRAMEWORK
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+#endif
         public bool ShowDialog()
         {
             return ShowDialog(null);
@@ -421,7 +426,9 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         /// <exception cref="CredentialException">An error occurred while showing the credentials dialog.</exception>
         /// <exception cref="InvalidOperationException"><see cref="Target"/> is an empty string ("").</exception>
+#if NETFRAMEWORK
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+#endif
         public bool ShowDialog(IntPtr owner)
         {
             if( string.IsNullOrEmpty(_target) )
@@ -496,7 +503,9 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         /// <exception cref="CredentialException">An error occurred while showing the credentials dialog.</exception>
         /// <exception cref="InvalidOperationException"><see cref="Target"/> is an empty string ("").</exception>
+#if NETFRAMEWORK
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+#endif
         public bool ShowDialog(Window owner)
         {
             IntPtr ownerHandle;

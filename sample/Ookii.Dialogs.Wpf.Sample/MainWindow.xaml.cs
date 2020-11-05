@@ -3,6 +3,9 @@ using System.Windows;
 using System.Threading;
 using System.ComponentModel;
 
+[assembly: CLSCompliant(true)]
+[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
+
 namespace Ookii.Dialogs.Wpf.Sample
 {
     /// <summary>

@@ -8,7 +8,9 @@ using System.Runtime.ConstrainedExecution;
 
 namespace Ookii.Dialogs.Wpf
 {
+#if NETFRAMEWORK
     [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+#endif
     class SafeModuleHandle : SafeHandle
     {
         public SafeModuleHandle()
@@ -28,7 +30,9 @@ namespace Ookii.Dialogs.Wpf
         }
     }
 
+#if NETFRAMEWORK
     [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
+#endif
     class ActivationContextSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         public ActivationContextSafeHandle()
