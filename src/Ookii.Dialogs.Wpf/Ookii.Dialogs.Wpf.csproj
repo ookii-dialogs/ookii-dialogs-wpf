@@ -5,21 +5,21 @@
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf</PackageId>
-    <Version>2.1.2</Version>
+    <Version>2.2.0</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, C. Augusto Proiete, AceOfAces</Authors>
     <Summary>Common dialog classes for WPF applications.</Summary>
     <Description>Ookii.Dialogs.Wpf is a class library for .NET and .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
     <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
+    <RepositoryUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>ookii dialogs wpf windows-presentation-foundation progress-dialog task-dialog credential-dialog common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIconUrl></PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.1.20310.0</AssemblyVersion>
-    <FileVersion>2.1.20310.0</FileVersion>
+    <AssemblyVersion>2.2.20310.0</AssemblyVersion>
+    <FileVersion>2.2.20310.0</FileVersion>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009.</Copyright>
     <Company>Ookii.org</Company>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -27,7 +27,6 @@
     <TieredCompilation>true</TieredCompilation>
     <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
