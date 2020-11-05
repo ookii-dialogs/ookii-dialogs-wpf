@@ -18,7 +18,7 @@ Install-Package Ookii.Dialogs.Wpf
 
 The included sample application [`Ookii.Dialogs.Sample.Wpf`](sample/Ookii.Dialogs.Wpf.Sample/) demonstrate the dialogs for WPF. View the source of this application to see how to use the dialogs.
 
-N.B.: **Ookii.Dialogs.Wpf** requires the [Microsoft .NET Framework 4.5](https://www.microsoft.com/en-us/download/details.aspx?id=30653). The included source code is intended for use in Visual Studio.
+N.B.: **Ookii.Dialogs.Wpf** requires the [Microsoft .NET Framework 4.5](https://www.microsoft.com/en-us/download/details.aspx?id=30653) or higher.
 
 ### Windows Forms compatibility
 
