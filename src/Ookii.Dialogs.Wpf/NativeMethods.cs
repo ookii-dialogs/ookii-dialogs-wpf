@@ -36,9 +36,13 @@ namespace Ookii.Dialogs.Wpf
             IntPtr hFile,
             LoadLibraryExFlags dwFlags
             );
-
+        //TODO: Check if CER has to be replaced.
+#if NETFRAMEWORK
         [DllImport("kernel32", SetLastError = true),
         ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+#else
+        [DllImport("kernel32", SetLastError = true)]
+#endif
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
 
@@ -51,9 +55,9 @@ namespace Ookii.Dialogs.Wpf
             LoadIgnoreCodeAuthzLevel = 0x00000010
         }
 
-        #endregion
+#endregion
 
-        #region Task Dialogs
+#region Task Dialogs
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern IntPtr GetActiveWindow();
@@ -202,13 +206,17 @@ namespace Ookii.Dialogs.Wpf
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
-        #endregion
+#endregion
 
-        #region Activation Context
+#region Activation Context
 
         [DllImport("Kernel32.dll", SetLastError = true)]
         public extern static ActivationContextSafeHandle CreateActCtx(ref ACTCTX actctx);
+#if NETFRAMEWORK
         [DllImport("kernel32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+#else
+        [DllImport("kernel32.dll")]
+#endif
         public extern static void ReleaseActCtx(IntPtr hActCtx);
         [DllImport("Kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -232,9 +240,9 @@ namespace Ookii.Dialogs.Wpf
         }
 
 
-        #endregion
+#endregion
 
-        #region File Operations Definitions
+#region File Operations Definitions
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
         internal struct COMDLG_FILTERSPEC
@@ -317,9 +325,9 @@ namespace Ookii.Dialogs.Wpf
             CDCS_VISIBLE = 0x00000002
         }
 
-        #endregion
+#endregion
 
-        #region KnownFolder Definitions
+#region KnownFolder Definitions
 
         internal enum FFFP_MODE
         {
@@ -380,9 +388,9 @@ namespace Ookii.Dialogs.Wpf
             internal uint pid;
         }
 
-        #endregion
+#endregion
 
-        #region Shell Parsing Names
+#region Shell Parsing Names
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
@@ -397,9 +405,9 @@ namespace Ookii.Dialogs.Wpf
             return (Interop.IShellItem)item;
         }
 
-        #endregion
+#endregion
 
-        #region String Resources
+#region String Resources
 
         [Flags()]
         public enum FormatMessageFlags
@@ -420,9 +428,9 @@ namespace Ookii.Dialogs.Wpf
            uint dwMessageId, uint dwLanguageId, ref IntPtr lpBuffer,
            uint nSize, string[] Arguments);
 
-        #endregion
+#endregion
 
-        #region Credentials
+#region Credentials
 
         internal const int CREDUI_MAX_USERNAME_LENGTH = 256 + 1 + 256;
         internal const int CREDUI_MAX_PASSWORD_LENGTH = 256;
@@ -530,7 +538,11 @@ namespace Ookii.Dialogs.Wpf
         [return: MarshalAs(UnmanagedType.Bool)]
         extern static internal bool CredRead(string TargetName, CredTypes Type, int Flags, out IntPtr Credential);
 
+#if NETFRAMEWORK
         [DllImport("advapi32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+#else
+        [DllImport("advapi32.dll")]
+#endif
         extern static internal void CredFree(IntPtr Buffer);
 
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredDeleteW", SetLastError = true)]
@@ -579,9 +591,9 @@ namespace Ookii.Dialogs.Wpf
         }
 #pragma warning restore 649
 
-        #endregion
+#endregion
 
-        #region Downlevel folder browser dialog
+#region Downlevel folder browser dialog
 
         public enum FolderBrowserDialogMessage
         {
@@ -644,7 +656,7 @@ namespace Ookii.Dialogs.Wpf
         public static extern IntPtr SendMessage(IntPtr hWnd, FolderBrowserDialogMessage msg, IntPtr wParam, IntPtr lParam);
 
 
-        #endregion
+#endregion
 
     }
 }

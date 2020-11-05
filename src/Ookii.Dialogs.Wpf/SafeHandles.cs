@@ -8,6 +8,7 @@ using System.Runtime.ConstrainedExecution;
 
 namespace Ookii.Dialogs.Wpf
 {
+    //TODO: Check if CER has to be replaced or removed.
 #if NETFRAMEWORK
     [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
 #endif
@@ -22,8 +23,9 @@ namespace Ookii.Dialogs.Wpf
         {
             get { return handle == IntPtr.Zero; }
         }
-
+#if NETFRAMEWORK
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+#endif
         protected override bool ReleaseHandle()
         {
             return NativeMethods.FreeLibrary(handle);
@@ -40,7 +42,9 @@ namespace Ookii.Dialogs.Wpf
         {
         }
 
+#if NETFRAMEWORK
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+#endif
         protected override bool ReleaseHandle()
         {
             NativeMethods.ReleaseActCtx(handle);

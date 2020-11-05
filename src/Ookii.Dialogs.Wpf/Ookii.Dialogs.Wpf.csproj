@@ -5,7 +5,7 @@
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
     <PackageId>Ookii.Dialogs.Wpf</PackageId>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Sven Groot, C. Augusto Proiete, AceOfAces</Authors>
@@ -26,6 +26,8 @@
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
     <TieredCompilation>true</TieredCompilation>
     <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
@@ -80,6 +82,13 @@
     <EmbeddedResource Include="VistaFolderBrowserDialog.bmp" />
     <EmbeddedResource Include="VistaOpenFileDialog.bmp" />
     <EmbeddedResource Include="VistaSaveFileDialog.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
