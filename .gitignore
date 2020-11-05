@@ -34,3 +34,4 @@ _ReSharper*/
 #Ignore files created by NUnit
 TestResult.xml
 *.VisualState.xml
+/Ookii.Dialogs.Wpf.NETCore/Properties/PublishProfiles
