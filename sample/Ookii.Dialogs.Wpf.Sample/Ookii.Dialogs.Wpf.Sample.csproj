@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net45;netcoreapp3.1;net5-windows</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>ookii.ico</ApplicationIcon>
@@ -13,8 +13,8 @@
     <Description>A sample app that demonstrates how Ookii.Dialogs works.</Description>
     <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.20310</AssemblyVersion>
-    <FileVersion>1.0.0.20310</FileVersion>
+    <AssemblyVersion>1.0.0.20316</AssemblyVersion>
+    <FileVersion>1.0.0.20316</FileVersion>
     <Company>Ookii.org</Company>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject></StartupObject>
