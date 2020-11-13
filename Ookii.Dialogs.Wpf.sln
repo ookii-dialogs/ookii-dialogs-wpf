@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{B2AB57
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		global.json = global.json
 		LICENSE = LICENSE
 		nuget.config = nuget.config
 		assets\ookii-dialogs.snk = assets\ookii-dialogs.snk
