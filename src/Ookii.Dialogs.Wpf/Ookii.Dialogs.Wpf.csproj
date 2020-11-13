@@ -1,48 +1,77 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net45</TargetFrameworks>
-    <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
-    <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
-    <PackageId>Ookii.Dialogs.Wpf</PackageId>
-    <Version>2.1.1</Version>
+    <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Authors>Sven Groot, Caio Proiete, AceOfAces</Authors>
-    <Summary>Common dialog classes for WPF applications.</Summary>
-    <Description>Ookii.Dialogs.Wpf is a class library for .NET and .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
-    <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/acemod13/ookii-dialogs-wpf</RepositoryUrl>
-    <RepositoryType></RepositoryType>
-    <PackageTags>ookii dialogs wpf windows-presentation-foundation progress-dialog task-dialog credential-dialog common-file-dialog</PackageTags>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIconUrl></PackageIconUrl>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.1.20307.0</AssemblyVersion>
-    <FileVersion>2.1.20307.0</FileVersion>
-    <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009.</Copyright>
-    <Company>Ookii.org</Company>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
-    <TieredCompilation>true</TieredCompilation>
-    <PackageIcon>ookii-dialogs-wpf-nuget.png</PackageIcon>
+    <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
+
+    <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DebugType>portable</DebugType>
     <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../assets/ookii-dialogs.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
+    <NoWarn>$(NoWarn);NU5048</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TieredCompilation>true</TieredCompilation>
+    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <ShouldCreateLogs>True</ShouldCreateLogs>
-    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
-    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
-    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
-    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-    <AssemblyVersionSettings>None.None.DateStamp.None</AssemblyVersionSettings>
-    <UpdatePackageVersion>True</UpdatePackageVersion>
-    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
-    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
-    <AssemblyFileVersionSettings>None.None.DateStamp.None</AssemblyFileVersionSettings>
-    <PackageVersionSettings>AssemblyVersion.None.None</PackageVersionSettings>
+  <PropertyGroup>
+    <MinClientVersion>3.3</MinClientVersion>
+    <PackageId>Ookii.Dialogs.Wpf</PackageId>
+    <Version>0.0.1-local</Version>
+    <Authors>Ookii Dialogs Contributors</Authors>
+    <Company>augustoproiete.net</Company>
+    <Description>Ookii.Dialogs.Wpf is a class library for .NET and .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
+    <Copyright>Copyright (c) 2009-2020 Ookii Dialogs Contributors</Copyright>
+    <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageIcon>images\icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/augustoproiete/ookii-dialogs-wpf/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/augustoproiete/ookii-dialogs-wpf/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/augustoproiete/ookii-dialogs-wpf.git</RepositoryUrl>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net45' ">true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="*.DotSettings" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="CredentialDialog.bmp" />
@@ -52,25 +81,6 @@
     <None Remove="VistaFolderBrowserDialog.bmp" />
     <None Remove="VistaOpenFileDialog.bmp" />
     <None Remove="VistaSaveFileDialog.bmp" />
-    <None Include="..\..\assets\ookii-dialogs-wpf-nuget.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework) == net45">
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Security" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 
   <ItemGroup>
@@ -123,9 +133,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Ookii.Dialogs.Wpf.nuspec">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="..\..\assets\ookii-dialogs-wpf-nuget.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
   </ItemGroup>
 
 </Project>

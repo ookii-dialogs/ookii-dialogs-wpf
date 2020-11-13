@@ -1,32 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net45</TargetFrameworks>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>ookii.ico</ApplicationIcon>
-    <Version>1.0.0</Version>
-    <Company>Ookii.org</Company>
-    <Authors>Sven Groot</Authors>
-    <Product>Ookii.Dialogs</Product>
-    <Description>A sample app that demonstrates how Ookii.Dialogs works.</Description>
-    <Copyright>Copyright (c) Sven Groot (Ookii.org) 2009</Copyright>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.20307</AssemblyVersion>
-    <FileVersion>1.0.0.20307</FileVersion>
-    <Company>Ookii.org</Company>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <StartupObject></StartupObject>
-    <AssemblyName>Ookii.Dialogs.Wpf.Sample</AssemblyName>
     <RootNamespace>Ookii.Dialogs.Wpf.Sample</RootNamespace>
+
+    <AssemblyName>Ookii.Dialogs.Wpf.Sample</AssemblyName>
+    <ApplicationIcon>ookii.ico</ApplicationIcon>
+    <NeutralLanguage>en</NeutralLanguage>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../assets/ookii-dialogs.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
+    <NoWarn>$(NoWarn);NU5048</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj" />
-  </ItemGroup>
+  <PropertyGroup>
+    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net45' ">true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
 
-  <ItemGroup Condition="$(TargetFramework) == net45">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -36,5 +35,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj" />
+  </ItemGroup>
 
 </Project>
