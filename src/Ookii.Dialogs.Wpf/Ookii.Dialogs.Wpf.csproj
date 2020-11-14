@@ -7,7 +7,7 @@
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
 
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
