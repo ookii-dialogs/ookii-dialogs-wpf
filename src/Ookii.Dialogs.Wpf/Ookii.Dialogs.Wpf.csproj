@@ -32,6 +32,14 @@
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <DefineConstants>$(DefineConstants);NETCORE31</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup>
     <MinClientVersion>3.3</MinClientVersion>
     <PackageId>Ookii.Dialogs.Wpf</PackageId>
