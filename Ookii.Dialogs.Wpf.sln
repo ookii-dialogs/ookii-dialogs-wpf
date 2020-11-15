@@ -1,25 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.452
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{85E0D2C3-A700-4A65-BFEA-1F9A29875419}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E248E2C9-CE4A-41D2-91A0-8F61AAB69247}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf", "src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj", "{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{B2AB57E4-0121-4AF9-A559-C53B442F33D8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		global.json = global.json
 		LICENSE = LICENSE
+		nuget.config = nuget.config
 		assets\ookii-dialogs.snk = assets\ookii-dialogs.snk
 		README.md = README.md
+		SECURITY.md = SECURITY.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf.Sample", "sample\Ookii.Dialogs.Wpf.Sample\Ookii.Dialogs.Wpf.Sample.csproj", "{E38181B2-E8E5-466D-9099-33FE75B4CFA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ookii.Dialogs.Wpf", "src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj", "{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
