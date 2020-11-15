@@ -12,8 +12,7 @@
 
 A class library for WPF applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
 
-[![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-informational)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1.0-informational)](https://dotnet.microsoft.com/download)
-
+[![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET](https://img.shields.io/badge/.NET%20-%3E%3D%205.0-informational)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1-informational)](https://dotnet.microsoft.com/download) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-informational)](https://dotnet.microsoft.com/download)
 </div>
 
 ## Give a Star! :star:
@@ -82,9 +81,9 @@ The `Ookii.Dialogs.Wpf.VistaOpenFileDialog`, `Ookii.Dialogs.Wpf.VistaSaveFileDia
 
 The classes have been designed to resemble the original WPF classes to make it easy to switch. When the classes are used on Windows XP, they will automatically fall back to the old style dialog; this is also true for the `VistaFolderBrowserDialog`; that class provides a complete implementation of a folder browser dialog for WPF, old as well as new style.
 
-## .NET Core 3.1 pre-requisites
+## .NET Core 3.1 & .NET 5 pre-requisites
 
-Ookii Dialogs leverages the components and visual styles of the Windows Common Controls library (`comctl32.dll`), and WPF applications targeting .NET Core 3.1 must add an [application manifest](https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests) (`app.manifest`) to their projects with a reference to `Microsoft.Windows.Common-Controls`.
+Ookii Dialogs leverages the components and visual styles of the Windows Common Controls library (`comctl32.dll`), and WPF applications targeting .NET Core 3.1 and/or .NET 5 must add an [application manifest](https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests) (`app.manifest`) to their projects with a reference to `Microsoft.Windows.Common-Controls`.
 
 Without the application manifest, you'll get an error with a message similar to the below:
 
