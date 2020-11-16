@@ -10,7 +10,7 @@
 <h1 align="center">Ookii.Dialogs.Wpf</h1>
 <div align="center">
 
-A class library for WPF applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.
+A class library for WPF applications providing several common dialogs. Included are classes for task dialogs, credential dialog, progress dialog, and common file dialogs.
 
 [![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET](https://img.shields.io/badge/.NET%20-%3E%3D%205.0-informational)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1-informational)](https://dotnet.microsoft.com/download) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-informational)](https://dotnet.microsoft.com/download)
 </div>
@@ -75,7 +75,7 @@ On Windows XP, the `CredentialDialog` class will use the `CredUIPromptForCredent
 
 Windows Vista introduced a new style of common file dialogs. As of .NET 3.5 SP1, the Windows Forms `OpenFileDialog` and `SaveFileDialog` class will automatically use the new style under most circumstances; however, some settings (such as setting `ShowReadOnly` to `true`) still cause it to revert to the old dialog. The `FolderBrowserDialog` still uses the old style. In WPF, the `Microsoft.Win32.OpenFileDialog` and `SaveFileDialog` classes still use the old style dialogs, and a folder browser dialog is not provided at all.
 
-![The Vista-style folder browser dialog on Windows 10](assets/sample-folderbrowser-dialog-win10.png)
+![The Vista-style folder browser dialog as it appears on Windows 10](assets/sample-folderbrowser-dialog-win10.png)
 
 The `Ookii.Dialogs.Wpf.VistaOpenFileDialog`, `Ookii.Dialogs.Wpf.VistaSaveFileDialog` and `Ookii.Dialogs.Wpf.VistaFolderBrowserDialog` classes provide these dialogs for WPF (note that in the case of the `OpenFileDialog` and `SaveFileDialog` it is recommended to use the built-in .NET classes unless you hit one of the scenarios where those classes use the old dialogs).
 
