@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>Ookii.Dialogs.Wpf.Sample</RootNamespace>
+
+    <AssemblyName>Ookii.Dialogs.Wpf.Sample</AssemblyName>
+    <ApplicationIcon>ookii.ico</ApplicationIcon>
+    <NeutralLanguage>en</NeutralLanguage>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../assets/ookii-dialogs.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
+    <NoWarn>$(NoWarn);NU5048</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net45' ">true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj" />
+  </ItemGroup>
+
+</Project>
