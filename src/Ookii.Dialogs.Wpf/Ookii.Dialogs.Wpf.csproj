@@ -10,7 +10,7 @@
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DebugType>portable</DebugType>
