@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Permissions;
-using System.Security;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -58,45 +53,50 @@ namespace Ookii.Dialogs.Wpf
 
         private static bool EnsureActivateContextCreated()
         {
-            lock( _contextCreationLock )
+            lock (_contextCreationLock)
             {
-                if( !_contextCreationSucceeded )
+                if (_contextCreationSucceeded)
                 {
-                    // Pull manifest from the .NET Framework install
-                    // directory
+                    return _contextCreationSucceeded;
+                }
 
-                    string assemblyLoc = null;
+                const string manifestResourceName = "Ookii.Dialogs.XPThemes.manifest";
+                string manifestTempFilePath;
 
-                    assemblyLoc = typeof(Object).Assembly.Location;
-
-                    string manifestLoc = null;
-                    string installDir = null;
-                    if( assemblyLoc != null )
+                using (var manifest = typeof(ComCtlv6ActivationContext).Assembly.GetManifestResourceStream(manifestResourceName))
+                {
+                    if (manifest is null)
                     {
-                        installDir = Path.GetDirectoryName(assemblyLoc);
-                        const string manifestName = "XPThemes.manifest";
-                        manifestLoc = Path.Combine(installDir, manifestName);
+                        throw new InvalidOperationException($"Unable to retrieve {manifestResourceName} embedded resource");
                     }
 
-                    if( manifestLoc != null && installDir != null )
+                    manifestTempFilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+                    using (var tempFileStream = new FileStream(manifestTempFilePath, FileMode.CreateNew, FileAccess.ReadWrite,
+                        FileShare.Delete | FileShare.ReadWrite))
                     {
-                        _enableThemingActivationContext = new NativeMethods.ACTCTX();
-                        _enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(NativeMethods.ACTCTX));
-                        _enableThemingActivationContext.lpSource = manifestLoc;
-
-                        // Set the lpAssemblyDirectory to the install
-                        // directory to prevent Win32 Side by Side from
-                        // looking for comctl32 in the application
-                        // directory, which could cause a bogus dll to be
-                        // placed there and open a security hole.
-                        _enableThemingActivationContext.lpAssemblyDirectory = installDir;
-                        _enableThemingActivationContext.dwFlags = NativeMethods.ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID;
-
-                        // Note this will fail gracefully if file specified
-                        // by manifestLoc doesn't exist.
-                        _activationContext = NativeMethods.CreateActCtx(ref _enableThemingActivationContext);
-                        _contextCreationSucceeded = !_activationContext.IsInvalid;
+                        manifest.CopyTo(tempFileStream);
                     }
+                }
+
+                _enableThemingActivationContext = new NativeMethods.ACTCTX
+                {
+                    cbSize = Marshal.SizeOf(typeof(NativeMethods.ACTCTX)),
+                    lpSource = manifestTempFilePath,
+                };
+
+                // Note this will fail gracefully if file specified
+                // by manifestFilePath doesn't exist.
+                _activationContext = NativeMethods.CreateActCtx(ref _enableThemingActivationContext);
+                _contextCreationSucceeded = !_activationContext.IsInvalid;
+
+                try
+                {
+                    File.Delete(manifestTempFilePath);
+                }
+                catch (Exception)
+                {
+                    // We tried to be tidy but something blocked us :(
                 }
 
                 // If we return false, we'll try again on the next call into

@@ -86,6 +86,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Properties\XPThemes.manifest" />
+    <EmbeddedResource Include="Properties\XPThemes.manifest">
+      <LogicalName>Ookii.Dialogs.XPThemes.manifest</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="CredentialDialog.bmp" />
     <None Remove="CustomDictionary.xml" />
     <None Remove="ProgressDialog.bmp" />
