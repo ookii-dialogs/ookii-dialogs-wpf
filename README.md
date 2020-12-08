@@ -12,7 +12,7 @@
 
 A class library for WPF applications providing several common dialogs. Included are classes for task dialogs, credential dialog, progress dialog, and common file dialogs.
 
-[![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET](https://img.shields.io/badge/.NET%20-%3E%3D%205.0-informational)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1-informational)](https://dotnet.microsoft.com/download) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-informational)](https://dotnet.microsoft.com/download)
+[![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET](https://img.shields.io/badge/.NET%20-%3E%3D%205.0-512bd4)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1-512bd4)](https://dotnet.microsoft.com/download) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-512bd4)](https://dotnet.microsoft.com/download)
 </div>
 
 ## Give a Star! :star:
