@@ -1,6 +1,6 @@
 #addin "nuget:?package=Cake.MinVer&version=0.1.0"
 
-var target       = Argument<string>("target", "publish");
+var target       = Argument<string>("target", "pack");
 var buildVersion = MinVer(s => s.WithTagPrefix("v").WithDefaultPreReleasePhase("preview"));
 
 Task("clean")
@@ -81,6 +81,19 @@ Task("pack")
         NoBuild = true,
         IncludeSymbols = true,
         IncludeSource = true,
+        OutputDirectory = "./build/artifacts",
+        ArgumentCustomization = args =>
+            args.AppendQuoted($"-p:Version={buildVersion.Version}")
+                .AppendQuoted($"-p:PackageReleaseNotes={releaseNotes}")
+    });
+
+    DotNetCorePack("./src/Ookii.Dialogs/Ookii.Dialogs.csproj", new DotNetCorePackSettings
+    {
+        Configuration = "Release",
+        NoRestore = true,
+        NoBuild = true,
+        IncludeSymbols = false,
+        IncludeSource = false,
         OutputDirectory = "./build/artifacts",
         ArgumentCustomization = args =>
             args.AppendQuoted($"-p:Version={buildVersion.Version}")
