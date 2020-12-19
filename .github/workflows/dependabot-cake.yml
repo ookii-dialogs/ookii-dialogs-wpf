@@ -1,0 +1,13 @@
+on:
+  schedule:
+    # every Sunday at 6am
+    - cron:  '0 6 * * SUN'
+
+  workflow_dispatch:
+
+jobs:
+  dependabot-cake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check/update cake dependencies
+        uses: augustoproiete-actions/nils-org--dependabot-cake-action@v1
