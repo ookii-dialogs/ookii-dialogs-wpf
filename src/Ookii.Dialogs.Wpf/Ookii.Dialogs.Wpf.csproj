@@ -51,7 +51,7 @@
     <Authors>Ookii Dialogs Contributors</Authors>
     <Company>augustoproiete.net</Company>
     <Description>Ookii.Dialogs.Wpf is a class library for .NET and .NET Core applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
-    <Copyright>Copyright (c) 2009-2020 Ookii Dialogs Contributors</Copyright>
+    <Copyright>Copyright (c) 2009-2021 Ookii Dialogs Contributors</Copyright>
     <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>

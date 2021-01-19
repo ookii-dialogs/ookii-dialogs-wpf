@@ -131,4 +131,4 @@ Click on the [Releases](https://github.com/augustoproiete/ookii-dialogs-wpf/rele
 
 ---
 
-_Copyright &copy; 2009-2020 Ookii Dialogs Contributors - Provided under the [BSD 3-Clause "New" or "Revised" License](LICENSE)._
+_Copyright &copy; 2009-2021 Ookii Dialogs Contributors - Provided under the [BSD 3-Clause "New" or "Revised" License](LICENSE)._

@@ -20,7 +20,7 @@
     <Authors>Ookii Dialogs Contributors</Authors>
     <Company>augustoproiete.net</Company>
     <Description>DEPRECATED. This package has been replaced by the package Ookii.Dialogs.Wpf.</Description>
-    <Copyright>Copyright (c) 2009-2020 Ookii Dialogs Contributors</Copyright>
+    <Copyright>Copyright (c) 2009-2021 Ookii Dialogs Contributors</Copyright>
     <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
