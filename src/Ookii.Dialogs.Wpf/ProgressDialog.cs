@@ -57,6 +57,7 @@ namespace Ookii.Dialogs.Wpf
         private SafeModuleHandle _currentAnimationModuleHandle;
         private bool _cancellationPending;
         private int _percentProgress;
+        private IntPtr _ownerHandle;
 
         /// <summary>
         /// Event raised when the dialog is displayed.
@@ -758,6 +759,7 @@ namespace Ookii.Dialogs.Wpf
             if( !MinimizeBox )
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoMinimize;
 
+            _ownerHandle = owner;
             _dialog.StartProgressDialog(owner, null, flags, IntPtr.Zero);
             _backgroundWorker.RunWorkerAsync(argument);
         }
@@ -777,6 +779,9 @@ namespace Ookii.Dialogs.Wpf
                 _currentAnimationModuleHandle.Dispose();
                 _currentAnimationModuleHandle = null;
             }
+
+            if (_ownerHandle != IntPtr.Zero)
+                NativeMethods.EnableWindow(_ownerHandle, true);
 
             OnRunWorkerCompleted(new RunWorkerCompletedEventArgs((!e.Cancelled && e.Error == null) ? e.Result : null, e.Error, e.Cancelled));
         }
