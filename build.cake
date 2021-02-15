@@ -1,6 +1,7 @@
 #addin "nuget:?package=Cake.MinVer&version=1.0.0"
+#addin "nuget:?package=Cake.Args&version=1.0.0"
 
-var target       = Argument<string>("target", "pack");
+var target       = ArgumentOrDefault<string>("target") ?? "pack";
 var buildVersion = MinVer(s => s.WithTagPrefix("v").WithDefaultPreReleasePhase("preview"));
 
 Task("clean")
