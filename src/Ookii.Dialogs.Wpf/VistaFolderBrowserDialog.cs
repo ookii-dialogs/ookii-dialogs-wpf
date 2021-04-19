@@ -98,6 +98,15 @@ namespace Ookii.Dialogs.Wpf
         public System.Environment.SpecialFolder RootFolder { get; set; }
 	
         /// <summary>
+        /// Gets or sets the initial directory where the browsing starts from. This property only affects the Vista style dialog.
+        /// </summary>
+        /// <value>
+        /// The path of the directory where the folder browsing should start. The dfault is <see langword="null"/>.
+        /// </value>
+        [Browsable(true), Description("The initial directory where the browsing starts from. This property only affects the Vista style dialog."), Category("Folder Browsing"), DefaultValue(null)]
+        public string InitialDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the path selected by the user.
         /// </summary>
         /// <value>
@@ -290,6 +299,11 @@ namespace Ookii.Dialogs.Wpf
                     dialog.SetFolder(NativeMethods.CreateItemFromParsingName(parent));
                     dialog.SetFileName(folder);
                 }
+            }
+
+            if( Directory.Exists(this.InitialDirectory) )
+            {
+                dialog.SetFolder(NativeMethods.CreateItemFromParsingName(this.InitialDirectory));
             }
         }
 
