@@ -94,16 +94,11 @@
 
   <ItemGroup>
     <None Remove="CredentialDialog.bmp" />
-    <None Remove="CustomDictionary.xml" />
     <None Remove="ProgressDialog.bmp" />
     <None Remove="TaskDialog.bmp" />
     <None Remove="VistaFolderBrowserDialog.bmp" />
     <None Remove="VistaOpenFileDialog.bmp" />
     <None Remove="VistaSaveFileDialog.bmp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
 
   <ItemGroup>
