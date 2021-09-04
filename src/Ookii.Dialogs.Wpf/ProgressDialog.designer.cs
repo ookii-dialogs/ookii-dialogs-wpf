@@ -24,6 +24,11 @@
                         _currentAnimationModuleHandle.Dispose();
                         _currentAnimationModuleHandle = null;
                     }
+                    if (_cancellationSource != null)
+                    {
+                        _cancellationSource.Dispose();
+                        _cancellationSource = null;
+                    }
                 }
             }
             finally
