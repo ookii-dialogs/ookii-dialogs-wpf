@@ -22,6 +22,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Threading;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -679,8 +680,19 @@ namespace Ookii.Dialogs.Wpf
         protected virtual void OnDoWork(DoWorkEventArgs e)
         {
             DoWorkEventHandler handler = DoWork;
-            if( handler != null )
-                handler(this, e);
+            if (!(handler is null))
+            {
+                var eventArgs = new ProgressDialogDoWorkEventArgs(e.Argument, CancellationToken.None)
+                {
+                    Cancel = e.Cancel,
+                    Result = e.Result,
+                };
+
+                handler(this, eventArgs);
+
+                e.Cancel = eventArgs.Cancel;
+                e.Result = eventArgs.Result;
+            }
         }
 
         /// <summary>
