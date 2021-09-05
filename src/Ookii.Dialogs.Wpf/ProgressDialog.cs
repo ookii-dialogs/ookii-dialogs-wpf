@@ -22,6 +22,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Threading;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -66,7 +67,7 @@ namespace Ookii.Dialogs.Wpf
         /// Use this event to perform the operation that the dialog is showing the progress for.
         /// This event will be raised on a different thread than the UI thread.
         /// </remarks>
-        public event DoWorkEventHandler DoWork;
+        public event ProgressDialogDoWorkEventHandler DoWork;
 
         /// <summary>
         /// Event raised when the operation completes.
@@ -678,9 +679,20 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="DoWorkEventArgs"/> containing data for the event.</param>
         protected virtual void OnDoWork(DoWorkEventArgs e)
         {
-            DoWorkEventHandler handler = DoWork;
-            if( handler != null )
-                handler(this, e);
+            ProgressDialogDoWorkEventHandler handler = DoWork;
+            if (!(handler is null))
+            {
+                var eventArgs = new ProgressDialogDoWorkEventArgs(e.Argument, CancellationToken.None)
+                {
+                    Cancel = e.Cancel,
+                    Result = e.Result,
+                };
+
+                handler(this, eventArgs);
+
+                e.Cancel = eventArgs.Cancel;
+                e.Result = eventArgs.Result;
+            }
         }
 
         /// <summary>

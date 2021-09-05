@@ -36,7 +36,7 @@ namespace Ookii.Dialogs.Wpf.Sample
         {
             InitializeComponent();
 
-            _sampleProgressDialog.DoWork += new DoWorkEventHandler(_sampleProgressDialog_DoWork);
+            _sampleProgressDialog.DoWork += new ProgressDialogDoWorkEventHandler(_sampleProgressDialog_DoWork);
         }
 
 
@@ -199,7 +199,7 @@ namespace Ookii.Dialogs.Wpf.Sample
             System.Diagnostics.Process.Start(e.Href);
         }
 
-        private void _sampleProgressDialog_DoWork(object sender, DoWorkEventArgs e)
+        private void _sampleProgressDialog_DoWork(object sender, ProgressDialogDoWorkEventArgs e)
         {
             // Implement the operation that the progress bar is showing progress of here, same as you would do with a background worker.
             for( int x = 0; x <= 100; ++x )
