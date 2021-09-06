@@ -24,7 +24,7 @@
     <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
-    <PackageIconUrl>https://raw.githubusercontent.com/augustoproiete/ookii-dialogs-wpf/master/assets/ookii-dialogs-deprecated-nuget.png</PackageIconUrl>
+    <PackageIconUrl>https://cdn.jsdelivr.net/gh/ookii-dialogs/ookii-dialogs-wpf/assets/ookii-dialogs-deprecated-nuget.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/augustoproiete/ookii-dialogs-wpf/releases</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
