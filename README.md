@@ -14,7 +14,7 @@ A class library for WPF applications providing several common dialogs. Included 
 
 [![NuGet Version](http://img.shields.io/nuget/v/Ookii.Dialogs.Wpf.svg?style=flat)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ookii.Dialogs.Wpf.svg)](https://www.nuget.org/packages/Ookii.Dialogs.Wpf) [![.NET](https://img.shields.io/badge/.NET%20-%3E%3D%205.0-512bd4)](https://dotnet.microsoft.com/download) [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1-512bd4)](https://dotnet.microsoft.com/download) [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.5-512bd4)](https://dotnet.microsoft.com/download)
 
-[![codeql-analysis](https://github.com/augustoproiete/ookii-dialogs-wpf/workflows/.github/workflows/codeql-analysis.yml/badge.svg)](https://github.com/augustoproiete/ookii-dialogs-wpf/actions?query=workflow%3A.github%2Fworkflows%2Fcodeql-analysis.yml)
+[![codeql-analysis](https://github.com/ookii-dialogs/ookii-dialogs-wpf/workflows/.github/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ookii-dialogs/ookii-dialogs-wpf/actions?query=workflow%3A.github%2Fworkflows%2Fcodeql-analysis.yml)
 
 </div>
 
@@ -34,7 +34,7 @@ The included sample application [`Ookii.Dialogs.Sample.Wpf`](sample/Ookii.Dialog
 
 ### Windows Forms compatibility
 
-If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/augustoproiete/ookii-dialogs-winforms).
+If you're looking to use these common dialogs on a Windows Forms application, check out [Ookii.Dialogs.WinForms](https://github.com/ookii-dialogs/ookii-dialogs-winforms).
 
 ## Included dialogs
 
@@ -121,13 +121,13 @@ In Visual Studio, you can right click on your project and go to Add -> New Item.
 
 For more information, visit the following links:
 
-- [EntryPointNotFoundException when instantiating a TaskDialog](https://github.com/augustoproiete/ookii-dialogs-wpf/issues/23)
-- [WPF System.EntryPointNotFoundException: Unable to find an entry point named 'TaskDialogIndirect' in DLL 'comctl32.dll'](https://github.com/augustoproiete-repros/repro-wpf-net5-comctl32-entrypointnotfoundexception)
+- [EntryPointNotFoundException when instantiating a TaskDialog](https://github.com/ookii-dialogs/ookii-dialogs-wpf/issues/23)
+- [WPF System.EntryPointNotFoundException: Unable to find an entry point named 'TaskDialogIndirect' in DLL 'comctl32.dll'](https://github.com/ookii-dialogs-repros/repro-wpf-net5-comctl32-entrypointnotfoundexception)
 - [Calls to comctl32.dll succeed in .NET 4.8, but fail in .NET 5 with System.EntryPointNotFoundException](https://github.com/dotnet/wpf/issues/3815)
 
 ## Release History
 
-Click on the [Releases](https://github.com/augustoproiete/ookii-dialogs-wpf/releases) tab on GitHub.
+Click on the [Releases](https://github.com/ookii-dialogs/ookii-dialogs-wpf/releases) tab on GitHub.
 
 ---
 

@@ -60,7 +60,7 @@ Task("pack")
     .IsDependentOn("test")
     .Does(() =>
 {
-    var releaseNotes = $"https://github.com/augustoproiete/ookii-dialogs-wpf/releases/tag/v{buildVersion.Version}";
+    var releaseNotes = $"https://github.com/ookii-dialogs/ookii-dialogs-wpf/releases/tag/v{buildVersion.Version}";
 
     DotNetCorePack("./src/Ookii.Dialogs.Wpf/Ookii.Dialogs.Wpf.csproj", new DotNetCorePackSettings
     {

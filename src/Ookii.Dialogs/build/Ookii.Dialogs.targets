@@ -22,7 +22,7 @@ Copyright (C) Ookii Dialogs Contributors
           BeforeTargets="BeforeCompile;CoreCompile"
           Condition=" '$(DesignTimeBuild)' != 'true' AND '$(BuildingByReSharper)' != 'true' ">
     <Warning Code="OKD001"
-             Text="Ookii.Dialogs is deprecated. You should install the package Ookii.Dialogs.Wpf instead - https://github.com/augustoproiete/ookii-dialogs-wpf" />
+             Text="Ookii.Dialogs is deprecated. You should install the package Ookii.Dialogs.Wpf instead - https://github.com/ookii-dialogs/ookii-dialogs-wpf" />
   </Target>
 
 </Project>

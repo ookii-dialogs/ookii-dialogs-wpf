@@ -14,21 +14,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <MinClientVersion>3.3</MinClientVersion>
     <PackageId>Ookii.Dialogs</PackageId>
     <Version>0.0.1-local</Version>
     <Authors>Ookii Dialogs Contributors</Authors>
-    <Company>augustoproiete.net</Company>
     <Description>DEPRECATED. This package has been replaced by the package Ookii.Dialogs.Wpf.</Description>
     <Copyright>Copyright (c) 2009-2021 Ookii Dialogs Contributors</Copyright>
     <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
     <PackageIconUrl>https://cdn.jsdelivr.net/gh/ookii-dialogs/ookii-dialogs-wpf/assets/ookii-dialogs-deprecated-nuget.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/augustoproiete/ookii-dialogs-wpf/releases</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/ookii-dialogs/ookii-dialogs-wpf/releases</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/augustoproiete/ookii-dialogs-wpf.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf.git</RepositoryUrl>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 

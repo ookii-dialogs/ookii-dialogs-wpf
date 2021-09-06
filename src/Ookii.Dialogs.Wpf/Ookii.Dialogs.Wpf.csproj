@@ -37,18 +37,17 @@
     <PackageId>Ookii.Dialogs.Wpf</PackageId>
     <Version>0.0.1-local</Version>
     <Authors>Ookii Dialogs Contributors</Authors>
-    <Company>augustoproiete.net</Company>
     <Description>Ookii.Dialogs.Wpf is a class library for WPF applications providing several common dialogs. Included are classes for task dialogs, credential dialogs, progress dialogs, and common file dialogs.</Description>
     <Copyright>Copyright (c) 2009-2021 Ookii Dialogs Contributors</Copyright>
     <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>images\icon.png</PackageIcon>
-    <PackageIconUrl>https://raw.githubusercontent.com/augustoproiete/ookii-dialogs-wpf/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/augustoproiete/ookii-dialogs-wpf</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/augustoproiete/ookii-dialogs-wpf/releases</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/ookii-dialogs/ookii-dialogs-wpf/master/assets/ookii-dialogs-wpf-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/ookii-dialogs/ookii-dialogs-wpf/releases</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/augustoproiete/ookii-dialogs-wpf.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf.git</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
