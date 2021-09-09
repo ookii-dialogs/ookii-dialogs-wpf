@@ -787,6 +787,7 @@ namespace Ookii.Dialogs.Wpf
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoMinimize;
 
             _ownerHandle = owner;
+            _dialog.Timer(Interop.ProgressDialogTimerAction.Resume, pvReserved: null);
             _dialog.StartProgressDialog(owner, null, flags, IntPtr.Zero);
             _backgroundWorker.RunWorkerAsync(argument);
         }
