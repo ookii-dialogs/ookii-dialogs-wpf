@@ -24,10 +24,12 @@
                         _currentAnimationModuleHandle.Dispose();
                         _currentAnimationModuleHandle = null;
                     }
-                    if (_cancellationSource != null)
+
+                    var cancellationTokenSource = _cancellationTokenSource;
+                    if (!(cancellationTokenSource is null))
                     {
-                        _cancellationSource.Dispose();
-                        _cancellationSource = null;
+                        cancellationTokenSource.Dispose();
+                        _cancellationTokenSource = null;
                     }
                 }
             }
