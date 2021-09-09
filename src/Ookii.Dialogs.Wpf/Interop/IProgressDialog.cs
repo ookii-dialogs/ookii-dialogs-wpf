@@ -15,9 +15,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Ookii.Dialogs.Wpf.Interop
@@ -45,7 +42,15 @@ namespace Ookii.Dialogs.Wpf.Interop
         NoMinimize = 0x00000008,
         NoProgressBar = 0x00000010,
         MarqueeProgress = 0x00000020,
-        NoCancel = 0x00000040
+        NoCancel = 0x00000040,
+    }
+
+    [Flags]
+    internal enum ProgressDialogTimerAction : uint
+    {
+        Reset = 0x00000001,
+        Pause = 0x00000002,
+        Resume = 0x00000003,
     }
 
     [ComImport]
@@ -112,10 +117,8 @@ namespace Ookii.Dialogs.Wpf.Interop
 
         [PreserveSig]
         void Timer(
-            uint dwTimerAction,
-            object pvResevered
+            ProgressDialogTimerAction dwTimerAction,
+            object pvReserved
             );
-
     }
-
 }
