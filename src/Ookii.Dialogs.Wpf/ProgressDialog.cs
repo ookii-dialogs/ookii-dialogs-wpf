@@ -16,9 +16,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -39,7 +36,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety static="true" instance="false" />
     [DefaultEvent("DoWork"), DefaultProperty("Text"), Description("Represents a dialog that can be used to report progress to the user.")]
-    public partial class ProgressDialog : Component , IProgress<int>, IProgress<string>
+    public partial class ProgressDialog : Component, IProgress<int>, IProgress<string>, IServiceProvider
     {
         private class ProgressChangedData
         {
@@ -56,9 +53,10 @@ namespace Ookii.Dialogs.Wpf
         private bool _useCompactPathsForText;
         private bool _useCompactPathsForDescription;
         private SafeModuleHandle _currentAnimationModuleHandle;
-        private bool _cancellationPending;
+        private volatile bool _cancellationPending;
+        private CancellationTokenSource _cancellationTokenSource;
         private int _percentProgress;
-        private IntPtr _ownerHandle;
+        private IntPtr _ownerHandle;        
 
         /// <summary>
         /// Event raised when the dialog is displayed.
@@ -114,7 +112,7 @@ namespace Ookii.Dialogs.Wpf
         /// </value>
         /// <remarks>
         /// <para>
-        ///   This property must be set before <see cref="ShowDialog()"/> or <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="ShowDialog(CancellationToken)"/> or <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -247,7 +245,7 @@ namespace Ookii.Dialogs.Wpf
         /// </value>
         /// <remarks>
         /// <para>
-        ///   This property must be set before <see cref="ShowDialog()"/> or <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="ShowDialog(CancellationToken)"/> or <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -267,7 +265,7 @@ namespace Ookii.Dialogs.Wpf
         /// </value>
         /// <remarks>
         /// <para>
-        ///   This property must be set before <see cref="ShowDialog()"/> or <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="ShowDialog(CancellationToken)"/> or <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -308,10 +306,10 @@ namespace Ookii.Dialogs.Wpf
         /// <remarks>
         /// <note>
         ///   This property has no effect on modal dialogs (which do not have a minimize button). It only applies
-        ///   to modeless dialogs shown by using the <see cref="Show()"/> method.
+        ///   to modeless dialogs shown by using the <see cref="Show(CancellationToken)"/> method.
         /// </note>
         /// <para>
-        ///   This property must be set before <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -335,6 +333,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 _backgroundWorker.ReportProgress(-1); // Call with an out-of-range percentage will update the value of
                                                       // _cancellationPending but do nothing else.
+
                 return _cancellationPending;
             }
         }
@@ -352,7 +351,7 @@ namespace Ookii.Dialogs.Wpf
         ///   a flying papers animation.
         /// </para>
         /// <para>
-        ///   This property must be set before <see cref="ShowDialog()"/> or <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="ShowDialog(CancellationToken)"/> or <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -378,7 +377,7 @@ namespace Ookii.Dialogs.Wpf
         ///   but the percentage will be ignored.
         /// </para>
         /// <para>
-        ///   This property must be set before <see cref="ShowDialog()"/> or <see cref="Show()"/> is called. Changing property has
+        ///   This property must be set before <see cref="ShowDialog(CancellationToken)"/> or <see cref="Show(CancellationToken)"/> is called. Changing property has
         ///   no effect while the dialog is being displayed.
         /// </para>
         /// </remarks>
@@ -402,6 +401,7 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Displays the progress dialog as a modeless dialog.
         /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   This function will not block the parent window and will return immediately.
@@ -415,15 +415,16 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded.</exception>
-        public void Show()
+        public void Show(CancellationToken cancellationToken = default)
         {
-            Show(null);
+            Show(null, cancellationToken);
         }
 
         /// <summary>
         /// Displays the progress dialog as a modeless dialog.
         /// </summary>
         /// <param name="argument">A parameter for use by the background operation to be executed in the <see cref="DoWork"/> event handler.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   This function will not block the parent window and return immediately.
@@ -437,18 +438,19 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded.</exception>
-        public void Show(object argument)
+        public void Show(object argument, CancellationToken cancellationToken = default)
         {
-            RunProgressDialog(IntPtr.Zero, argument);
+            RunProgressDialog(IntPtr.Zero, argument, cancellationToken);
         }
 
         /// <summary>
         /// Displays the progress dialog as a modal dialog.
         /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
+        ///   the <see cref="ShowDialog(CancellationToken)"/> function for the <see cref="ProgressDialog"/> class will return immediately.
         ///   The parent window will be disabled as with all modal dialogs.
         /// </para>
         /// <para>
@@ -462,24 +464,25 @@ namespace Ookii.Dialogs.Wpf
         ///   but is part of the underlying native progress dialog API so cannot be avoided.
         /// </para>
         /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
+        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show(CancellationToken)"/> function.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded.</exception>
-        public void ShowDialog()
+        public void ShowDialog(CancellationToken cancellationToken = default)
         {
-            ShowDialog(null, null);
+            ShowDialog(null, null, cancellationToken);
         }
 
         /// <summary>
         /// Displays the progress dialog as a modal dialog.
         /// </summary>
         /// <param name="owner">The window that owns the dialog.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
+        ///   the <see cref="ShowDialog(CancellationToken)"/> function for the <see cref="ProgressDialog"/> class will return immediately.
         ///   The parent window will be disabled as with all modal dialogs.
         /// </para>
         /// <para>
@@ -493,24 +496,25 @@ namespace Ookii.Dialogs.Wpf
         ///   but is part of the underlying native progress dialog API so cannot be avoided.
         /// </para>
         /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
+        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show(CancellationToken)"/> function.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(Window owner)
+        public void ShowDialog(Window owner, CancellationToken cancellationToken = default)
         {
-            ShowDialog(owner, null);
+            ShowDialog(owner, null, cancellationToken);
         }
 
         /// <summary>
         /// Displays the progress dialog as a modal dialog.
         /// </summary>
         /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
+        ///   the <see cref="ShowDialog(CancellationToken)"/> function for the <see cref="ProgressDialog"/> class will return immediately.
         ///   The parent window will be disabled as with all modal dialogs.
         /// </para>
         /// <para>
@@ -524,14 +528,14 @@ namespace Ookii.Dialogs.Wpf
         ///   but is part of the underlying native progress dialog API so cannot be avoided.
         /// </para>
         /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
+        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show(CancellationToken)"/> function.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(IntPtr owner)
+        public void ShowDialog(IntPtr owner, CancellationToken cancellationToken = default)
         {
-            ShowDialog(owner, null);
+            ShowDialog(owner, null, cancellationToken);
         }
 
         /// <summary>
@@ -539,10 +543,11 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         /// <param name="owner">The window that owns the dialog.</param>
         /// <param name="argument">A parameter for use by the background operation to be executed in the <see cref="DoWork"/> event handler.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
+        ///   the <see cref="ShowDialog(CancellationToken)"/> function for the <see cref="ProgressDialog"/> class will return immediately.
         ///   The parent window will be disabled as with all modal dialogs.
         /// </para>
         /// <para>
@@ -556,14 +561,14 @@ namespace Ookii.Dialogs.Wpf
         ///   but is part of the underlying native progress dialog API so cannot be avoided.
         /// </para>
         /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
+        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show(CancellationToken)"/> function.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(Window owner, object argument)
+        public void ShowDialog(Window owner, object argument, CancellationToken cancellationToken = default)
         {
-            RunProgressDialog(owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle, argument);
+            RunProgressDialog(owner is null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle, argument, cancellationToken);
         }
 
         /// <summary>
@@ -571,10 +576,11 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this dialog.</param>
         /// <param name="argument">A parameter for use by the background operation to be executed in the <see cref="DoWork"/> event handler.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// <para>
         ///   The ShowDialog function for most .Net dialogs will not return until the dialog is closed. However,
-        ///   the <see cref="ShowDialog()"/> function for the <see cref="ProgressDialog"/> class will return immediately.
+        ///   the <see cref="ShowDialog(CancellationToken)"/> function for the <see cref="ProgressDialog"/> class will return immediately.
         ///   The parent window will be disabled as with all modal dialogs.
         /// </para>
         /// <para>
@@ -588,14 +594,14 @@ namespace Ookii.Dialogs.Wpf
         ///   but is part of the underlying native progress dialog API so cannot be avoided.
         /// </para>
         /// <para>
-        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show()"/> function.
+        ///   When possible, it is recommended that you use a modeless dialog using the <see cref="Show(CancellationToken)"/> function.
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">The animation specified in the <see cref="Animation"/> property
         /// could not be loaded, or the operation is already running.</exception>
-        public void ShowDialog(IntPtr owner, object argument)
+        public void ShowDialog(IntPtr owner, object argument, CancellationToken cancellationToken = default)
         {
-            RunProgressDialog(owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner, argument);
+            RunProgressDialog(owner == IntPtr.Zero ? NativeMethods.GetActiveWindow() : owner, argument, cancellationToken);
         }
 
         /// <summary>
@@ -676,23 +682,28 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Raises the <see cref="DoWork"/> event.
         /// </summary>
+        /// <param name="e">The <see cref="ProgressDialogDoWorkEventArgs"/> containing data for the event.</param>
+        protected virtual void OnDoWork(ProgressDialogDoWorkEventArgs e)
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            OnDoWork((DoWorkEventArgs)e);
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
+
+        /// <summary>
+        /// Raises the <see cref="DoWork"/> event.
+        /// </summary>
         /// <param name="e">The <see cref="DoWorkEventArgs"/> containing data for the event.</param>
+        [Obsolete("OnDoWork(DoWorkEventArgs) is obsolete and will be removed in a future release. Use OnDoWork(ProgressDialogDoWorkEventArgs) instead.")]
         protected virtual void OnDoWork(DoWorkEventArgs e)
         {
             DoWorkEventHandler handler = DoWork;
-            if (!(handler is null))
+            if (handler is null)
             {
-                var eventArgs = new ProgressDialogDoWorkEventArgs(e.Argument, CancellationToken.None)
-                {
-                    Cancel = e.Cancel,
-                    Result = e.Result,
-                };
-
-                handler(this, eventArgs);
-
-                e.Cancel = eventArgs.Cancel;
-                e.Result = eventArgs.Result;
+                return;
             }
+            
+            handler(this, e);
         }
 
         /// <summary>
@@ -717,12 +728,16 @@ namespace Ookii.Dialogs.Wpf
                 handler(this, e);
         }
 
-        private void RunProgressDialog(IntPtr owner, object argument)
+        private void RunProgressDialog(IntPtr owner, object argument, CancellationToken cancellationToken)
         {
-            if( _backgroundWorker.IsBusy )
+            if (_backgroundWorker.IsBusy || !(_cancellationTokenSource is null))
+            {
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogRunning);
+            }
 
-            if( Animation != null )
+            _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+            if ( Animation != null )
             {
                 try
                 {
@@ -778,7 +793,18 @@ namespace Ookii.Dialogs.Wpf
 
         private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            OnDoWork(e);
+            var cancellationToken = _cancellationTokenSource?.Token ?? CancellationToken.None;
+
+            var eventArgs = new ProgressDialogDoWorkEventArgs(e.Argument, cancellationToken)
+            {
+                Cancel = e.Cancel,
+                Result = e.Result,
+            };
+
+            OnDoWork(eventArgs);
+
+            e.Cancel = eventArgs.Cancel;
+            e.Result = eventArgs.Result;
         }
 
         private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -795,12 +821,30 @@ namespace Ookii.Dialogs.Wpf
             if (_ownerHandle != IntPtr.Zero)
                 NativeMethods.EnableWindow(_ownerHandle, true);
 
+            var cancellationTokenSource = _cancellationTokenSource;
+            if (!(cancellationTokenSource is null))
+            {
+                cancellationTokenSource.Dispose();
+                _cancellationTokenSource = null;
+            }
+
             OnRunWorkerCompleted(new RunWorkerCompletedEventArgs((!e.Cancelled && e.Error == null) ? e.Result : null, e.Error, e.Cancelled));
         }
 
         private void _backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            _cancellationPending = _dialog.HasUserCancelled();
+            var cancellationTokenSource = _cancellationTokenSource;
+
+            var cancellationRequestedByUser = _dialog.HasUserCancelled();
+            var cancellationRequestedByCode = cancellationTokenSource?.IsCancellationRequested ?? false;
+
+            if (cancellationRequestedByUser && !cancellationRequestedByCode)
+            {
+                cancellationTokenSource.Cancel();
+            }
+
+            _cancellationPending = cancellationRequestedByUser || cancellationRequestedByCode;
+
             // ReportProgress doesn't allow values outside this range. However, CancellationPending will call
             // BackgroundWorker.ReportProgress directly with a value that is outside this range to update the value of the property.
             if( e.ProgressPercentage >= 0 && e.ProgressPercentage <= 100 )
@@ -816,6 +860,26 @@ namespace Ookii.Dialogs.Wpf
                     OnProgressChanged(new ProgressChangedEventArgs(e.ProgressPercentage, data.UserState));
                 }
             }
-        }    
+        }
+
+        /// <summary>
+        /// Used to retrieve services from the "Sender" event args.
+        /// </summary>
+        /// <param name="serviceType">
+        /// The service to retrieve. currently, only supports one of these:<br/>
+        /// <see cref="IProgress{T}"/> with <see cref="int"/>.<br/>
+        /// <see cref="IProgress{T}"/> with <see cref="string"/>.<br/>
+        /// <see cref="System.Threading.CancellationTokenSource"/>.<br/>
+        /// </param>
+        /// <returns>An object that can be casted to the requested service.</returns>
+        object IServiceProvider.GetService(Type serviceType)
+        {
+            if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
+
+            if (serviceType == typeof(IProgress<int>)) return this;
+            if (serviceType == typeof(IProgress<string>)) return this;
+
+            throw new ArgumentException($"Unsupported service {serviceType}", nameof(serviceType));            
+        }
     }
 }
