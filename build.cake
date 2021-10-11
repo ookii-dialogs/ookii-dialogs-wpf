@@ -30,11 +30,13 @@ Task("build")
         Configuration = configuration,
         NoRestore = true,
         NoIncremental = false,
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
-            .WithProperty("Version", buildVersion.Version)
-            .WithProperty("AssemblyVersion", buildVersion.AssemblyVersion)
-            .WithProperty("FileVersion", buildVersion.FileVersion)
-            .WithProperty("ContinuousIntegrationBuild", BuildSystem.IsLocalBuild ? "false" : "true")
+        MSBuildSettings = new DotNetCoreMSBuildSettings
+        {
+            Version = buildVersion.Version,
+            AssemblyVersion = buildVersion.AssemblyVersion,
+            FileVersion = buildVersion.FileVersion,
+            ContinuousIntegrationBuild = BuildSystem.IsLocalBuild,
+        },
     });
 });
 
@@ -70,9 +72,11 @@ Task("pack")
         IncludeSymbols = true,
         IncludeSource = true,
         OutputDirectory = "./artifact/nuget",
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
-            .WithProperty("Version", buildVersion.Version)
-            .WithProperty("PackageReleaseNotes", releaseNotes)
+        MSBuildSettings = new DotNetCoreMSBuildSettings
+        {
+            Version = buildVersion.Version,
+            PackageReleaseNotes = releaseNotes,
+        },
     });
 
     DotNetCorePack("./src/Ookii.Dialogs/Ookii.Dialogs.csproj", new DotNetCorePackSettings
@@ -83,9 +87,11 @@ Task("pack")
         IncludeSymbols = false,
         IncludeSource = false,
         OutputDirectory = "./artifact/nuget",
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
-            .WithProperty("Version", buildVersion.Version)
-            .WithProperty("PackageReleaseNotes", releaseNotes)
+        MSBuildSettings = new DotNetCoreMSBuildSettings
+        {
+            Version = buildVersion.Version,
+            PackageReleaseNotes = releaseNotes,
+        },
     });
 });
 
