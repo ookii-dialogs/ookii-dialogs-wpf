@@ -7,7 +7,7 @@ on:
 
 jobs:
   dependabot-cake:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: check/update cake dependencies
-        uses: augustoproiete-actions/nils-org--dependabot-cake-action@v1
+        uses: augustoproiete-actions/nils-org--dependabot-cake-action@v1.1.0
