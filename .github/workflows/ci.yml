@@ -42,7 +42,7 @@ jobs:
           dotnet-version: "5.0.201"
       - name: Run dotnet --info
         run: dotnet --info
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0
       - name: Build
