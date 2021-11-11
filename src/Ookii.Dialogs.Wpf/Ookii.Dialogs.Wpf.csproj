@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net45</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net462</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
@@ -49,7 +49,7 @@
     <RepositoryUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf.git</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
   </PropertyGroup>
 
@@ -62,14 +62,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net45' ">true</DisableImplicitFrameworkReferences>
+    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net462' ">true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net462</TargetFrameworks>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
@@ -22,10 +22,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net45' ">true</DisableImplicitFrameworkReferences>
+    <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net462' ">true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
