@@ -23,6 +23,7 @@ using Ookii.Dialogs.Wpf.Interop;
 using System.Windows.Interop;
 using System.Windows;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -40,6 +41,8 @@ namespace Ookii.Dialogs.Wpf
     {
         private string _description;
         private string _selectedPath;
+        private NativeMethods.FOS _options;
+        private string[] _selectedPaths;
 
         /// <summary>
         /// Creates a new instance of the <see cref="VistaFolderBrowserDialog" /> class.
@@ -108,8 +111,14 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                return _selectedPath ?? string.Empty;
+                var selectedPath =
+                    _selectedPath ??
+                    _selectedPaths?.FirstOrDefault() ??
+                    string.Empty;
+
+                return selectedPath;
             }
+
             set
             {
                 _selectedPath = value;
@@ -135,6 +144,63 @@ namespace Ookii.Dialogs.Wpf
         [Category("Folder Browsing"), DefaultValue(false), Description("A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.")]
         public bool UseDescriptionForTitle { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box allows multiple folder to be selected.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if the dialog box allows multiple folder to be selected together or concurrently; otherwise, <see langword="false" />. 
+        /// The default value is <see langword="false" />.
+        /// </value>
+        [Description("A value indicating whether the dialog box allows multiple folders to be selected."), DefaultValue(false), Category("Behavior")]
+        public bool Multiselect
+        {
+            get
+            {
+                return HasOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT);
+            }
+
+            set
+            {
+                SetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the folder paths of all selected folder in the dialog box.
+        /// </summary>
+        /// <value>
+        /// An array of type <see cref="string"/>, containing the folder paths of all selected folder in the dialog box.
+        /// </value>
+        [Description("The folder path of all selected folder in the dialog box."), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string[] SelectedPaths
+        {
+            get
+            {
+                var selectedPaths = _selectedPaths;
+
+                if (selectedPaths is null)
+                {
+                    var selectedPath = _selectedPath;
+                    if (string.IsNullOrWhiteSpace(selectedPath))
+                    {
+                        return new string[0];
+                    }
+                    else
+                    {
+                        return new[] { selectedPath };
+                    }
+                }
+
+                return (string[])selectedPaths.Clone();
+            }
+
+            set
+            {
+                _selectedPaths = value;
+            }
+        }
+
+
         #endregion
 
         #region Public Methods
@@ -149,6 +215,8 @@ namespace Ookii.Dialogs.Wpf
             _selectedPath = string.Empty;
             RootFolder = Environment.SpecialFolder.Desktop;
             ShowNewFolderButton = true;
+            _selectedPaths = null;
+            _options = 0;
         }
 
         /// <summary>
@@ -180,6 +248,27 @@ namespace Ookii.Dialogs.Wpf
         {
             IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
             return new bool?(IsVistaFolderDialogSupported ? RunDialog(ownerHandle) : RunDialogDownlevel(ownerHandle));
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal void SetOption(NativeMethods.FOS option, bool value)
+        {
+            if (value)
+            {
+                _options |= option;
+            }
+            else
+            {
+                _options &= ~option;
+            }
+        }
+
+        internal bool HasOption(NativeMethods.FOS option)
+        {
+            return (_options & option) != 0;
         }
 
         #endregion
@@ -275,9 +364,9 @@ namespace Ookii.Dialogs.Wpf
                 }
             }
 
-            dialog.SetOptions(NativeMethods.FOS.FOS_PICKFOLDERS | NativeMethods.FOS.FOS_FORCEFILESYSTEM | NativeMethods.FOS.FOS_FILEMUSTEXIST);
+            dialog.SetOptions(NativeMethods.FOS.FOS_PICKFOLDERS | NativeMethods.FOS.FOS_FORCEFILESYSTEM | NativeMethods.FOS.FOS_FILEMUSTEXIST | _options);
 
-            if( !string.IsNullOrEmpty(_selectedPath) )
+            if ( !string.IsNullOrEmpty(_selectedPath) )
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
                 if( parent == null || !Directory.Exists(parent) )
@@ -293,11 +382,30 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-        private void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        private void GetResult(IFileDialog dialog)
         {
-            Ookii.Dialogs.Wpf.Interop.IShellItem item;
-            dialog.GetResult(out item);
-            item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
+            if (Multiselect)
+            {
+                ((IFileOpenDialog)dialog).GetResults(out IShellItemArray results);
+
+                results.GetCount(out uint count);
+                string[] folderPaths = new string[count];
+
+                for (uint x = 0; x < count; ++x)
+                {
+                    results.GetItemAt(x, out IShellItem item);
+                    item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out string name);
+
+                    folderPaths[x] = name;
+                }
+
+                SelectedPaths = folderPaths;
+            }
+            else
+            {
+                dialog.GetResult(out IShellItem item);
+                item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
+            }
         }
 
         private int BrowseCallbackProc(IntPtr hwnd, NativeMethods.FolderBrowserDialogMessage msg, IntPtr lParam, IntPtr wParam)

@@ -16,6 +16,7 @@
                 <ComboBoxItem>Progress Dialog</ComboBoxItem>
                 <ComboBoxItem>Credential Dialog</ComboBoxItem>
                 <ComboBoxItem>Vista-style Folder Browser Dialog</ComboBoxItem>
+                <ComboBoxItem>Vista-style Folder Browser Dialog (Select Multiple)</ComboBoxItem>
                 <ComboBoxItem>Vista-style Open File Dialog</ComboBoxItem>
                 <ComboBoxItem>Vista-style Save File Dialog</ComboBoxItem>
             </ComboBox.Items>
