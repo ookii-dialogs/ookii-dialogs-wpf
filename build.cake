@@ -1,4 +1,4 @@
-#addin "nuget:?package=Cake.MinVer&version=1.0.1"
+#addin "nuget:?package=Cake.MinVer&version=2.0.0"
 #addin "nuget:?package=Cake.Args&version=1.0.1"
 
 var target       = ArgumentOrDefault<string>("target") ?? "pack";
