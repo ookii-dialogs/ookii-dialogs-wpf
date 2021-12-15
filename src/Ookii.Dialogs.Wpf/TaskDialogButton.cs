@@ -206,24 +206,24 @@ namespace Ookii.Dialogs.Wpf
             base.CheckDuplicate(itemToExclude);
         }
 
-        internal NativeMethods.TaskDialogCommonButtonFlags ButtonFlag
+        internal TASKDIALOG_COMMON_BUTTON_FLAGS ButtonFlag
         {
             get
             {
                 switch( _type )
                 {
                 case ButtonType.Ok:
-                    return NativeMethods.TaskDialogCommonButtonFlags.OkButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON;
                 case ButtonType.Yes:
-                    return NativeMethods.TaskDialogCommonButtonFlags.YesButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_YES_BUTTON;
                 case ButtonType.No:
-                    return NativeMethods.TaskDialogCommonButtonFlags.NoButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_NO_BUTTON;
                 case ButtonType.Cancel:
-                    return NativeMethods.TaskDialogCommonButtonFlags.CancelButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON;
                 case ButtonType.Retry:
-                    return NativeMethods.TaskDialogCommonButtonFlags.RetryButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON;
                 case ButtonType.Close:
-                    return NativeMethods.TaskDialogCommonButtonFlags.CloseButton;
+                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON;
                 default:
                     return 0;
                 }

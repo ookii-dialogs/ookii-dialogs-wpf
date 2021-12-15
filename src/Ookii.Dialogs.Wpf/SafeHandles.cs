@@ -38,7 +38,7 @@ namespace Ookii.Dialogs.Wpf
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            return NativeMethods.FreeLibrary(handle);
+            return NativeMethods.FreeLibrary((HINSTANCE)handle);
         }
     }
 
@@ -53,7 +53,7 @@ namespace Ookii.Dialogs.Wpf
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            NativeMethods.ReleaseActCtx(handle);
+            NativeMethods.ReleaseActCtx((HANDLE)handle);
             return true;
         }
     }

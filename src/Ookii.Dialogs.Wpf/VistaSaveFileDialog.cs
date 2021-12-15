@@ -80,14 +80,14 @@ namespace Ookii.Dialogs.Wpf
             {
                 if( DownlevelDialog != null )
                     return ((SaveFileDialog)DownlevelDialog).CreatePrompt;
-                return GetOption(NativeMethods.FOS.FOS_CREATEPROMPT);
+                return GetOption(FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT);
             }
             set
             {
                 if( DownlevelDialog != null )
                     ((SaveFileDialog)DownlevelDialog).CreatePrompt = value;
                 else
-                    SetOption(NativeMethods.FOS.FOS_CREATEPROMPT, value);
+                    SetOption(FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT, value);
             }
         }
 
@@ -107,14 +107,14 @@ namespace Ookii.Dialogs.Wpf
             {
                 if( DownlevelDialog != null )
                     return ((SaveFileDialog)DownlevelDialog).OverwritePrompt;
-                return GetOption(NativeMethods.FOS.FOS_OVERWRITEPROMPT);
+                return GetOption(FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT);
             }
             set
             {
                 if( DownlevelDialog != null )
                     ((SaveFileDialog)DownlevelDialog).OverwritePrompt = value;
                 else
-                    SetOption(NativeMethods.FOS.FOS_OVERWRITEPROMPT, value);
+                    SetOption(FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT, value);
             }
         }
 
@@ -188,9 +188,9 @@ namespace Ookii.Dialogs.Wpf
 
         #region Internal Methods
 
-        internal override Ookii.Dialogs.Wpf.Interop.IFileDialog CreateFileDialog()
+        internal override IFileDialog CreateFileDialog()
         {
-            return new Ookii.Dialogs.Wpf.Interop.NativeFileSaveDialog();
+            return new NativeFileSaveDialog();
         }
 
         #endregion

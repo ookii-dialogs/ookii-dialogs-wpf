@@ -1,0 +1,12 @@
+﻿{
+    "$schema": "https://aka.ms/CsWin32.schema.json",
+    "emitSingleFile": false,
+    "className": "NativeMethods",
+    "comInterop": {
+        "preserveSigMethods": [
+            "IFileDialog.Show",
+            "IFileDialogEvents.OnFileOk",
+            "IFileDialogEvents.OnFolderChanging"
+        ]
+    }
+}
