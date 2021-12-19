@@ -55,7 +55,7 @@ jobs:
         run: ${{ matrix.job.build }} --verbosity=diagnostic --target=pack
       - name: Publish artifacts
         if: matrix.job.push && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
-        uses: actions/upload-artifact@v2.3.0
+        uses: actions/upload-artifact@v2.3.1
         with:
           if-no-files-found: warn
           name: package
