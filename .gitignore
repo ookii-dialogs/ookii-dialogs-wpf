@@ -1,36 +1,28 @@
-#Ignore thumbnails created by Windows
+#windows
 Thumbs.db
 
-#Ignore metadata created by OSX
+#osx
 .DS_Store
 ._*
 
-#Ignore files created by Visual Studio
+#visual-studio
 .vs/
 *.user
 *.suo
 *.tmp_proj
-*.dbmdl
-*.dbproj.schemaview
 *.cache
 *.vsdoc
 [Oo]bj/
 [Bb]in/
 [Dd]ebug/
 [Rr]elease/
-[Rr][Cc]/
-[Cc]ode[Cc]overage/
-[Ff]x[Cc]op/
 [Ll]og/
 [Tt]emp/
 
-# Ignore NuGet Packages
+#nuget
 *.nupkg
 **/packages/*
 
-#Ignore files created by ReSharper
-_ReSharper*/
-
-#Ignore files created by NUnit
-TestResult.xml
-*.VisualState.xml
+#cake
+.cake/
+/artifact/

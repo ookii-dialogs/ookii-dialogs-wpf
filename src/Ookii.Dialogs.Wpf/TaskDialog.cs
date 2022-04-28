@@ -1,5 +1,19 @@
-// Copyright (c) Sven Groot (Ookii.org) 2009
-// BSD license; see LICENSE for details.
+﻿#region Copyright 2009-2021 Ookii Dialogs Contributors
+//
+// Licensed under the BSD 3-Clause License (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://opensource.org/licenses/BSD-3-Clause
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+#endregion
+
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -1082,6 +1096,76 @@ namespace Ookii.Dialogs.Wpf
         }
 
         /// <summary>
+        /// Shows the task dialog as a modal dialog.
+        /// </summary>
+        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that is the owner of this task dialog.</param>
+        /// <returns>The button that the user clicked. Can be <see langword="null" /> if the user cancelled the dialog using the
+        /// title bar close button.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <para>
+        ///   One of the properties or a combination of properties is not valid.
+        /// </para>
+        /// <para>
+        ///   -or-
+        /// </para>
+        /// <para>
+        ///   The dialog is already running.
+        /// </para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if task dialog is already being displayed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if no buttons are present.</exception>
+        public TaskDialogButton ShowDialog(IntPtr owner)
+        {
+            if( !OSSupportsTaskDialogs )
+                throw new NotSupportedException(Properties.Resources.TaskDialogsNotSupportedError);
+
+            if( IsDialogRunning )
+                throw new InvalidOperationException(Properties.Resources.TaskDialogRunningError);
+
+            if (_buttons is null || _buttons.Count == 0)
+                throw new InvalidOperationException(Properties.Resources.TaskDialogNoButtonsError);
+
+            _config.hwndParent = owner;
+            _config.dwCommonButtons = 0;
+            _config.pButtons = IntPtr.Zero;
+            _config.cButtons = 0;
+            List<NativeMethods.TASKDIALOG_BUTTON> buttons = SetupButtons();
+            List<NativeMethods.TASKDIALOG_BUTTON> radioButtons = SetupRadioButtons();
+
+            SetupIcon();
+
+            try
+            {
+                MarshalButtons(buttons, out _config.pButtons, out _config.cButtons);
+                MarshalButtons(radioButtons, out _config.pRadioButtons, out _config.cRadioButtons);
+                int buttonId;
+                int radioButton;
+                bool verificationFlagChecked;
+                using( new ComCtlv6ActivationContext(true) )
+                {
+                    NativeMethods.TaskDialogIndirect(ref _config, out buttonId, out radioButton, out verificationFlagChecked);
+                }
+                IsVerificationChecked = verificationFlagChecked;
+
+                TaskDialogRadioButton selectedRadioButton;
+                if( _radioButtonsById.TryGetValue(radioButton, out selectedRadioButton) )
+                    selectedRadioButton.Checked = true;
+
+                TaskDialogButton selectedButton;
+                if( _buttonsById.TryGetValue(buttonId, out selectedButton) )
+                    return selectedButton;
+                else
+                    return null;
+            }
+            finally
+            {
+                CleanUpButtons(ref _config.pButtons, ref _config.cButtons);
+                CleanUpButtons(ref _config.pRadioButtons, ref _config.cRadioButtons);
+            }
+        }
+
+        /// <summary>
         /// Simulates a click on the verification checkbox of the <see cref="TaskDialog"/>, if it exists.
         /// </summary>
         /// <param name="checkState"><see langword="true" /> to set the state of the checkbox to be checked; <see langword="false" /> to set it to be unchecked.</param>
@@ -1220,57 +1304,7 @@ namespace Ookii.Dialogs.Wpf
         #endregion
 
         #region Private members
-
-        private TaskDialogButton ShowDialog(IntPtr owner)
-        {
-            if( !OSSupportsTaskDialogs )
-                throw new NotSupportedException(Properties.Resources.TaskDialogsNotSupportedError);
-
-            if( IsDialogRunning )
-                throw new InvalidOperationException(Properties.Resources.TaskDialogRunningError);
-
-            if( _buttons.Count == 0 )
-                throw new InvalidOperationException(Properties.Resources.TaskDialogNoButtonsError);
-
-            _config.hwndParent = owner;
-            _config.dwCommonButtons = 0;
-            _config.pButtons = IntPtr.Zero;
-            _config.cButtons = 0;
-            List<NativeMethods.TASKDIALOG_BUTTON> buttons = SetupButtons();
-            List<NativeMethods.TASKDIALOG_BUTTON> radioButtons = SetupRadioButtons();
-
-            SetupIcon();
-
-            try
-            {
-                MarshalButtons(buttons, out _config.pButtons, out _config.cButtons);
-                MarshalButtons(radioButtons, out _config.pRadioButtons, out _config.cRadioButtons);
-                int buttonId;
-                int radioButton;
-                bool verificationFlagChecked;
-                using( new ComCtlv6ActivationContext(true) )
-                {
-                    NativeMethods.TaskDialogIndirect(ref _config, out buttonId, out radioButton, out verificationFlagChecked);
-                }
-                IsVerificationChecked = verificationFlagChecked;
-
-                TaskDialogRadioButton selectedRadioButton;
-                if( _radioButtonsById.TryGetValue(radioButton, out selectedRadioButton) )
-                    selectedRadioButton.Checked = true;
-
-                TaskDialogButton selectedButton;
-                if( _buttonsById.TryGetValue(buttonId, out selectedButton) )
-                    return selectedButton;
-                else
-                    return null;
-            }
-            finally
-            {
-                CleanUpButtons(ref _config.pButtons, ref _config.cButtons);
-                CleanUpButtons(ref _config.pRadioButtons, ref _config.cRadioButtons);
-            }
-        }
-
+        
         internal void UpdateDialog()
         {
             if( IsDialogRunning )

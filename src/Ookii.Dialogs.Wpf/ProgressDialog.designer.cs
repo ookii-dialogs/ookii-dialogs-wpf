@@ -1,4 +1,4 @@
-namespace Ookii.Dialogs.Wpf
+﻿namespace Ookii.Dialogs.Wpf
 {
     partial class ProgressDialog
     {
@@ -23,6 +23,13 @@ namespace Ookii.Dialogs.Wpf
                     {
                         _currentAnimationModuleHandle.Dispose();
                         _currentAnimationModuleHandle = null;
+                    }
+
+                    var cancellationTokenSource = _cancellationTokenSource;
+                    if (!(cancellationTokenSource is null))
+                    {
+                        cancellationTokenSource.Dispose();
+                        _cancellationTokenSource = null;
                     }
                 }
             }

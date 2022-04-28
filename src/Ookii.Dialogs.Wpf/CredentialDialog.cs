@@ -1,5 +1,19 @@
-// Copyright (c) Sven Groot (Ookii.org) 2009
-// BSD license; see LICENSE for details.
+﻿#region Copyright 2009-2021 Ookii Dialogs Contributors
+//
+// Licensed under the BSD 3-Clause License (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://opensource.org/licenses/BSD-3-Clause
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +52,7 @@ namespace Ookii.Dialogs.Wpf
     {
         private string _confirmTarget;
         private NetworkCredential _credentials = new NetworkCredential();
+        private byte[] _additionalEntropy;
         private bool _isSaveChecked;
         private string _target;
 
@@ -146,6 +161,27 @@ namespace Ookii.Dialogs.Wpf
                 _confirmTarget = null;
                 _credentials.Password = value;
                 OnPasswordChanged(EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the optional entropy to increase the complexity of the password encryption.
+        /// This property is only used if the user chose to save the credentials.
+        /// </summary>
+        /// <value>
+        /// A byte array with values of your choosing.
+        /// The default value is <see langword="null" /> for no added complexity.
+        /// </value>
+        [Browsable(false)]
+        public byte[] AdditionalEntropy
+        {
+            get
+            {
+                return _additionalEntropy;
+            }
+            set
+            {
+                _additionalEntropy = value;
             }
         }
 
@@ -389,6 +425,81 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Shows the credentials dialog as a modal dialog with the specified owner.
         /// </summary>
+        /// <param name="owner">The <see cref="IntPtr"/> Win32 handle that owns the credentials dialog.</param>
+        /// <returns><see langword="true" /> if the user clicked OK; otherwise, <see langword="false" />.</returns>
+        /// <remarks>
+        /// <para>
+        ///   The credentials dialog will not be shown if one of the following conditions holds:
+        /// </para>
+        /// <list type="bullet">
+        ///   <item>
+        ///     <description>
+        ///       <see cref="UseApplicationInstanceCredentialCache"/> is <see langword="true"/> and the application instance
+        ///       credential cache contains credentials for the specified <see cref="Target"/>, even if <see cref="ShowUIForSavedCredentials"/>
+        ///       is <see langword="true"/>.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///       <see cref="ShowSaveCheckBox"/> is <see langword="true"/>, <see cref="ShowUIForSavedCredentials"/> is <see langword="false"/>, and the operating system credential store
+        ///       for the current user contains credentials for the specified <see cref="Target"/>.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// <para>
+        ///   In these cases, the <see cref="Credentials"/>, <see cref="UserName"/> and <see cref="Password"/> properties will
+        ///   be set to the saved credentials and this function returns immediately, returning <see langword="true" />.
+        /// </para>
+        /// <para>
+        ///   If the <see cref="ShowSaveCheckBox"/> property is <see langword="true"/>, you should call <see cref="ConfirmCredentials"/>
+        ///   after validating if the provided credentials are correct.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="CredentialException">An error occurred while showing the credentials dialog.</exception>
+        /// <exception cref="InvalidOperationException"><see cref="Target"/> is an empty string ("").</exception>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        public bool ShowDialog(IntPtr owner)
+        {
+            if( string.IsNullOrEmpty(_target) )
+                throw new InvalidOperationException(Properties.Resources.CredentialEmptyTargetError);
+
+            IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
+
+            UserName = "";
+            Password = "";
+            IsStoredCredential = false;
+
+            if( RetrieveCredentialsFromApplicationInstanceCache() )
+            {
+                IsStoredCredential = true;
+                _confirmTarget = Target;
+                return true;
+            }
+
+            bool storedCredentials = false;
+            if( ShowSaveCheckBox && RetrieveCredentials() )
+            {
+                IsSaveChecked = true;
+                if( !ShowUIForSavedCredentials )
+                {
+                    IsStoredCredential = true;
+                    _confirmTarget = Target;
+                    return true;
+                }
+                storedCredentials = true;
+            }
+
+            bool result;
+            if( NativeMethods.IsWindowsVistaOrLater )
+                result = PromptForCredentialsCredUIWin(ownerHandle, storedCredentials);
+            else
+                result = PromptForCredentialsCredUI(ownerHandle, storedCredentials);
+            return result;
+        }
+
+        /// <summary>
+        /// Shows the credentials dialog as a modal dialog with the specified owner.
+        /// </summary>
         /// <param name="owner">The <see cref="Window"/> that owns the credentials dialog.</param>
         /// <returns><see langword="true" /> if the user clicked OK; otherwise, <see langword="false" />.</returns>
         /// <remarks>
@@ -424,40 +535,12 @@ namespace Ookii.Dialogs.Wpf
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public bool ShowDialog(Window owner)
         {
-            if( string.IsNullOrEmpty(_target) )
-                throw new InvalidOperationException(Properties.Resources.CredentialEmptyTargetError);
-
-            UserName = "";
-            Password = "";
-            IsStoredCredential = false;
-
-            if( RetrieveCredentialsFromApplicationInstanceCache() )
-            {
-                IsStoredCredential = true;
-                _confirmTarget = Target;
-                return true;
-            }
-
-            bool storedCredentials = false;
-            if( ShowSaveCheckBox && RetrieveCredentials() )
-            {
-                IsSaveChecked = true;
-                if( !ShowUIForSavedCredentials )
-                {
-                    IsStoredCredential = true;
-                    _confirmTarget = Target;
-                    return true;
-                }
-                storedCredentials = true;
-            }
-
-            IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
-            bool result;
-            if( NativeMethods.IsWindowsVistaOrLater )
-                result = PromptForCredentialsCredUIWin(ownerHandle, storedCredentials);
+            IntPtr ownerHandle;
+            if( owner == null )
+                ownerHandle = NativeMethods.GetActiveWindow();
             else
-                result = PromptForCredentialsCredUI(ownerHandle, storedCredentials);
-            return result;
+                ownerHandle = new WindowInteropHelper(owner).Handle;
+            return ShowDialog(ownerHandle);
         }
 
         /// <summary>
@@ -490,7 +573,7 @@ namespace Ookii.Dialogs.Wpf
                     }
                 }
 
-                StoreCredential(Target, Credentials);
+                StoreCredential(Target, Credentials, AdditionalEntropy);
             }
         }
 
@@ -499,6 +582,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         /// <param name="target">The target name for the credentials.</param>
         /// <param name="credential">The credentials to store.</param>
+        /// <param name="additionalEntropy">Additional entropy for encrypting the password.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>
         ///   <paramref name="target"/> is <see langword="null" />.
@@ -524,7 +608,7 @@ namespace Ookii.Dialogs.Wpf
         ///   form "Company_ApplicationName_www.example.com".
         /// </para>
         /// </remarks>
-        public static void StoreCredential(string target, NetworkCredential credential)
+        public static void StoreCredential(string target, NetworkCredential credential, byte[] additionalEntropy = null)
         {
             if( target == null )
                 throw new ArgumentNullException("target");
@@ -537,7 +621,7 @@ namespace Ookii.Dialogs.Wpf
             c.UserName = credential.UserName;
             c.TargetName = target;
             c.Persist = NativeMethods.CredPersist.Enterprise;
-            byte[] encryptedPassword = EncryptPassword(credential.Password);
+            byte[] encryptedPassword = EncryptPassword(credential.Password, additionalEntropy);
             c.CredentialBlob = System.Runtime.InteropServices.Marshal.AllocHGlobal(encryptedPassword.Length);
             try
             {
@@ -557,6 +641,7 @@ namespace Ookii.Dialogs.Wpf
         /// Retrieves credentials for the specified target from the operating system's credential store for the current user.
         /// </summary>
         /// <param name="target">The target name for the credentials.</param>
+        /// <param name="additionalEntropy">The same entropy value that was used when storing the credentials.</param>
         /// <returns>The credentials if they were found; otherwise, <see langword="null" />.</returns>
         /// <remarks>
         /// <para>
@@ -571,7 +656,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="ArgumentNullException"><paramref name="target"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException"><paramref name="target"/> is an empty string ("").</exception>
         /// <exception cref="CredentialException">An error occurred retrieving the credentials.</exception>
-        public static NetworkCredential RetrieveCredential(string target)
+        public static NetworkCredential RetrieveCredential(string target, byte[] additionalEntropy = null)
         {
             if( target == null )
                 throw new ArgumentNullException("target");
@@ -592,7 +677,7 @@ namespace Ookii.Dialogs.Wpf
                     NativeMethods.CREDENTIAL c = (NativeMethods.CREDENTIAL)System.Runtime.InteropServices.Marshal.PtrToStructure(credential, typeof(NativeMethods.CREDENTIAL));
                     byte[] encryptedPassword = new byte[c.CredentialBlobSize];
                     System.Runtime.InteropServices.Marshal.Copy(c.CredentialBlob, encryptedPassword, 0, encryptedPassword.Length);
-                    cred = new NetworkCredential(c.UserName, DecryptPassword(encryptedPassword));
+                    cred = new NetworkCredential(c.UserName, DecryptPassword(encryptedPassword, additionalEntropy));
                 }
                 finally
                 {
@@ -835,7 +920,7 @@ namespace Ookii.Dialogs.Wpf
 
         private bool RetrieveCredentials()
         {
-            NetworkCredential credential = RetrieveCredential(Target);
+            NetworkCredential credential = RetrieveCredential(Target, AdditionalEntropy);
             if( credential != null )
             {
                 UserName = credential.UserName;
@@ -845,17 +930,17 @@ namespace Ookii.Dialogs.Wpf
             return false;
         }
 
-        private static byte[] EncryptPassword(string password)
+        private static byte[] EncryptPassword(string password, byte[] additionalEntropy)
         {
-            byte[] protectedData = System.Security.Cryptography.ProtectedData.Protect(System.Text.Encoding.UTF8.GetBytes(password), null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+            byte[] protectedData = System.Security.Cryptography.ProtectedData.Protect(System.Text.Encoding.UTF8.GetBytes(password), additionalEntropy, System.Security.Cryptography.DataProtectionScope.CurrentUser);
             return protectedData;
         }
 
-        private static string DecryptPassword(byte[] encrypted)
+        private static string DecryptPassword(byte[] encrypted, byte[] additionalEntropy)
         {
             try
             {
-                return System.Text.Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
+                return Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, additionalEntropy, System.Security.Cryptography.DataProtectionScope.CurrentUser));
             }
             catch( System.Security.Cryptography.CryptographicException )
             {

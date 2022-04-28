@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright 2009-2021 Ookii Dialogs Contributors
+//
+// Licensed under the BSD 3-Clause License (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://opensource.org/licenses/BSD-3-Clause
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Threading;
 using System.ComponentModel;
 
@@ -32,7 +36,7 @@ namespace Ookii.Dialogs.Wpf.Sample
         {
             InitializeComponent();
 
-            _sampleProgressDialog.DoWork += new System.ComponentModel.DoWorkEventHandler(_sampleProgressDialog_DoWork);
+            _sampleProgressDialog.DoWork += new DoWorkEventHandler(_sampleProgressDialog_DoWork);
         }
 
 
@@ -56,9 +60,12 @@ namespace Ookii.Dialogs.Wpf.Sample
                 ShowFolderBrowserDialog();
                 break;
             case 5:
-                ShowOpenFileDialog();
+                ShowFolderBrowserDialogSelectMultiple();
                 break;
             case 6:
+                ShowOpenFileDialog();
+                break;
+            case 7:
                 ShowSaveFileDialog();
                 break;
             }
@@ -158,13 +165,46 @@ namespace Ookii.Dialogs.Wpf.Sample
 
         private void ShowFolderBrowserDialog()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            var dialog = new VistaFolderBrowserDialog();
             dialog.Description = "Please select a folder.";
             dialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
-            if( !VistaFolderBrowserDialog.IsVistaFolderDialogSupported )
+
+            if (!VistaFolderBrowserDialog.IsVistaFolderDialogSupported)
+            {
                 MessageBox.Show(this, "Because you are not using Windows Vista or later, the regular folder browser dialog will be used. Please use Windows Vista to see the new dialog.", "Sample folder browser dialog");
-            if( (bool)dialog.ShowDialog(this) )
-                MessageBox.Show(this, "The selected folder was: " + dialog.SelectedPath, "Sample folder browser dialog");            
+            }
+
+            if ((bool)dialog.ShowDialog(this))
+            {
+                MessageBox.Show(this, $"The selected folder was:{Environment.NewLine}{dialog.SelectedPath}", "Sample folder browser dialog");
+            }
+        }
+
+        private void ShowFolderBrowserDialogSelectMultiple()
+        {
+            var dialog = new VistaFolderBrowserDialog();
+            dialog.Multiselect = true;
+            dialog.Description = "Please select a folder.";
+            dialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+
+            if (!VistaFolderBrowserDialog.IsVistaFolderDialogSupported)
+            {
+                MessageBox.Show(this, "Because you are not using Windows Vista or later, the regular folder browser dialog will be used. Please use Windows Vista to see the new dialog.", "Sample folder browser dialog");
+            }
+
+            if ((bool)dialog.ShowDialog(this))
+            {
+                var selectedPaths = dialog.SelectedPaths;
+
+                if (selectedPaths.Length == 1)
+                {
+                    MessageBox.Show(this, $"The selected folder was:{Environment.NewLine}{selectedPaths[0]}", "Sample folder browser dialog");
+                }
+                else
+                {
+                    MessageBox.Show(this, $"The selected folders were:{Environment.NewLine}{string.Join(Environment.NewLine, selectedPaths)}", "Sample folder browser dialog");
+                }
+            }
         }
 
         private void ShowOpenFileDialog()

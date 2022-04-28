@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows;net5.0-windows;netcoreapp3.1;net462</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IsPackable>true</IsPackable>
+
+    <NoWarn>$(NoWarn);NU5048;NU5128</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Ookii.Dialogs</PackageId>
+    <Version>0.0.1-local</Version>
+    <Authors>Ookii Dialogs Contributors</Authors>
+    <Description>DEPRECATED. This package has been replaced by the package Ookii.Dialogs.Wpf.</Description>
+    <Copyright>Copyright (c) 2009-2021 Ookii Dialogs Contributors</Copyright>
+    <PackageTags>ookii;dialogs;wpf;windows-presentation-foundation;progress-dialog;task-dialog;credential-dialog;common-file-dialog</PackageTags>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageIcon>images\icon.png</PackageIcon>
+    <PackageIconUrl>https://cdn.jsdelivr.net/gh/ookii-dialogs/ookii-dialogs-wpf/assets/ookii-dialogs-deprecated-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/ookii-dialogs/ookii-dialogs-wpf/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/ookii-dialogs/ookii-dialogs-wpf.git</RepositoryUrl>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="*.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="build\**\*" Pack="true"  PackagePath="build" />
+    <Content Include="buildMultiTargeting\**\*" Pack="true"  PackagePath="buildMultiTargeting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\ookii-dialogs-deprecated-nuget.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+  </ItemGroup>
+
+  <!--
+    Workaround to force a [lowerBound, upperBound] version constraint in the ProjectReference
+    https://github.com/NuGet/Home/issues/5556#issuecomment-585482714
+  -->
+  <Target Name="_BoundedProjectReferencesVersion" AfterTargets="_GetProjectReferenceVersions">
+    <ItemGroup>
+      <_ProjectReferencesWithBounds Include="@(_ProjectReferencesWithVersions)">
+        <ProjectVersion>[$(Version)]</ProjectVersion>
+      </_ProjectReferencesWithBounds>
+    </ItemGroup>
+    <ItemGroup>
+      <_ProjectReferencesWithVersions Remove="@(_ProjectReferencesWithVersions)" />
+      <_ProjectReferencesWithVersions Include="@(_ProjectReferencesWithBounds)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

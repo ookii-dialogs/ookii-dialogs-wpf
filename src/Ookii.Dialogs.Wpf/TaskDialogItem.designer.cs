@@ -1,4 +1,4 @@
-namespace Ookii.Dialogs.Wpf
+﻿namespace Ookii.Dialogs.Wpf
 {
     partial class TaskDialogItem
     {
