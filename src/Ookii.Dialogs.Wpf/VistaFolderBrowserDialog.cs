@@ -364,22 +364,13 @@ namespace Ookii.Dialogs.Wpf
                 }
             }
 
-            dialog.SetOptions(NativeMethods.FOS.FOS_PICKFOLDERS | NativeMethods.FOS.FOS_FORCEFILESYSTEM | NativeMethods.FOS.FOS_FILEMUSTEXIST | _options);
-
-            if ( !string.IsNullOrEmpty(_selectedPath) )
+            // Set the default directory
+            if (Directory.Exists(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(_selectedPath);
-                if( parent == null || !Directory.Exists(parent) )
-                {
-                    dialog.SetFileName(_selectedPath);
-                }
-                else
-                {
-                    string folder = Path.GetFileName(_selectedPath);
-                    dialog.SetFolder(NativeMethods.CreateItemFromParsingName(parent));
-                    dialog.SetFileName(folder);
-                }
+                dialog.SetFolder(NativeMethods.CreateItemFromParsingName(_selectedPath));
             }
+
+            dialog.SetOptions(NativeMethods.FOS.FOS_PICKFOLDERS | NativeMethods.FOS.FOS_FORCEFILESYSTEM | NativeMethods.FOS.FOS_FILEMUSTEXIST);
         }
 
         private void GetResult(IFileDialog dialog)
