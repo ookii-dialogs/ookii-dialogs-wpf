@@ -672,7 +672,11 @@ namespace Ookii.Dialogs.Wpf
             if( !string.IsNullOrEmpty(_initialDirectory) )
             {
                 Ookii.Dialogs.Wpf.Interop.IShellItem item = NativeMethods.CreateItemFromParsingName(_initialDirectory);
-                dialog.SetDefaultFolder(item);
+                
+                // The dialog.SetDefaultFolder(item) is only set first time the applications sets the folder,
+                // Next time the folder will be restored to last picked object and the 'Default folder' is ignored
+                // Use instead dialog.SetFolder which behaviour better matches the name 'InitialFolder'
+                dialog.SetFolder(item);
             }
 
             if( !string.IsNullOrEmpty(_title) )
