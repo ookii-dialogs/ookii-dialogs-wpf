@@ -23,8 +23,8 @@
 
   <PropertyGroup>
     <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net462' ">true</DisableImplicitFrameworkReferences>
-    <AssemblyVersion>1.0.0.22258</AssemblyVersion>
-    <FileVersion>1.0.0.22258</FileVersion>
+    <AssemblyVersion>1.0.0.22259</AssemblyVersion>
+    <FileVersion>1.0.0.22259</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">

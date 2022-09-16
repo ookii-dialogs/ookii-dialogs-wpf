@@ -7,7 +7,7 @@
     <RootNamespace>Ookii.Dialogs.Wpf</RootNamespace>
 
     <AssemblyName>Ookii.Dialogs.Wpf</AssemblyName>
-    <AssemblyVersion>3.0.0.22258</AssemblyVersion>
+    <AssemblyVersion>3.0.0.22259</AssemblyVersion>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -64,7 +64,7 @@
   <PropertyGroup>
     <DisableImplicitFrameworkReferences Condition=" '$(TargetFramework)' == 'net462' ">true</DisableImplicitFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <FileVersion>0.0.1.22258</FileVersion>
+    <FileVersion>0.0.1.22259</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

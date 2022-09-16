@@ -245,13 +245,11 @@ namespace Ookii.Dialogs.Wpf
             public uint cxWidth;
         }
 
-#if NET7_0_OR_GREATER
-        [LibraryImport("user32.dll")]
-        public static partial IntPtr SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
-#else
+        //This DllImport doesn't work with LibraryImport. Unless it's re-worked a bit, skip suggestions for it.
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
         public static extern IntPtr SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
-#endif
+#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 
         #endregion
 
