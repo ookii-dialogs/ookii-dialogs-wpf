@@ -24,7 +24,7 @@ using Ookii.Dialogs.Wpf.Interop;
 
 namespace Ookii.Dialogs.Wpf
 {
-    static class NativeMethods
+    static partial class NativeMethods
     {
         public const int ErrorFileNotFound = 2;
 
@@ -45,7 +45,19 @@ namespace Ookii.Dialogs.Wpf
         }
 
         #region LoadLibrary
+#if NET7_0_OR_GREATER
+        [LibraryImport("kernel32", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        public static partial SafeModuleHandle LoadLibraryEx(
+            string lpFileName,
+            IntPtr hFile,
+            LoadLibraryExFlags dwFlags
+            );
 
+        [LibraryImport("kernel32", SetLastError = true),
+        ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool FreeLibrary(IntPtr hModule);
+#else
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern Ookii.Dialogs.Wpf.SafeModuleHandle LoadLibraryEx(
             string lpFileName,
@@ -57,7 +69,7 @@ namespace Ookii.Dialogs.Wpf
         ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
-
+#endif
         [Flags]
         public enum LoadLibraryExFlags : uint
         {
@@ -71,6 +83,23 @@ namespace Ookii.Dialogs.Wpf
 
         #region Task Dialogs
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist"), DllImport("comctl32.dll", PreserveSig = false)]
+        public static extern void TaskDialogIndirect([In] ref TASKDIALOGCONFIG pTaskConfig, out int pnButton, out int pnRadioButton, [MarshalAs(UnmanagedType.Bool)] out bool pfVerificationFlagChecked);
+
+#if NET7_0_OR_GREATER
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr GetActiveWindow();
+
+        [LibraryImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool EnableWindow(IntPtr hwnd, [MarshalAs(UnmanagedType.Bool)] bool bEnable);
+
+        [LibraryImport("user32.dll")]
+        public static partial int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+
+        [LibraryImport("kernel32.dll")]
+        public static partial int GetCurrentThreadId();
+#else
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern IntPtr GetActiveWindow();
 
@@ -82,9 +111,7 @@ namespace Ookii.Dialogs.Wpf
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern int GetCurrentThreadId();
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist"), DllImport("comctl32.dll", PreserveSig = false)]
-        public static extern void TaskDialogIndirect([In] ref TASKDIALOGCONFIG pTaskConfig, out int pnButton, out int pnRadioButton, [MarshalAs(UnmanagedType.Bool)] out bool pfVerificationFlagChecked);
+#endif
 
 
         public delegate uint TaskDialogCallback(IntPtr hwnd, uint uNotification, IntPtr wParam, IntPtr lParam, IntPtr dwRefData);
@@ -218,8 +245,11 @@ namespace Ookii.Dialogs.Wpf
             public uint cxWidth;
         }
 
+        //This DllImport doesn't work with LibraryImport. Unless it's re-worked a bit, skip suggestions for it.
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
         public static extern IntPtr SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
+#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 
         #endregion
 
@@ -227,6 +257,17 @@ namespace Ookii.Dialogs.Wpf
 
         [DllImport("Kernel32.dll", SetLastError = true)]
         public extern static ActivationContextSafeHandle CreateActCtx(ref ACTCTX actctx);
+#if NET7_0_OR_GREATER
+        [LibraryImport("kernel32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        public static partial void ReleaseActCtx(IntPtr hActCtx);
+        [LibraryImport("Kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool ActivateActCtx(ActivationContextSafeHandle hActCtx, out IntPtr lpCookie);
+        [LibraryImport("Kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool DeactivateActCtx(uint dwFlags, IntPtr lpCookie);
+#else
+
         [DllImport("kernel32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         public extern static void ReleaseActCtx(IntPtr hActCtx);
         [DllImport("Kernel32.dll", SetLastError = true)]
@@ -235,6 +276,7 @@ namespace Ookii.Dialogs.Wpf
         [DllImport("Kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public extern static bool DeactivateActCtx(uint dwFlags, IntPtr lpCookie);
+#endif
 
         public const int ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID = 0x004;
 
@@ -251,9 +293,9 @@ namespace Ookii.Dialogs.Wpf
         }
 
 
-        #endregion
+#endregion
 
-        #region File Operations Definitions
+#region File Operations Definitions
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
         internal struct COMDLG_FILTERSPEC
@@ -336,9 +378,9 @@ namespace Ookii.Dialogs.Wpf
             CDCS_VISIBLE = 0x00000002
         }
 
-        #endregion
+#endregion
 
-        #region KnownFolder Definitions
+#region KnownFolder Definitions
 
         internal enum FFFP_MODE
         {
@@ -399,9 +441,9 @@ namespace Ookii.Dialogs.Wpf
             internal uint pid;
         }
 
-        #endregion
+#endregion
 
-        #region Shell Parsing Names
+#region Shell Parsing Names
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
@@ -416,9 +458,9 @@ namespace Ookii.Dialogs.Wpf
             return (Interop.IShellItem)item;
         }
 
-        #endregion
+#endregion
 
-        #region String Resources
+#region String Resources
 
         [Flags()]
         public enum FormatMessageFlags
@@ -439,9 +481,9 @@ namespace Ookii.Dialogs.Wpf
            uint dwMessageId, uint dwLanguageId, ref IntPtr lpBuffer,
            uint nSize, string[] Arguments);
 
-        #endregion
+#endregion
 
-        #region Credentials
+#region Credentials
 
         internal const int CREDUI_MAX_USERNAME_LENGTH = 256 + 1 + 256;
         internal const int CREDUI_MAX_PASSWORD_LENGTH = 256;
@@ -545,17 +587,6 @@ namespace Ookii.Dialogs.Wpf
             [MarshalAs(UnmanagedType.Bool)]ref bool pfSave,
             CredUIWinFlags dwFlags);
 
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredReadW", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        extern static internal bool CredRead(string TargetName, CredTypes Type, int Flags, out IntPtr Credential);
-
-        [DllImport("advapi32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        extern static internal void CredFree(IntPtr Buffer);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredDeleteW", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        extern static internal bool CredDelete(string TargetName, CredTypes Type, int Flags);
-
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredWriteW", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         extern static internal bool CredWrite(ref CREDENTIAL Credential, int Flags);
@@ -567,6 +598,31 @@ namespace Ookii.Dialogs.Wpf
         [DllImport("credui.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CredUnPackAuthenticationBuffer(uint dwFlags, IntPtr pAuthBuffer, uint cbAuthBuffer, StringBuilder pszUserName, ref uint pcchMaxUserName, StringBuilder pszDomainName, ref uint pcchMaxDomainName, StringBuilder pszPassword, ref uint pcchMaxPassword);
+
+#if NET7_0_OR_GREATER
+        [LibraryImport("advapi32.dll", EntryPoint = "CredReadW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool CredRead(string TargetName, CredTypes Type, int Flags, out IntPtr Credential);
+
+        [LibraryImport("advapi32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        internal static partial void CredFree(IntPtr Buffer);
+
+        [LibraryImport("advapi32.dll", EntryPoint = "CredDeleteW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool CredDelete(string TargetName, CredTypes Type, int Flags);
+
+#else
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredReadW", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        extern static internal bool CredRead(string TargetName, CredTypes Type, int Flags, out IntPtr Credential);
+
+        [DllImport("advapi32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        extern static internal void CredFree(IntPtr Buffer);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, EntryPoint = "CredDeleteW", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        extern static internal bool CredDelete(string TargetName, CredTypes Type, int Flags);
+#endif
 
         // Disable the "Internal field is never assigned to" warning.
 #pragma warning disable 649
@@ -598,9 +654,9 @@ namespace Ookii.Dialogs.Wpf
         }
 #pragma warning restore 649
 
-        #endregion
+#endregion
 
-        #region Downlevel folder browser dialog
+#region Downlevel folder browser dialog
 
         public enum FolderBrowserDialogMessage
         {
@@ -650,17 +706,27 @@ namespace Ookii.Dialogs.Wpf
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
-        [DllImport("shell32.dll", SetLastError = true)]
-        public static extern int SHGetSpecialFolderLocation(IntPtr hwndOwner, Environment.SpecialFolder nFolder, ref IntPtr ppidl);
         [DllImport("shell32.dll", PreserveSig = false)]
         public static extern IMalloc SHGetMalloc();
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
+#if NET7_0_OR_GREATER
+        [LibraryImport("shell32.dll", SetLastError = true)]
+        public static partial int SHGetSpecialFolderLocation(IntPtr hwndOwner, Environment.SpecialFolder nFolder, ref IntPtr ppidl);
+
+        [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+        public static partial IntPtr SendMessage(IntPtr hWnd, FolderBrowserDialogMessage msg, IntPtr wParam, string lParam);
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr SendMessage(IntPtr hWnd, FolderBrowserDialogMessage msg, IntPtr wParam, IntPtr lParam);
+#else
+        [DllImport("shell32.dll", SetLastError = true)]
+        public static extern int SHGetSpecialFolderLocation(IntPtr hwndOwner, Environment.SpecialFolder nFolder, ref IntPtr ppidl);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr SendMessage(IntPtr hWnd, FolderBrowserDialogMessage msg, IntPtr wParam, string lParam);
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, FolderBrowserDialogMessage msg, IntPtr wParam, IntPtr lParam);
+#endif
 
 
         #endregion
