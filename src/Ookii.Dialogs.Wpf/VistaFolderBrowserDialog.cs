@@ -285,7 +285,7 @@ namespace Ookii.Dialogs.Wpf
                 int result = dialog.Show(owner);
                 if (result < 0)
                 {
-                    if ((uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32((int)WIN32_ERROR.ERROR_CANCELLED))
+                    if ((uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
                         return false;
                     else
                         throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
@@ -303,7 +303,7 @@ namespace Ookii.Dialogs.Wpf
         private unsafe bool RunDialogDownlevel(HWND owner)
         {
             IntPtr resultItemIdList = IntPtr.Zero;
-            if (NativeMethods.SHGetSpecialFolderLocation(owner, (int)RootFolder, out ITEMIDLIST* rootItemIdList) != NativeMethods.S_OK)
+            if (NativeMethods.SHGetSpecialFolderLocation(owner, (int)RootFolder, out ITEMIDLIST* rootItemIdList) != HRESULT.S_OK)
             {
                 if (NativeMethods.SHGetSpecialFolderLocation(owner, 0, out rootItemIdList) != 0)
                 {

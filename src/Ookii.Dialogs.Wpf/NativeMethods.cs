@@ -52,19 +52,6 @@ namespace Windows.Win32
             return shellItem;
         }
 
-        internal const int CREDUI_MAX_USERNAME_LENGTH = 256 + 1 + 256;
         internal const int CREDUI_MAX_PASSWORD_LENGTH = 256;
-
-        // Implementation of HRESULT_FROM_WIN32 macro
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int HRESULT_FROM_WIN32(int errorCode)
-        {
-            if ((errorCode & 0x80000000) == 0x80000000)
-            {
-                return errorCode;
-            }
-
-            return (errorCode & 0x0000FFFF) | unchecked((int)0x80070000);
-        }
     }
 }

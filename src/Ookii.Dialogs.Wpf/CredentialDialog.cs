@@ -799,15 +799,13 @@ namespace Ookii.Dialogs.Wpf
             if (ShowSaveCheckBox)
                 flags |= CREDUI_FLAGS.CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX;
 
-            Span<char> userSpan = stackalloc char[NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
+            Span<char> userSpan = stackalloc char[(int)NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
             UserName.AsSpan().CopyTo(userSpan);
             Span<char> pwSpan = stackalloc char[NativeMethods.CREDUI_MAX_PASSWORD_LENGTH];
             Password.AsSpan().CopyTo(pwSpan);
             WIN32_ERROR result;
-            fixed (char* user = userSpan)
-            fixed (char* pw = pwSpan)
             fixed (BOOL* b = &_isSaveChecked)
-                result = (WIN32_ERROR)NativeMethods.CredUIPromptForCredentials(info, Target, ref Unsafe.AsRef<SecHandle>((void*)0), 0, user, NativeMethods.CREDUI_MAX_USERNAME_LENGTH, pw, NativeMethods.CREDUI_MAX_PASSWORD_LENGTH, b, flags);
+                result = (WIN32_ERROR)NativeMethods.CredUIPromptForCredentials(info, Target, ref Unsafe.AsRef<SecHandle>((void*)0), 0, ref userSpan, NativeMethods.CREDUI_MAX_USERNAME_LENGTH, ref pwSpan, NativeMethods.CREDUI_MAX_PASSWORD_LENGTH, b, flags);
 
             switch (result)
             {
@@ -844,7 +842,7 @@ namespace Ookii.Dialogs.Wpf
                 uint inBufferSize = 0;
                 if (UserName.Length > 0)
                 {
-                    Span<char> userSpan = stackalloc char[NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
+                    Span<char> userSpan = stackalloc char[(int)NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
                     UserName.AsSpan().CopyTo(userSpan);
                     Span<char> pwSpan = stackalloc char[NativeMethods.CREDUI_MAX_PASSWORD_LENGTH];
                     Password.AsSpan().CopyTo(pwSpan);
@@ -875,7 +873,7 @@ namespace Ookii.Dialogs.Wpf
                 switch (result)
                 {
                     case WIN32_ERROR.NO_ERROR:
-                        Span<char> userSpan = stackalloc char[NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
+                        Span<char> userSpan = stackalloc char[(int)NativeMethods.CREDUI_MAX_USERNAME_LENGTH];
                         UserName.AsSpan().CopyTo(userSpan);
                         Span<char> pwSpan = stackalloc char[NativeMethods.CREDUI_MAX_PASSWORD_LENGTH];
                         Password.AsSpan().CopyTo(pwSpan);

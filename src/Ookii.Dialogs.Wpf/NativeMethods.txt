@@ -17,6 +17,7 @@ CredPackAuthenticationBuffer
 CredRead
 CREDUI_FLAGS
 CREDUI_INFOW
+CREDUI_MAX_USERNAME_LENGTH
 CredUIPromptForCredentials
 CredUIPromptForWindowsCredentials
 CredUnPackAuthenticationBuffer
@@ -29,6 +30,7 @@ FormatMessage
 GetActiveWindow
 GetCurrentThreadId
 GetWindowThreadProcessId
+HRESULT_FROM_WIN32
 ICON_SMALL
 IFileDialogControlEvents
 IFileOpenDialog

@@ -20,10 +20,6 @@ namespace Ookii.Dialogs.Wpf
 {
     class VistaFileDialogEvents : IFileDialogEvents, IFileDialogControlEvents
     {
-        const uint S_OK = 0;
-        const uint S_FALSE = 1;
-        const uint E_NOTIMPL = 0x80004001;
-
         private VistaFileDialog _dialog;
 
         public VistaFileDialogEvents(VistaFileDialog dialog)
@@ -36,12 +32,12 @@ namespace Ookii.Dialogs.Wpf
         HRESULT IFileDialogEvents.OnFileOk(IFileDialog pfd)
         {
             if (_dialog.DoFileOk(pfd))
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             else
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
         }
 
-        HRESULT IFileDialogEvents.OnFolderChanging(IFileDialog pfd, IShellItem psiFolder) => NativeMethods.S_OK;
+        HRESULT IFileDialogEvents.OnFolderChanging(IFileDialog pfd, IShellItem psiFolder) => HRESULT.S_OK;
 
         public void OnFolderChange(IFileDialog pfd)
         {

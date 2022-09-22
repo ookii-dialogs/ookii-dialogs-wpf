@@ -68,7 +68,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.1.635-beta" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.2.63-beta" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
     <PackageReference Include="System.Memory" Version="4.5.4" Condition="'$(TargetFramework)'=='net462'" />
   </ItemGroup>
 

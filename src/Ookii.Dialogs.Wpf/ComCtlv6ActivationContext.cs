@@ -35,7 +35,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 if( EnsureActivateContextCreated() )
                 {
-                    if( !NativeMethods.ActivateActCtx((HANDLE)_activationContext.DangerousGetHandle(), out _cookie) )
+                    if( !NativeMethods.ActivateActCtx(_activationContext, out _cookie) )
                     {
                         // Be sure cookie always zero if activation failed
                         _cookie = 0;

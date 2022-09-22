@@ -712,7 +712,7 @@ namespace Ookii.Dialogs.Wpf
                 var result = dialog.Show((HWND)hwndOwner);
                 if( result < 0 )
                 {
-                    if( (uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32((int)WIN32_ERROR.ERROR_CANCELLED) )
+                    if( (uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED) )
                         return false;
                     else
                         throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);

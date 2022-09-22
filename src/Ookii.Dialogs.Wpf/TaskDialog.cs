@@ -1585,7 +1585,7 @@ namespace Ookii.Dialogs.Wpf
                         TaskDialogItemClickedEventArgs e = new TaskDialogItemClickedEventArgs(button);
                         OnButtonClicked(e);
                         if( e.Cancel )
-                            return NativeMethods.S_FALSE;
+                            return HRESULT.S_FALSE;
                     }
                     break;
                 case TASKDIALOG_NOTIFICATIONS.TDN_VERIFICATION_CLICKED:
@@ -1604,7 +1604,7 @@ namespace Ookii.Dialogs.Wpf
                 case TASKDIALOG_NOTIFICATIONS.TDN_TIMER:
                     TimerEventArgs timerEventArgs = new TimerEventArgs((int)(nuint)wParam);
                     OnTimer(timerEventArgs);
-                    return timerEventArgs.ResetTickCount ? NativeMethods.S_FALSE : NativeMethods.S_OK;
+                    return timerEventArgs.ResetTickCount ? HRESULT.S_FALSE : HRESULT.S_OK;
                 case TASKDIALOG_NOTIFICATIONS.TDN_EXPANDO_BUTTON_CLICKED:
                     OnExpandButtonClicked(new ExpandButtonClickedEventArgs((int)(nuint)wParam != 0));
                     break;
@@ -1612,7 +1612,7 @@ namespace Ookii.Dialogs.Wpf
                     OnHelpRequested(EventArgs.Empty);
                     break;
                 }
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
             finally
             {
