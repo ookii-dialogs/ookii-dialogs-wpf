@@ -74,9 +74,9 @@ namespace Ookii.Dialogs.Wpf
             return new AnimationResource("shell32.dll", (int)animation);
         }
 
-        internal SafeModuleHandle LoadLibrary()
+        internal FreeLibrarySafeHandle LoadLibrary()
         {
-            SafeModuleHandle handle = NativeMethods.LoadLibraryEx(ResourceFile, IntPtr.Zero, NativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
+            var handle = NativeMethods.LoadLibraryEx(ResourceFile, default, Windows.Win32.System.LibraryLoader.LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
             if( handle.IsInvalid )
             {
                 int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();

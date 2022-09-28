@@ -16,69 +16,80 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
+using Windows.Win32.System.Diagnostics.Debug;
+using Windows.Win32.System.LibraryLoader;
+using System.Runtime.CompilerServices;
 
 namespace Ookii.Dialogs.Wpf.Interop
 {
     class Win32Resources : IDisposable
     {
-        private SafeModuleHandle _moduleHandle;
+        private SafeHandle _moduleHandle;
         private const int _bufferSize = 500;
 
         public Win32Resources(string module)
         {
-            _moduleHandle = NativeMethods.LoadLibraryEx(module, IntPtr.Zero, NativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
-            if( _moduleHandle.IsInvalid )
+            _moduleHandle = NativeMethods.LoadLibraryEx(module, default, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
+            if (_moduleHandle.IsInvalid)
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
         }
 
-        public string LoadString(uint id)
+        public unsafe string LoadString(uint id)
         {
             CheckDisposed();
 
-            StringBuilder buffer = new StringBuilder(_bufferSize);
-            if( NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0 )
-                throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+            Span<char> buffer = stackalloc char[_bufferSize];
+            fixed (char* pBuffer = buffer)
+            {
+                if (NativeMethods.LoadString(_moduleHandle, id, pBuffer, _bufferSize + 1) == 0)
+                    throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+            }
             return buffer.ToString();
         }
 
-        public string FormatString(uint id, params string[] args)
+        public unsafe string FormatString(uint id, params string[] args)
         {
             CheckDisposed();
 
-            IntPtr buffer = IntPtr.Zero;
+            PWSTR buffer = new();
             string source = LoadString(id);
 
             // For some reason FORMAT_MESSAGE_FROM_HMODULE doesn't work so we use this way.
-            NativeMethods.FormatMessageFlags flags = NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ARGUMENT_ARRAY | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_FROM_STRING;
+            FORMAT_MESSAGE_OPTIONS flags = FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_STRING;
 
             IntPtr sourcePtr = System.Runtime.InteropServices.Marshal.StringToHGlobalAuto(source);
             try
             {
-                if( NativeMethods.FormatMessage(flags, sourcePtr, id, 0, ref buffer, 0, args) == 0 )
-                    throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+                fixed (char* pargs = args[0])
+                {
+                    if (NativeMethods.FormatMessage(flags, (void*)sourcePtr, id, 0, (PWSTR)Unsafe.AsPointer(ref buffer), 0, (sbyte**)&pargs) == 0)
+                        throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+                }
             }
             finally
             {
                 System.Runtime.InteropServices.Marshal.FreeHGlobal(sourcePtr);
             }
 
-            string result = System.Runtime.InteropServices.Marshal.PtrToStringAuto(buffer);
+            string result = buffer.ToString();
             // FreeHGlobal calls LocalFree
-            System.Runtime.InteropServices.Marshal.FreeHGlobal(buffer);
+            System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Unsafe.AsPointer(ref buffer));
 
             return result;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
                 _moduleHandle.Dispose();
         }
 
         private void CheckDisposed()
         {
-            if( _moduleHandle.IsClosed )
+            if (_moduleHandle.IsClosed)
             {
                 throw new ObjectDisposedException("Win32Resources");
             }
@@ -92,6 +103,6 @@ namespace Ookii.Dialogs.Wpf.Interop
             GC.SuppressFinalize(this);
         }
 
-        #endregion    
+        #endregion
     }
 }

@@ -41,7 +41,7 @@ namespace Ookii.Dialogs.Wpf
     {
         private string _description;
         private string _selectedPath;
-        private NativeMethods.FOS _options;
+        private FILEOPENDIALOGOPTIONS _options;
         private string[] _selectedPaths;
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="System.Environment.SpecialFolder" /> values.</exception>
         [Localizable(false), Description("The root folder where the browsing starts from. This property has no effect if the Vista style dialog is used."), Category("Folder Browsing"), Browsable(true), DefaultValue(typeof(System.Environment.SpecialFolder), "Desktop")]
         public System.Environment.SpecialFolder RootFolder { get; set; }
-	
+
         /// <summary>
         /// Gets or sets the path selected by the user.
         /// </summary>
@@ -133,7 +133,7 @@ namespace Ookii.Dialogs.Wpf
         /// <see langword="true" /> if the New Folder button is shown in the dialog box; otherwise, <see langword="false" />. The default is <see langword="true" />.
         /// </value>
         [Browsable(true), Localizable(false), Description("A value indicating whether the New Folder button appears in the folder browser dialog box. This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown."), DefaultValue(true), Category("Folder Browsing")]
-        public bool ShowNewFolderButton { get; set; }	
+        public bool ShowNewFolderButton { get; set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether to use the value of the <see cref="Description" /> property
@@ -156,12 +156,12 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                return HasOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT);
+                return HasOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT);
             }
 
             set
             {
-                SetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT, value);
+                SetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT, value);
             }
         }
 
@@ -247,14 +247,14 @@ namespace Ookii.Dialogs.Wpf
         public bool? ShowDialog(IntPtr owner)
         {
             IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
-            return new bool?(IsVistaFolderDialogSupported ? RunDialog(ownerHandle) : RunDialogDownlevel(ownerHandle));
+            return new bool?(IsVistaFolderDialogSupported ? RunDialog((HWND)ownerHandle) : RunDialogDownlevel((HWND)ownerHandle));
         }
 
         #endregion
 
         #region Internal Methods
 
-        internal void SetOption(NativeMethods.FOS option, bool value)
+        internal void SetOption(FILEOPENDIALOGOPTIONS option, bool value)
         {
             if (value)
             {
@@ -266,7 +266,7 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-        internal bool HasOption(NativeMethods.FOS option)
+        internal bool HasOption(FILEOPENDIALOGOPTIONS option)
         {
             return (_options & option) != 0;
         }
@@ -275,59 +275,67 @@ namespace Ookii.Dialogs.Wpf
 
         #region Private Methods
 
-        private bool RunDialog(IntPtr owner)
+        private bool RunDialog(HWND owner)
         {
-            Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
+            IFileDialog dialog = null;
             try
             {
-                dialog = new Ookii.Dialogs.Wpf.Interop.NativeFileOpenDialog();
+                dialog = new NativeFileOpenDialog();
                 SetDialogProperties(dialog);
                 int result = dialog.Show(owner);
-                if( result < 0 )
+                if (result < 0)
                 {
-                    if( (uint)result == (uint)HRESULT.ERROR_CANCELLED )
+                    if ((uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
                         return false;
                     else
                         throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
-                } 
+                }
                 GetResult(dialog);
                 return true;
             }
             finally
             {
-                if( dialog != null )
+                if (dialog != null)
                     System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
             }
         }
 
-        private bool RunDialogDownlevel(IntPtr owner)
+        private unsafe bool RunDialogDownlevel(HWND owner)
         {
-            IntPtr rootItemIdList = IntPtr.Zero;
             IntPtr resultItemIdList = IntPtr.Zero;
-            if( NativeMethods.SHGetSpecialFolderLocation(owner, RootFolder, ref rootItemIdList) != 0 )
+            if (NativeMethods.SHGetSpecialFolderLocation(owner, (int)RootFolder, out ITEMIDLIST* rootItemIdList) != HRESULT.S_OK)
             {
-                if( NativeMethods.SHGetSpecialFolderLocation(owner, 0, ref rootItemIdList) != 0 )
+                if (NativeMethods.SHGetSpecialFolderLocation(owner, 0, out rootItemIdList) != 0)
                 {
                     throw new InvalidOperationException(Properties.Resources.FolderBrowserDialogNoRootFolder);
                 }
             }
             try
             {
-                NativeMethods.BROWSEINFO info = new NativeMethods.BROWSEINFO();
-                info.hwndOwner = owner;
-                info.lpfn = new NativeMethods.BrowseCallbackProc(BrowseCallbackProc);
-                info.lpszTitle = Description;
-                info.pidlRoot = rootItemIdList;
-                info.pszDisplayName = new string('\0', 260);
-                info.ulFlags = NativeMethods.BrowseInfoFlags.NewDialogStyle | NativeMethods.BrowseInfoFlags.ReturnOnlyFsDirs;
-                if( !ShowNewFolderButton )
-                    info.ulFlags |= NativeMethods.BrowseInfoFlags.NoNewFolderButton;
-                resultItemIdList = NativeMethods.SHBrowseForFolder(ref info);
-                if( resultItemIdList != IntPtr.Zero )
+                BROWSEINFOW info;
+                Span<char> spanDisplayName = stackalloc char[(int)NativeMethods.MAX_PATH];
+                fixed (char* pszDisplayName = spanDisplayName)
+                fixed (char* pDescription = Description)
                 {
-                    StringBuilder path = new StringBuilder(260);
-                    NativeMethods.SHGetPathFromIDList(resultItemIdList, path);
-                    SelectedPath = path.ToString();
+                    info = new BROWSEINFOW
+                    {
+                        hwndOwner = owner,
+                        lpfn = BrowseCallbackProc,
+                        lpszTitle = pDescription,
+                        pidlRoot = rootItemIdList,
+                        pszDisplayName = pszDisplayName,
+                        ulFlags = NativeMethods.BIF_NEWDIALOGSTYLE | NativeMethods.BIF_RETURNONLYFSDIRS
+                    };
+                    if (!ShowNewFolderButton)
+                        info.ulFlags |= NativeMethods.BIF_NONEWFOLDERBUTTON;
+                }
+                resultItemIdList = (IntPtr)NativeMethods.SHBrowseForFolder(info);
+                if (resultItemIdList != IntPtr.Zero)
+                {
+                    Span<char> path = stackalloc char[(int)NativeMethods.MAX_PATH];
+                    fixed (char* ppath = path)
+                        NativeMethods.SHGetPathFromIDList((ITEMIDLIST*)resultItemIdList, ppath);
+                    SelectedPath = path.ToCleanString();
                     return true;
                 }
                 else
@@ -335,41 +343,41 @@ namespace Ookii.Dialogs.Wpf
             }
             finally
             {
-                if( rootItemIdList != IntPtr.Zero )
+                if (rootItemIdList != default)
                 {
-                    IMalloc malloc = NativeMethods.SHGetMalloc();
+                    NativeMethods.SHGetMalloc(out var malloc);
                     malloc.Free(rootItemIdList);
                     Marshal.ReleaseComObject(malloc);
                 }
-                if( resultItemIdList != IntPtr.Zero )
+                if (resultItemIdList != IntPtr.Zero)
                 {
                     Marshal.FreeCoTaskMem(resultItemIdList);
                 }
             }
         }
 
-        private void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
+        private void SetDialogProperties(IFileDialog dialog)
         {
             // Description
-            if( !string.IsNullOrEmpty(_description) )
+            if (!string.IsNullOrEmpty(_description))
             {
-                if( UseDescriptionForTitle )
+                if (UseDescriptionForTitle)
                 {
                     dialog.SetTitle(_description);
                 }
                 else
                 {
-                    Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
+                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
                     customize.AddText(0, _description);
                 }
             }
 
-            dialog.SetOptions(NativeMethods.FOS.FOS_PICKFOLDERS | NativeMethods.FOS.FOS_FORCEFILESYSTEM | NativeMethods.FOS.FOS_FILEMUSTEXIST | _options);
+            dialog.SetOptions(FILEOPENDIALOGOPTIONS.FOS_PICKFOLDERS | FILEOPENDIALOGOPTIONS.FOS_FORCEFILESYSTEM | FILEOPENDIALOGOPTIONS.FOS_FILEMUSTEXIST | _options);
 
-            if ( !string.IsNullOrEmpty(_selectedPath) )
+            if (!string.IsNullOrEmpty(_selectedPath))
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
-                if( parent == null || !Directory.Exists(parent) )
+                if (parent == null || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
                 }
@@ -394,9 +402,9 @@ namespace Ookii.Dialogs.Wpf
                 for (uint x = 0; x < count; ++x)
                 {
                     results.GetItemAt(x, out IShellItem item);
-                    item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out string name);
+                    item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var name);
 
-                    folderPaths[x] = name;
+                    folderPaths[x] = name.ToString();
                 }
 
                 SelectedPaths = folderPaths;
@@ -404,26 +412,32 @@ namespace Ookii.Dialogs.Wpf
             else
             {
                 dialog.GetResult(out IShellItem item);
-                item.GetDisplayName(NativeMethods.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
+                item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var s);
+                _selectedPath = s.ToString();
             }
         }
 
-        private int BrowseCallbackProc(IntPtr hwnd, NativeMethods.FolderBrowserDialogMessage msg, IntPtr lParam, IntPtr wParam)
+        private unsafe int BrowseCallbackProc(HWND hwnd, uint msg, LPARAM lParam, LPARAM lpData)
         {
-            switch( msg )
+            switch (msg)
             {
-            case NativeMethods.FolderBrowserDialogMessage.Initialized:
-                if( SelectedPath.Length != 0 )
-                    NativeMethods.SendMessage(hwnd, NativeMethods.FolderBrowserDialogMessage.SetSelection, new IntPtr(1), SelectedPath);
-                break;
-            case NativeMethods.FolderBrowserDialogMessage.SelChanged:
-                if( lParam != IntPtr.Zero )
-                {
-                    StringBuilder path = new StringBuilder(260);
-                    bool validPath = NativeMethods.SHGetPathFromIDList(lParam, path);
-                    NativeMethods.SendMessage(hwnd, NativeMethods.FolderBrowserDialogMessage.EnableOk, IntPtr.Zero, validPath ? new IntPtr(1) : IntPtr.Zero);
-                }
-                break;
+                case NativeMethods.BFFM_INITIALIZED:
+                    if (SelectedPath.Length != 0)
+                    {
+                        fixed (char* pSelectedPath = SelectedPath)
+                            NativeMethods.SendMessage(hwnd, NativeMethods.BFFM_SETSELECTION, 1, (IntPtr)pSelectedPath);
+                    }
+                    break;
+                case NativeMethods.BFFM_SELCHANGED:
+                    if (lParam != default)
+                    {
+                        bool validPath;
+                        Span<char> span = stackalloc char[(int)NativeMethods.MAX_PATH];
+                        fixed (char* pspan = span)
+                            validPath = NativeMethods.SHGetPathFromIDList((ITEMIDLIST*)(IntPtr)lParam, pspan);
+                        NativeMethods.SendMessage(hwnd, NativeMethods.BFFM_ENABLEOK, 0, (nint)(validPath ? 1 : 0));
+                    }
+                    break;
             }
             return 0;
         }

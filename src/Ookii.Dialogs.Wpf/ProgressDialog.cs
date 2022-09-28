@@ -48,11 +48,11 @@ namespace Ookii.Dialogs.Wpf
         private string _windowTitle;
         private string _text;
         private string _description;
-        private Interop.IProgressDialog _dialog;
+        private IProgressDialog _dialog;
         private string _cancellationText;
         private bool _useCompactPathsForText;
         private bool _useCompactPathsForDescription;
-        private SafeModuleHandle _currentAnimationModuleHandle;
+        private FreeLibrarySafeHandle _currentAnimationModuleHandle;
         private volatile bool _cancellationPending;
         private CancellationTokenSource _cancellationTokenSource;
         private int _percentProgress;
@@ -146,8 +146,11 @@ namespace Ookii.Dialogs.Wpf
             set 
             { 
                 _text = value;
-                if( _dialog != null )
-                    _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
+                unsafe
+                {
+                    if (_dialog != null)
+                        _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                }
             }
         }
 
@@ -175,8 +178,11 @@ namespace Ookii.Dialogs.Wpf
             set 
             {
                 _useCompactPathsForText = value;
-                if( _dialog != null )
-                    _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
+                unsafe
+                {
+                    if ( _dialog != null )
+                    _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                }
             }
         }
 	
@@ -203,8 +209,11 @@ namespace Ookii.Dialogs.Wpf
             set 
             { 
                 _description = value;
-                if( _dialog != null )
-                    _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
+                unsafe
+                {
+                    if (_dialog != null)
+                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                }
             }
         }
 
@@ -232,8 +241,11 @@ namespace Ookii.Dialogs.Wpf
             set
             {
                 _useCompactPathsForDescription = value;
-                if( _dialog != null )
-                    _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
+                unsafe
+                {
+                    if (_dialog != null)
+                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                }
             }
         }
 
@@ -728,7 +740,7 @@ namespace Ookii.Dialogs.Wpf
                 handler(this, e);
         }
 
-        private void RunProgressDialog(IntPtr owner, object argument, CancellationToken cancellationToken)
+        private unsafe void RunProgressDialog(IntPtr owner, object argument, CancellationToken cancellationToken)
         {
             if (_backgroundWorker.IsBusy || !(_cancellationTokenSource is null))
             {
@@ -761,34 +773,34 @@ namespace Ookii.Dialogs.Wpf
 
             if( CancellationText.Length > 0 )
                 _dialog.SetCancelMsg(CancellationText, null);
-            _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
-            _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
+            _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+            _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
 
-            Interop.ProgressDialogFlags flags = Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.Normal;
+            uint flags = NativeMethods.PROGDLG_NORMAL;
             if( owner != IntPtr.Zero )
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.Modal;
+                flags |= NativeMethods.PROGDLG_MODAL;
             switch( ProgressBarStyle )
             {
             case ProgressBarStyle.None:
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar;
+                flags |= NativeMethods.PROGDLG_NOPROGRESSBAR;
                 break;
             case ProgressBarStyle.MarqueeProgressBar:
                 if( NativeMethods.IsWindowsVistaOrLater )
-                    flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.MarqueeProgress;
+                    flags |= NativeMethods.PROGDLG_MARQUEEPROGRESS;
                 else
-                    flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar; // Older than Vista doesn't support marquee.
+                    flags |= NativeMethods.PROGDLG_NOPROGRESSBAR; // Older than Vista doesn't support marquee.
                 break;
             }
             if( ShowTimeRemaining )
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.AutoTime;
+                flags |= NativeMethods.PROGDLG_AUTOTIME;
             if( !ShowCancelButton )
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoCancel;
+                flags |= NativeMethods.PROGDLG_NOCANCEL;
             if( !MinimizeBox )
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoMinimize;
+                flags |= NativeMethods.PROGDLG_NOMINIMIZE;
 
             _ownerHandle = owner;
 
-            _dialog.StartProgressDialog(owner, null, flags, IntPtr.Zero);
+            _dialog.StartProgressDialog((HWND)owner, null, flags, default);
             _backgroundWorker.RunWorkerAsync(argument);
         }
 
@@ -820,7 +832,7 @@ namespace Ookii.Dialogs.Wpf
             }
 
             if (_ownerHandle != IntPtr.Zero)
-                NativeMethods.EnableWindow(_ownerHandle, true);
+                NativeMethods.EnableWindow((HWND)_ownerHandle, true);
 
             var cancellationTokenSource = _cancellationTokenSource;
             if (!(cancellationTokenSource is null))
