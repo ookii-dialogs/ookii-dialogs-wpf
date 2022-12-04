@@ -72,8 +72,8 @@ namespace Ookii.Dialogs.Wpf
         /// Gets or sets the type of the button.
         /// </summary>
         /// <value>
-        /// One of the <see cref="Ookii.Dialogs.Wpf.ButtonType"/> values that indicates the type of the button. The default value
-        /// is <see cref="Ookii.Dialogs.Wpf.ButtonType.Custom"/>.
+        /// One of the <see cref="Wpf.ButtonType"/> values that indicates the type of the button. The default value
+        /// is <see cref="ButtonType.Custom"/>.
         /// </value>
         [Category("Appearance"), Description("The type of the button."), DefaultValue(ButtonType.Custom)]
         public ButtonType ButtonType
@@ -105,7 +105,7 @@ namespace Ookii.Dialogs.Wpf
         /// <remarks>
         /// <para>
         ///   This property applies only to buttons where the <see cref="Type"/> property
-        ///   is <see cref="Ookii.Dialogs.Wpf.ButtonType.Custom"/>. For other button types, it is ignored.
+        ///   is <see cref="ButtonType.Custom"/>. For other button types, it is ignored.
         /// </para>
         /// <para>
         ///   In addition, it is used only if the <see cref="TaskDialog.ButtonStyle"/> property is set to

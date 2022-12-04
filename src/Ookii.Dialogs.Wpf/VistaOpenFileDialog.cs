@@ -164,8 +164,8 @@ namespace Ookii.Dialogs.Wpf
         /// Opens the file selected by the user, with read-only permission. The file is specified by the FileName property. 
         /// </summary>
         /// <returns>A Stream that specifies the read-only file selected by the user.</returns>
-        /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
-        public System.IO.Stream OpenFile()
+        /// <exception cref="ArgumentNullException">The file name is <see langword="null" />.</exception>
+        public Stream OpenFile()
         {
             if (DownlevelDialog != null)
                 return ((OpenFileDialog)DownlevelDialog).OpenFile();

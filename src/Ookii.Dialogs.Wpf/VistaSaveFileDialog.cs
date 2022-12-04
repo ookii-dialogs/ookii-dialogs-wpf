@@ -130,8 +130,8 @@ namespace Ookii.Dialogs.Wpf
         /// Opens the file with read/write permission selected by the user.
         /// </summary>
         /// <returns>The read/write file selected by the user.</returns>
-        /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
-        public System.IO.Stream OpenFile()
+        /// <exception cref="ArgumentNullException">The file name is <see langword="null" />.</exception>
+        public Stream OpenFile()
         {
             if (DownlevelDialog != null)
                 return ((SaveFileDialog)DownlevelDialog).OpenFile();
@@ -149,7 +149,7 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Raises the <see cref="VistaFileDialog.FileOk" /> event.
         /// </summary>
-        /// <param name="e">A <see cref="System.ComponentModel.CancelEventArgs" /> that contains the event data.</param>        
+        /// <param name="e">A <see cref="CancelEventArgs" /> that contains the event data.</param>        
         protected override void OnFileOk(CancelEventArgs e)
         {
             // For reasons unknown, .Net puts the OFN_FILEMUSTEXIST and OFN_CREATEPROMPT flags on the save file dialog despite 

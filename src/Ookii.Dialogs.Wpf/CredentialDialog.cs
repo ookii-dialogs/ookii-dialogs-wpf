@@ -55,7 +55,7 @@ namespace Ookii.Dialogs.Wpf
         private BOOL _isSaveChecked;
         private string _target;
 
-        private static readonly Dictionary<string, System.Net.NetworkCredential> _applicationInstanceCredentialCache = new Dictionary<string, NetworkCredential>();
+        private static readonly Dictionary<string, NetworkCredential> _applicationInstanceCredentialCache = new Dictionary<string, NetworkCredential>();
         private string _caption;
         private string _text;
         private string _windowTitle;
@@ -293,13 +293,13 @@ namespace Ookii.Dialogs.Wpf
         /// is displayed on Windows XP.
         /// </summary>
         /// <value>
-        /// One of the values of the <see cref="Ookii.Dialogs.Wpf.DownlevelTextMode"/> enumeration. The default value is
-        /// <see cref="Ookii.Dialogs.Wpf.DownlevelTextMode.MainInstructionAndContent"/>.
+        /// One of the values of the <see cref="Wpf.DownlevelTextMode"/> enumeration. The default value is
+        /// <see cref="DownlevelTextMode.MainInstructionAndContent"/>.
         /// </value>
         /// <remarks>
         /// <para>
         ///   Windows XP does not support the distinct visual style of the main instruction, so there is no visual difference between the
-        ///   text of the <see cref="CredentialDialog.MainInstruction"/> and <see cref="CredentialDialog.Content"/> properties. Depending
+        ///   text of the <see cref="MainInstruction"/> and <see cref="Content"/> properties. Depending
         ///   on your requirements, you may wish to hide either the main instruction or the content text.
         /// </para>
         /// <para>
@@ -548,7 +548,7 @@ namespace Ookii.Dialogs.Wpf
                 {
                     lock (_applicationInstanceCredentialCache)
                     {
-                        _applicationInstanceCredentialCache[Target] = new System.Net.NetworkCredential(UserName, Password);
+                        _applicationInstanceCredentialCache[Target] = new NetworkCredential(UserName, Password);
                     }
                 }
 

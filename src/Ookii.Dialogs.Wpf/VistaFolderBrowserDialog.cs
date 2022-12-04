@@ -82,11 +82,11 @@ namespace Ookii.Dialogs.Wpf
         /// dialog is used.
         /// </summary>
         /// <value>
-        /// One of the <see cref="System.Environment.SpecialFolder" /> values. The default is Desktop.
+        /// One of the <see cref="Environment.SpecialFolder" /> values. The default is Desktop.
         /// </value>
-        /// <exception cref="System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="System.Environment.SpecialFolder" /> values.</exception>
-        [Localizable(false), Description("The root folder where the browsing starts from. This property has no effect if the Vista style dialog is used."), Category("Folder Browsing"), Browsable(true), DefaultValue(typeof(System.Environment.SpecialFolder), "Desktop")]
-        public System.Environment.SpecialFolder RootFolder { get; set; }
+        /// <exception cref="InvalidEnumArgumentException">The value assigned is not one of the <see cref="Environment.SpecialFolder" /> values.</exception>
+        [Localizable(false), Description("The root folder where the browsing starts from. This property has no effect if the Vista style dialog is used."), Category("Folder Browsing"), Browsable(true), DefaultValue(typeof(Environment.SpecialFolder), "Desktop")]
+        public Environment.SpecialFolder RootFolder { get; set; }
 
         /// <summary>
         /// Gets or sets the path selected by the user.

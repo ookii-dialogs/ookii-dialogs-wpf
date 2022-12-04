@@ -68,7 +68,7 @@ namespace Ookii.Dialogs.Wpf
         /// Event raised when the user clicks on the Open or Save button on a file dialog box.
         /// </summary>
         [Description("Event raised when the user clicks on the Open or Save button on a file dialog box."), Category("Action")]
-        public event System.ComponentModel.CancelEventHandler FileOk;
+        public event CancelEventHandler FileOk;
 
         /// <summary>
         /// Creates a new instance of <see cref="VistaFileDialog" /> class.
@@ -252,7 +252,7 @@ namespace Ookii.Dialogs.Wpf
         /// <value>
         /// The file filtering options available in the dialog box.
         /// </value>
-        /// <exception cref="System.ArgumentException">Filter format is invalid.</exception>
+        /// <exception cref="ArgumentException">Filter format is invalid.</exception>
         [Description("The current file name filter string, which determines the choices that appear in the \"Save as file type\" or \"Files of type\" box in the dialog box."), Category("Behavior"), Localizable(true), DefaultValue("")]
         public string Filter
         {
@@ -414,7 +414,7 @@ namespace Ookii.Dialogs.Wpf
                 if (value != null)
                 {
                     //value.HelpRequest += new EventHandler(DownlevelDialog_HelpRequest);
-                    value.FileOk += new System.ComponentModel.CancelEventHandler(DownlevelDialog_FileOk);
+                    value.FileOk += new CancelEventHandler(DownlevelDialog_FileOk);
                 }
             }
         }
@@ -521,8 +521,8 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Raises the <see cref="FileOk" /> event.
         /// </summary>
-        /// <param name="e">A <see cref="System.ComponentModel.CancelEventArgs" /> that contains the event data.</param>
-        protected virtual void OnFileOk(System.ComponentModel.CancelEventArgs e)
+        /// <param name="e">A <see cref="CancelEventArgs" /> that contains the event data.</param>
+        protected virtual void OnFileOk(CancelEventArgs e)
         {
             FileOk?.Invoke(this, e);
         }
@@ -610,7 +610,7 @@ namespace Ookii.Dialogs.Wpf
         {
             GetResult(dialog);
 
-            System.ComponentModel.CancelEventArgs e = new System.ComponentModel.CancelEventArgs();
+            CancelEventArgs e = new CancelEventArgs();
             OnFileOk(e);
             return !e.Cancel;
         }
@@ -642,7 +642,7 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-        private void DownlevelDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void DownlevelDialog_FileOk(object sender, CancelEventArgs e)
         {
             OnFileOk(e);
         }

@@ -32,7 +32,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     [DefaultProperty("MainInstruction"), DefaultEvent("ButtonClicked"), Description("Displays a task dialog."), Designer(typeof(TaskDialogDesigner))]
-    public partial class TaskDialog : Component, System.Windows.Interop.IWin32Window
+    public partial class TaskDialog : Component, IWin32Window
     {
         #region Events
 
@@ -332,9 +332,9 @@ namespace Ookii.Dialogs.Wpf
         /// <remarks>
         /// <para>This property affects only custom buttons, not standard ones.</para>
         /// <para>
-        /// If a custom button is being displayed on a task dialog with <see cref="TaskDialog.ButtonStyle"/> set to <see
-        /// cref="Ookii.Dialogs.Wpf.TaskDialogButtonStyle.CommandLinks"/> or <see
-        /// cref="Ookii.Dialogs.Wpf.TaskDialogButtonStyle.CommandLinksNoIcon"/>, you delineate the command from the note by
+        /// If a custom button is being displayed on a task dialog with <see cref="ButtonStyle"/> set to <see
+        /// cref="TaskDialogButtonStyle.CommandLinks"/> or <see
+        /// cref="TaskDialogButtonStyle.CommandLinksNoIcon"/>, you delineate the command from the note by
         /// placing a line break in the string specified by <see cref="TaskDialogItem.Text"/> property.
         /// </para>
         /// </remarks>
@@ -727,15 +727,15 @@ namespace Ookii.Dialogs.Wpf
 
         /// <summary>Gets or sets the type of progress bar displayed on the dialog.</summary>
         /// <value>
-        /// A <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle"/> that indicates the type of progress bar shown on the task dialog.
+        /// A <see cref="Wpf.ProgressBarStyle"/> that indicates the type of progress bar shown on the task dialog.
         /// </value>
         /// <remarks>
         /// <para>
-        /// If this property is set to <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.MarqueeProgressBar"/>, the marquee will
+        /// If this property is set to <see cref="ProgressBarStyle.MarqueeProgressBar"/>, the marquee will
         /// scroll as long as the dialog is visible.
         /// </para>
         /// <para>
-        /// If this property is set to <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.ProgressBar"/>, the value of the <see
+        /// If this property is set to <see cref="ProgressBarStyle.ProgressBar"/>, the value of the <see
         /// cref="ProgressBarValue"/> property must be updated to advance the progress bar. This can be done e.g. by an
         /// asynchronous operation or from the <see cref="Timer"/> event.
         /// </para>
@@ -762,7 +762,7 @@ namespace Ookii.Dialogs.Wpf
 
         /// <summary>Gets or sets the marquee animation speed of the progress bar in milliseconds.</summary>
         /// <value>The marquee animation speed of the progress bar in milliseconds. The default value is 100.</value>
-        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.MarqueeProgressBar"/>.</remarks>
+        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.MarqueeProgressBar"/>.</remarks>
         [Category("Behavior"), Description("The marquee animation speed of the progress bar in milliseconds."), DefaultValue(100)]
         public int ProgressBarMarqueeAnimationSpeed
         {
@@ -776,7 +776,7 @@ namespace Ookii.Dialogs.Wpf
 
         /// <summary>Gets or sets the lower bound of the range of the task dialog's progress bar.</summary>
         /// <value>The lower bound of the range of the task dialog's progress bar. The default value is 0.</value>
-        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.ProgressBar"/>.</remarks>
+        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.ProgressBar"/>.</remarks>
         /// <exception cref="ArgumentOutOfRangeException">The new property value is not smaller than <see cref="ProgressBarMaximum"/>.</exception>
         [Category("Behavior"), Description("The lower bound of the range of the task dialog's progress bar."), DefaultValue(0)]
         public int ProgressBarMinimum
@@ -793,7 +793,7 @@ namespace Ookii.Dialogs.Wpf
 
         /// <summary>Gets or sets the upper bound of the range of the task dialog's progress bar.</summary>
         /// <value>The upper bound of the range of the task dialog's progress bar. The default value is 100.</value>
-        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.ProgressBar"/>.</remarks>
+        /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.ProgressBar"/>.</remarks>
         /// <exception cref="ArgumentOutOfRangeException">The new property value is not larger than <see cref="ProgressBarMinimum"/>.</exception>
         [Category("Behavior"), Description("The upper bound of the range of the task dialog's progress bar."), DefaultValue(100)]
         public int ProgressBarMaximum
@@ -812,7 +812,7 @@ namespace Ookii.Dialogs.Wpf
         /// <value>The current value of the task dialog's progress bar. The default value is 0.</value>
         /// <remarks>
         /// This property is only used if the <see cref="ProgressBarStyle"/> property is <see
-        /// cref="Ookii.Dialogs.Wpf.ProgressBarStyle.ProgressBar"/>. <note> Updating the value of the progress bar while the
+        /// cref="ProgressBarStyle.ProgressBar"/>. <note> Updating the value of the progress bar while the
         /// dialog is visible may only be done from the thread on which the task dialog was created. </note>
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -834,11 +834,11 @@ namespace Ookii.Dialogs.Wpf
 
         /// <summary>Gets or sets the state of the task dialog's progress bar.</summary>
         /// <value>
-        /// A <see cref="Ookii.Dialogs.Wpf.ProgressBarState"/> indicating the state of the task dialog's progress bar. The
-        /// default value is <see cref="Ookii.Dialogs.Wpf.ProgressBarState.Normal"/>.
+        /// A <see cref="Wpf.ProgressBarState"/> indicating the state of the task dialog's progress bar. The
+        /// default value is <see cref="ProgressBarState.Normal"/>.
         /// </value>
         /// <remarks>
-        /// This property is only used if the <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle"/> property is <see cref="Ookii.Dialogs.Wpf.ProgressBarStyle.ProgressBar"/>.
+        /// This property is only used if the <see cref="Wpf.ProgressBarStyle"/> property is <see cref="ProgressBarStyle.ProgressBar"/>.
         /// </remarks>
         [Category("Behavior"), Description("The state of the task dialog's progress bar."), DefaultValue(ProgressBarState.Normal)]
         public ProgressBarState ProgressBarState
