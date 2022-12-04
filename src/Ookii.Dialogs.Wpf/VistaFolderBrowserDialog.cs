@@ -403,7 +403,7 @@ namespace Ookii.Dialogs.Wpf
                         Span<char> span = stackalloc char[(int)NativeMethods.MAX_PATH];
                         fixed (char* pspan = span)
                             validPath = NativeMethods.SHGetPathFromIDList((ITEMIDLIST*)(IntPtr)lParam, pspan);
-                        NativeMethods.SendMessage(hwnd, NativeMethods.BFFM_ENABLEOK, 0, (nint)(validPath ? 1 : 0));
+                        NativeMethods.SendMessage(hwnd, NativeMethods.BFFM_ENABLEOK, 0, validPath ? 1 : 0);
                     }
                     break;
             }

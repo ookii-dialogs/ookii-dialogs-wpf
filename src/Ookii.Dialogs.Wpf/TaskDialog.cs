@@ -221,7 +221,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 if (IsDialogRunning)
                 {
-                    IntPtr icon = NativeMethods.SendMessage((HWND)Handle, NativeMethods.WM_GETICON, (nuint)NativeMethods.ICON_SMALL, IntPtr.Zero);
+                    IntPtr icon = NativeMethods.SendMessage((HWND)Handle, NativeMethods.WM_GETICON, NativeMethods.ICON_SMALL, IntPtr.Zero);
                     return System.Drawing.Icon.FromHandle(icon);
                 }
                 return _windowIcon;
@@ -267,7 +267,7 @@ namespace Ookii.Dialogs.Wpf
                 if (_customMainIcon != value)
                 {
                     _customMainIcon = value;
-                    UpdateDialog();
+                    NativeMethods.SendMessage((HWND)Handle, (uint)TASKDIALOG_MESSAGES.TDM_UPDATE_ICON, (uint)TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_MAIN, value.Handle);
                 }
             }
         }
@@ -316,8 +316,7 @@ namespace Ookii.Dialogs.Wpf
                 if (_customFooterIcon != value)
                 {
                     _customFooterIcon = value;
-                    // TODO: This and customMainIcon don't need to use UpdateDialog, they can use TDM_UPDATE_ICON
-                    UpdateDialog();
+                    NativeMethods.SendMessage((HWND)Handle, (uint)TASKDIALOG_MESSAGES.TDM_UPDATE_ICON, (uint)TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_FOOTER, value.Handle);
                 }
             }
         }
@@ -777,14 +776,14 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>Gets or sets the lower bound of the range of the task dialog's progress bar.</summary>
         /// <value>The lower bound of the range of the task dialog's progress bar. The default value is 0.</value>
         /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.ProgressBar"/>.</remarks>
-        /// <exception cref="ArgumentOutOfRangeException">The new property value is not smaller than <see cref="ProgressBarMaximum"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The new property value is negative or not smaller than <see cref="ProgressBarMaximum"/>.</exception>
         [Category("Behavior"), Description("The lower bound of the range of the task dialog's progress bar."), DefaultValue(0)]
         public int ProgressBarMinimum
         {
             get => _progressBarMinimimum;
             set
             {
-                if (_progressBarMaximum <= value)
+                if (value < 0 || _progressBarMaximum <= value)
                     throw new ArgumentOutOfRangeException(nameof(value));
                 _progressBarMinimimum = value;
                 UpdateProgressBarRange();
@@ -794,14 +793,14 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>Gets or sets the upper bound of the range of the task dialog's progress bar.</summary>
         /// <value>The upper bound of the range of the task dialog's progress bar. The default value is 100.</value>
         /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.ProgressBar"/>.</remarks>
-        /// <exception cref="ArgumentOutOfRangeException">The new property value is not larger than <see cref="ProgressBarMinimum"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The new property value is negative or not larger than <see cref="ProgressBarMinimum"/>.</exception>
         [Category("Behavior"), Description("The upper bound of the range of the task dialog's progress bar."), DefaultValue(100)]
         public int ProgressBarMaximum
         {
             get => _progressBarMaximum;
             set
             {
-                if (value <= _progressBarMinimimum)
+                if (value < 0 || value <= _progressBarMinimimum)
                     throw new ArgumentOutOfRangeException(nameof(value));
                 _progressBarMaximum = value;
                 UpdateProgressBarRange();
@@ -816,7 +815,7 @@ namespace Ookii.Dialogs.Wpf
         /// dialog is visible may only be done from the thread on which the task dialog was created. </note>
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// The new property value is smaller than <see cref="ProgressBarMinimum"/> or larger than <see cref="ProgressBarMaximum"/>.
+        /// The new property value is negative, smaller than <see cref="ProgressBarMinimum"/> or larger than <see cref="ProgressBarMaximum"/>.
         /// </exception>
         [Category("Behavior"), Description("The current value of the task dialog's progress bar."), DefaultValue(0)]
         public int ProgressBarValue
@@ -824,7 +823,7 @@ namespace Ookii.Dialogs.Wpf
             get => _progressBarValue;
             set
             {
-                if (value < ProgressBarMinimum || value > ProgressBarMaximum)
+                if (value < 0 || value < ProgressBarMinimum || value > ProgressBarMaximum)
                     throw new ArgumentOutOfRangeException(nameof(value));
 
                 _progressBarValue = value;
@@ -897,7 +896,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="NotSupportedException">Task dialogs are not supported on the current operating system.</exception>
         public TaskDialogButton ShowDialog()
         {
-            return ShowDialog((Window)null);
+            return ShowDialog(null);
         }
 
         /// <summary>Shows the task dialog as a modal dialog.</summary>
@@ -1070,7 +1069,7 @@ namespace Ookii.Dialogs.Wpf
         {
             if (IsDialogRunning)
             {
-                NativeMethods.SendMessage((HWND)Handle, item is TaskDialogButton ? (uint)TASKDIALOG_MESSAGES.TDM_ENABLE_BUTTON : (uint)TASKDIALOG_MESSAGES.TDM_ENABLE_RADIO_BUTTON, (nuint)item.Id, (nint)(item.Enabled ? 1 : 0));
+                NativeMethods.SendMessage((HWND)Handle, item is TaskDialogButton ? (uint)TASKDIALOG_MESSAGES.TDM_ENABLE_BUTTON : (uint)TASKDIALOG_MESSAGES.TDM_ENABLE_RADIO_BUTTON, (nuint)item.Id, item.Enabled ? 1 : 0);
             }
         }
 
@@ -1373,7 +1372,7 @@ namespace Ookii.Dialogs.Wpf
         {
             if (_config.hwndParent == IntPtr.Zero && _windowIcon != null)
             {
-                NativeMethods.SendMessage((HWND)Handle, NativeMethods.WM_SETICON, (nuint)NativeMethods.ICON_SMALL, _windowIcon.Handle);
+                NativeMethods.SendMessage((HWND)Handle, NativeMethods.WM_SETICON, NativeMethods.ICON_SMALL, _windowIcon.Handle);
             }
 
             foreach (TaskDialogButton button in Buttons)
@@ -1402,7 +1401,7 @@ namespace Ookii.Dialogs.Wpf
         {
             if (IsDialogRunning)
             {
-                NativeMethods.SendMessage((HWND)Handle, (int)TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_MARQUEE, (nuint)(ProgressBarMarqueeAnimationSpeed > 0 ? 1 : 0), (nint)ProgressBarMarqueeAnimationSpeed);
+                NativeMethods.SendMessage((HWND)Handle, (int)TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_MARQUEE, (nuint)(ProgressBarMarqueeAnimationSpeed > 0 ? 1 : 0), ProgressBarMarqueeAnimationSpeed);
             }
         }
 
