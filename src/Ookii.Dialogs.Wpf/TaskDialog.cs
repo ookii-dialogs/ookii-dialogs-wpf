@@ -762,12 +762,15 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>Gets or sets the marquee animation speed of the progress bar in milliseconds.</summary>
         /// <value>The marquee animation speed of the progress bar in milliseconds. The default value is 100.</value>
         /// <remarks>This property is only used if the <see cref="ProgressBarStyle"/> property is <see cref="ProgressBarStyle.MarqueeProgressBar"/>.</remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The new property value is negative or not smaller than <see cref="ProgressBarMaximum"/>.</exception>
         [Category("Behavior"), Description("The marquee animation speed of the progress bar in milliseconds."), DefaultValue(100)]
         public int ProgressBarMarqueeAnimationSpeed
         {
             get => _progressBarMarqueeAnimationSpeed;
             set
             {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 _progressBarMarqueeAnimationSpeed = value;
                 UpdateProgressBarMarqueeSpeed();
             }
