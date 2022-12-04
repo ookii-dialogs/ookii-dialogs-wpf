@@ -78,10 +78,10 @@ namespace Ookii.Dialogs.Wpf
         [Category("Appearance"), Description("The type of the button."), DefaultValue(ButtonType.Custom)]
         public ButtonType ButtonType
         {
-            get { return _type; }
-            set 
+            get => _type;
+            set
             {
-                if( value != ButtonType.Custom )
+                if (value != ButtonType.Custom)
                 {
                     CheckDuplicateButton(value, null);
                     _type = value;
@@ -116,14 +116,13 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("The text of the note associated with a command link button."), DefaultValue(""), Editor(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(UITypeEditor))]
         public string CommandLinkNote
         {
-            get { return _commandLinkNote ?? string.Empty; }
+            get => _commandLinkNote ?? string.Empty;
             set
-            { 
+            {
                 _commandLinkNote = value;
                 UpdateOwner();
             }
         }
-	
 
         /// <summary>
         /// Gets or sets a value that indicates if the button is the default button on the dialog.
@@ -136,15 +135,15 @@ namespace Ookii.Dialogs.Wpf
         [Category("Behavior"), Description("Indicates if the button is the default button on the dialog."), DefaultValue(false)]
         public bool Default
         {
-            get { return _default; }
+            get => _default;
             set
             {
                 _default = value;
-                if( value && Owner != null )
+                if (value && Owner != null)
                 {
-                    foreach( TaskDialogButton button in Owner.Buttons )
+                    foreach (TaskDialogButton button in Owner.Buttons)
                     {
-                        if( button != this )
+                        if (button != this)
                             button.Default = false;
                     }
                 }
@@ -164,30 +163,25 @@ namespace Ookii.Dialogs.Wpf
         /// Elevation is not performed by the task dialog; the code implementing the operation that results from
         /// the button being clicked is responsible for performing elevation if required.
         /// </remarks>
-        [Category("Behavior"), Description("Indicates whether the Task Dialog button or command link should have a User Account Control (UAC) shield icon (in other words, whether the action invoked by the button requires elevation)."), DefaultValue(false)] 
+        [Category("Behavior"), Description("Indicates whether the Task Dialog button or command link should have a User Account Control (UAC) shield icon (in other words, whether the action invoked by the button requires elevation)."), DefaultValue(false)]
         public bool ElevationRequired
         {
-            get { return _elevationRequired; }
-            set 
-            { 
-                _elevationRequired = value;
-                if( Owner != null )
-                    Owner.SetButtonElevationRequired(this);
-            }
-        }
-	
-	
-        internal override int Id
-        {
-            get
-            {
-                return base.Id;
-            }
+            get => _elevationRequired;
             set
             {
-                if( base.Id != value )
+                _elevationRequired = value;
+                Owner?.SetButtonElevationRequired(this);
+            }
+        }
+
+        internal override int Id
+        {
+            get => base.Id;
+            set
+            {
+                if (base.Id != value)
                 {
-                    if( _type != ButtonType.Custom )
+                    if (_type != ButtonType.Custom)
                         throw new InvalidOperationException(Properties.Resources.NonCustomTaskDialogButtonIdError);
                     base.Id = value;
                 }
@@ -196,7 +190,7 @@ namespace Ookii.Dialogs.Wpf
 
         internal override void AutoAssignId()
         {
-            if( _type == ButtonType.Custom )
+            if (_type == ButtonType.Custom)
                 base.AutoAssignId();
         }
 
@@ -206,29 +200,16 @@ namespace Ookii.Dialogs.Wpf
             base.CheckDuplicate(itemToExclude);
         }
 
-        internal TASKDIALOG_COMMON_BUTTON_FLAGS ButtonFlag
+        internal TASKDIALOG_COMMON_BUTTON_FLAGS ButtonFlag => _type switch
         {
-            get
-            {
-                switch( _type )
-                {
-                case ButtonType.Ok:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON;
-                case ButtonType.Yes:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_YES_BUTTON;
-                case ButtonType.No:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_NO_BUTTON;
-                case ButtonType.Cancel:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON;
-                case ButtonType.Retry:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON;
-                case ButtonType.Close:
-                    return TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON;
-                default:
-                    return 0;
-                }
-            }
-        }
+            ButtonType.Ok => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON,
+            ButtonType.Yes => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_YES_BUTTON,
+            ButtonType.No => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_NO_BUTTON,
+            ButtonType.Cancel => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON,
+            ButtonType.Retry => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON,
+            ButtonType.Close => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON,
+            _ => 0,
+        };
 
         /// <summary>
         /// Gets the collection that items of this type are part of.
@@ -237,23 +218,15 @@ namespace Ookii.Dialogs.Wpf
         /// If the <see cref="TaskDialogButton"/> is currently associated with a <see cref="TaskDialog"/>, the
         /// <see cref="TaskDialog.Buttons"/> collection of that <see cref="TaskDialog"/>; otherwise, <see langword="null" />.
         /// </value>
-        protected override System.Collections.IEnumerable ItemCollection
-        {
-            get 
-            {
-                if( Owner != null )
-                    return Owner.Buttons;
-                return null;
-            }
-        }
+        protected override System.Collections.IEnumerable ItemCollection => Owner != null ? Owner.Buttons : (System.Collections.IEnumerable)null;
 
         private void CheckDuplicateButton(ButtonType type, TaskDialogItem itemToExclude)
         {
-            if( type != ButtonType.Custom && Owner != null )
+            if (type != ButtonType.Custom && Owner != null)
             {
-                foreach( TaskDialogButton button in Owner.Buttons )
+                foreach (TaskDialogButton button in Owner.Buttons)
                 {
-                    if( button != this && button != itemToExclude && button.ButtonType == type )
+                    if (button != this && button != itemToExclude && button.ButtonType == type)
                         throw new InvalidOperationException(Properties.Resources.DuplicateButtonTypeError);
                 }
             }

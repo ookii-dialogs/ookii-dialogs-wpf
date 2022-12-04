@@ -27,7 +27,6 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class TaskDialogItemClickedEventArgs : CancelEventArgs
     {
-        private readonly TaskDialogItem _item;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskDialogItemClickedEventArgs"/> class with the specified item.
@@ -35,7 +34,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="item">The <see cref="TaskDialogItem"/> that was clicked.</param>
         public TaskDialogItemClickedEventArgs(TaskDialogItem item)
         {
-            _item = item;
+            Item = item;
         }
 
         /// <summary>
@@ -44,10 +43,7 @@ namespace Ookii.Dialogs.Wpf
         /// <value>
         /// The <see cref="TaskDialogItem"/> that was clicked.
         /// </value>
-        public TaskDialogItem Item
-        {
-            get { return _item; }
-        }
-	
+        public TaskDialogItem Item { get; private set; }
+
     }
 }

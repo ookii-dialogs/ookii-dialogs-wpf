@@ -56,7 +56,7 @@ namespace Ookii.Dialogs.Wpf
         private volatile bool _cancellationPending;
         private CancellationTokenSource _cancellationTokenSource;
         private int _percentProgress;
-        private IntPtr _ownerHandle;        
+        private IntPtr _ownerHandle;
 
         /// <summary>
         /// Event raised when the dialog is displayed.
@@ -91,8 +91,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="container">The <see cref="IContainer"/> to which the component should be added.</param>
         public ProgressDialog(IContainer container)
         {
-            if( container != null )
-                container.Add(this);
+            container?.Add(this);
 
             InitializeComponent();
 
@@ -100,7 +99,7 @@ namespace Ookii.Dialogs.Wpf
             ShowCancelButton = true;
             MinimizeBox = true;
             // Set a default animation for XP.
-            if( !NativeMethods.IsWindowsVistaOrLater )
+            if (!NativeMethods.IsWindowsVistaOrLater)
                 Animation = AnimationResource.GetShellAnimation(Ookii.Dialogs.Wpf.ShellAnimation.FlyingPapers);
         }
 
@@ -119,8 +118,8 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("The text in the progress dialog's title bar."), DefaultValue("")]
         public string WindowTitle
         {
-            get { return _windowTitle ?? string.Empty; }
-            set { _windowTitle = value; }
+            get => _windowTitle ?? string.Empty;
+            set => _windowTitle = value;
         }
 
         /// <summary>
@@ -142,14 +141,13 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("A short description of the operation being carried out.")]
         public string Text
         {
-            get { return _text ?? string.Empty; }
-            set 
-            { 
+            get => _text ?? string.Empty;
+            set
+            {
                 _text = value;
                 unsafe
                 {
-                    if (_dialog != null)
-                        _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                    _dialog?.SetLine(1, Text, UseCompactPathsForText, default);
                 }
             }
         }
@@ -174,18 +172,17 @@ namespace Ookii.Dialogs.Wpf
         [Category("Behavior"), Description("Indicates whether path strings in the Text property should be compacted if they are too large to fit on one line."), DefaultValue(false)]
         public bool UseCompactPathsForText
         {
-            get { return _useCompactPathsForText; }
-            set 
+            get => _useCompactPathsForText;
+            set
             {
                 _useCompactPathsForText = value;
                 unsafe
                 {
-                    if ( _dialog != null )
-                    _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                    _dialog?.SetLine(1, Text, UseCompactPathsForText, default);
                 }
             }
         }
-	
+
         /// <summary>
         /// Gets or sets additional details about the operation being carried out.
         /// </summary>
@@ -205,14 +202,13 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("Additional details about the operation being carried out."), DefaultValue("")]
         public string Description
         {
-            get { return _description ?? string.Empty; }
-            set 
-            { 
+            get => _description ?? string.Empty;
+            set
+            {
                 _description = value;
                 unsafe
                 {
-                    if (_dialog != null)
-                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                    _dialog?.SetLine(2, Description, UseCompactPathsForDescription, default);
                 }
             }
         }
@@ -237,14 +233,13 @@ namespace Ookii.Dialogs.Wpf
         [Category("Behavior"), Description("Indicates whether path strings in the Description property should be compacted if they are too large to fit on one line."), DefaultValue(false)]
         public bool UseCompactPathsForDescription
         {
-            get { return _useCompactPathsForDescription; }
+            get => _useCompactPathsForDescription;
             set
             {
                 _useCompactPathsForDescription = value;
                 unsafe
                 {
-                    if (_dialog != null)
-                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                    _dialog?.SetLine(2, Description, UseCompactPathsForDescription, default);
                 }
             }
         }
@@ -264,8 +259,8 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("The text that will be shown after the Cancel button is pressed."), DefaultValue("")]
         public string CancellationText
         {
-            get { return _cancellationText ?? string.Empty; }
-            set { _cancellationText = value; }
+            get => _cancellationText ?? string.Empty;
+            set => _cancellationText = value;
         }
 
         /// <summary>
@@ -405,10 +400,7 @@ namespace Ookii.Dialogs.Wpf
         /// otherwise, <see langword="false"/>.
         /// </value>
         [Browsable(false)]
-        public bool IsBusy
-        {
-            get { return _backgroundWorker.IsBusy; }
-        }
+        public bool IsBusy => _backgroundWorker.IsBusy;
 
         /// <summary>
         /// Displays the progress dialog as a modeless dialog.
@@ -680,9 +672,9 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="InvalidOperationException">The progress dialog is not currently being displayed.</exception>
         public void ReportProgress(int percentProgress, string text, string description, object userState)
         {
-            if( percentProgress < 0 || percentProgress > 100 )
-                throw new ArgumentOutOfRangeException("percentProgress");
-            if( _dialog == null )
+            if (percentProgress is < 0 or > 100)
+                throw new ArgumentOutOfRangeException(nameof(percentProgress));
+            if (_dialog == null)
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogNotRunningError);
 
             // we need to cache the latest percentProgress so IProgress<string>.Report(text) can report the percent progress correctly.
@@ -714,7 +706,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 return;
             }
-            
+
             handler(this, e);
         }
 
@@ -724,9 +716,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="EventArgs"/> containing data for the event.</param>
         protected virtual void OnRunWorkerCompleted(RunWorkerCompletedEventArgs e)
         {
-            RunWorkerCompletedEventHandler handler = RunWorkerCompleted;
-            if( handler != null )
-                handler(this, e);
+            RunWorkerCompleted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -735,31 +725,29 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> containing data for the event.</param>
         protected virtual void OnProgressChanged(ProgressChangedEventArgs e)
         {
-            ProgressChangedEventHandler handler = ProgressChanged;
-            if( handler != null )
-                handler(this, e);
+            ProgressChanged?.Invoke(this, e);
         }
 
         private unsafe void RunProgressDialog(IntPtr owner, object argument, CancellationToken cancellationToken)
         {
-            if (_backgroundWorker.IsBusy || !(_cancellationTokenSource is null))
+            if (_backgroundWorker.IsBusy || _cancellationTokenSource is not null)
             {
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogRunning);
             }
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-            if ( Animation != null )
+            if (Animation != null)
             {
                 try
                 {
                     _currentAnimationModuleHandle = Animation.LoadLibrary();
                 }
-                catch( Win32Exception ex )
+                catch (Win32Exception ex)
                 {
                     throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.AnimationLoadErrorFormat, ex.Message), ex);
                 }
-                catch( System.IO.FileNotFoundException ex )
+                catch (System.IO.FileNotFoundException ex)
                 {
                     throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.AnimationLoadErrorFormat, ex.Message), ex);
                 }
@@ -768,34 +756,34 @@ namespace Ookii.Dialogs.Wpf
             _cancellationPending = false;
             _dialog = new Interop.ProgressDialog();
             _dialog.SetTitle(WindowTitle);
-            if( Animation != null )
+            if (Animation != null)
                 _dialog.SetAnimation(_currentAnimationModuleHandle, (ushort)Animation.ResourceId);
 
-            if( CancellationText.Length > 0 )
+            if (CancellationText.Length > 0)
                 _dialog.SetCancelMsg(CancellationText, null);
             _dialog.SetLine(1, Text, UseCompactPathsForText, default);
             _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
 
             uint flags = NativeMethods.PROGDLG_NORMAL;
-            if( owner != IntPtr.Zero )
+            if (owner != IntPtr.Zero)
                 flags |= NativeMethods.PROGDLG_MODAL;
-            switch( ProgressBarStyle )
+            switch (ProgressBarStyle)
             {
-            case ProgressBarStyle.None:
-                flags |= NativeMethods.PROGDLG_NOPROGRESSBAR;
-                break;
-            case ProgressBarStyle.MarqueeProgressBar:
-                if( NativeMethods.IsWindowsVistaOrLater )
-                    flags |= NativeMethods.PROGDLG_MARQUEEPROGRESS;
-                else
-                    flags |= NativeMethods.PROGDLG_NOPROGRESSBAR; // Older than Vista doesn't support marquee.
-                break;
+                case ProgressBarStyle.None:
+                    flags |= NativeMethods.PROGDLG_NOPROGRESSBAR;
+                    break;
+                case ProgressBarStyle.MarqueeProgressBar:
+                    if (NativeMethods.IsWindowsVistaOrLater)
+                        flags |= NativeMethods.PROGDLG_MARQUEEPROGRESS;
+                    else
+                        flags |= NativeMethods.PROGDLG_NOPROGRESSBAR; // Older than Vista doesn't support marquee.
+                    break;
             }
-            if( ShowTimeRemaining )
+            if (ShowTimeRemaining)
                 flags |= NativeMethods.PROGDLG_AUTOTIME;
-            if( !ShowCancelButton )
+            if (!ShowCancelButton)
                 flags |= NativeMethods.PROGDLG_NOCANCEL;
-            if( !MinimizeBox )
+            if (!MinimizeBox)
                 flags |= NativeMethods.PROGDLG_NOMINIMIZE;
 
             _ownerHandle = owner;
@@ -825,7 +813,7 @@ namespace Ookii.Dialogs.Wpf
             _dialog.StopProgressDialog();
             Marshal.ReleaseComObject(_dialog);
             _dialog = null;
-            if( _currentAnimationModuleHandle != null )
+            if (_currentAnimationModuleHandle != null)
             {
                 _currentAnimationModuleHandle.Dispose();
                 _currentAnimationModuleHandle = null;
@@ -835,7 +823,7 @@ namespace Ookii.Dialogs.Wpf
                 NativeMethods.EnableWindow((HWND)_ownerHandle, true);
 
             var cancellationTokenSource = _cancellationTokenSource;
-            if (!(cancellationTokenSource is null))
+            if (cancellationTokenSource is not null)
             {
                 cancellationTokenSource.Dispose();
                 _cancellationTokenSource = null;
@@ -860,15 +848,14 @@ namespace Ookii.Dialogs.Wpf
 
             // ReportProgress doesn't allow values outside this range. However, CancellationPending will call
             // BackgroundWorker.ReportProgress directly with a value that is outside this range to update the value of the property.
-            if( e.ProgressPercentage >= 0 && e.ProgressPercentage <= 100 )
+            if (e.ProgressPercentage is >= 0 and <= 100)
             {
                 _dialog.SetProgress((uint)e.ProgressPercentage, 100);
-                ProgressChangedData data = e.UserState as ProgressChangedData;
-                if( data != null )
+                if (e.UserState is ProgressChangedData data)
                 {
-                    if( data.Text != null )
+                    if (data.Text != null)
                         Text = data.Text;
-                    if( data.Description != null )
+                    if (data.Description != null)
                         Description = data.Description;
                     OnProgressChanged(new ProgressChangedEventArgs(e.ProgressPercentage, data.UserState));
                 }
@@ -887,12 +874,13 @@ namespace Ookii.Dialogs.Wpf
         /// <returns>An object that can be casted to the requested service.</returns>
         object IServiceProvider.GetService(Type serviceType)
         {
-            if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
-
-            if (serviceType == typeof(IProgress<int>)) return this;
-            if (serviceType == typeof(IProgress<string>)) return this;
-
-            throw new ArgumentException($"Unsupported service {serviceType}", nameof(serviceType));            
+            return serviceType == null
+                ? throw new ArgumentNullException(nameof(serviceType))
+                : serviceType == typeof(IProgress<int>)
+                ? this
+                : serviceType == typeof(IProgress<string>)
+                ? (object)this
+                : throw new ArgumentException($"Unsupported service {serviceType}", nameof(serviceType));
         }
     }
 }

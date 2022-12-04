@@ -61,13 +61,7 @@ namespace Ookii.Dialogs.Wpf
         /// <see langword="true" /> on Windows Vista or newer operating systems; otherwise, <see langword="false" />.
         /// </value>
         [Browsable(false)]
-        public static bool IsVistaFolderDialogSupported
-        {
-            get
-            {
-                return NativeMethods.IsWindowsVistaOrLater;
-            }
-        }
+        public static bool IsVistaFolderDialogSupported => NativeMethods.IsWindowsVistaOrLater;
 
         /// <summary>
         /// Gets or sets the descriptive text displayed above the tree view control in the dialog box, or below the list view control
@@ -79,14 +73,8 @@ namespace Ookii.Dialogs.Wpf
         [Category("Folder Browsing"), DefaultValue(""), Localizable(true), Browsable(true), Description("The descriptive text displayed above the tree view control in the dialog box, or below the list view control in the Vista style dialog.")]
         public string Description
         {
-            get
-            {
-                return _description ?? string.Empty;
-            }
-            set
-            {
-                _description = value;
-            }
+            get => _description ?? string.Empty;
+            set => _description = value;
         }
 
         /// <summary>
@@ -119,10 +107,7 @@ namespace Ookii.Dialogs.Wpf
                 return selectedPath;
             }
 
-            set
-            {
-                _selectedPath = value;
-            }
+            set => _selectedPath = value;
         }
 
         /// <summary>
@@ -154,15 +139,9 @@ namespace Ookii.Dialogs.Wpf
         [Description("A value indicating whether the dialog box allows multiple folders to be selected."), DefaultValue(false), Category("Behavior")]
         public bool Multiselect
         {
-            get
-            {
-                return HasOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT);
-            }
+            get => HasOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT);
 
-            set
-            {
-                SetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT, value);
-            }
+            set => SetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT, value);
         }
 
         /// <summary>
@@ -181,23 +160,13 @@ namespace Ookii.Dialogs.Wpf
                 if (selectedPaths is null)
                 {
                     var selectedPath = _selectedPath;
-                    if (string.IsNullOrWhiteSpace(selectedPath))
-                    {
-                        return new string[0];
-                    }
-                    else
-                    {
-                        return new[] { selectedPath };
-                    }
+                    return string.IsNullOrWhiteSpace(selectedPath) ? Array.Empty<string>() : (new[] { selectedPath });
                 }
 
                 return (string[])selectedPaths.Clone();
             }
 
-            set
-            {
-                _selectedPaths = value;
-            }
+            set => _selectedPaths = value;
         }
 
 
@@ -246,7 +215,7 @@ namespace Ookii.Dialogs.Wpf
         /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
         public bool? ShowDialog(IntPtr owner)
         {
-            IntPtr ownerHandle = owner == default(IntPtr) ? NativeMethods.GetActiveWindow() : owner;
+            IntPtr ownerHandle = owner == default ? NativeMethods.GetActiveWindow() : owner;
             return new bool?(IsVistaFolderDialogSupported ? RunDialog((HWND)ownerHandle) : RunDialogDownlevel((HWND)ownerHandle));
         }
 
@@ -285,10 +254,9 @@ namespace Ookii.Dialogs.Wpf
                 int result = dialog.Show(owner);
                 if (result < 0)
                 {
-                    if ((uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
-                        return false;
-                    else
-                        throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
+                    return (uint)result == (uint)NativeMethods.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED)
+                        ? false
+                        : throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
                 }
                 GetResult(dialog);
                 return true;

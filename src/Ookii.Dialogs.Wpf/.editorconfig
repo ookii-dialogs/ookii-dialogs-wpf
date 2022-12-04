@@ -4,3 +4,30 @@ dotnet_diagnostic.SYSLIB0003.severity = none
 
 # SYSLIB0004: Type or member is obsolete
 dotnet_diagnostic.SYSLIB0004.severity = none
+
+# IDE0011: Add braces
+dotnet_diagnostic.IDE0011.severity = none
+
+# IDE0090: Use 'new(...)'
+csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none
+
+# IDE2000: Avoid multiple blank lines
+dotnet_style_allow_multiple_blank_lines_experimental = false
+
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = none
+
+# IDE0008: Use explicit type
+dotnet_diagnostic.IDE0008.severity = none
+
+# IDE0022: Use block body for methods
+dotnet_diagnostic.IDE0022.severity = none
+
+# IDE0057: Use range operator
+csharp_style_prefer_range_operator = false

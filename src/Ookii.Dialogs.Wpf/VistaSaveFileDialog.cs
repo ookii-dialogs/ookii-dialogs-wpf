@@ -58,7 +58,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         public VistaSaveFileDialog()
         {
-            if( !IsVistaFileDialogSupported )
+            if (!IsVistaFileDialogSupported)
                 DownlevelDialog = new SaveFileDialog();
         }
 
@@ -76,15 +76,10 @@ namespace Ookii.Dialogs.Wpf
         [DefaultValue(false), Category("Behavior"), Description("A value indicating whether the dialog box prompts the user for permission to create a file if the user specifies a file that does not exist.")]
         public bool CreatePrompt
         {
-            get
-            {
-                if( DownlevelDialog != null )
-                    return ((SaveFileDialog)DownlevelDialog).CreatePrompt;
-                return GetOption(FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT);
-            }
+            get => DownlevelDialog != null ? ((SaveFileDialog)DownlevelDialog).CreatePrompt : GetOption(FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT);
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((SaveFileDialog)DownlevelDialog).CreatePrompt = value;
                 else
                     SetOption(FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT, value);
@@ -103,15 +98,12 @@ namespace Ookii.Dialogs.Wpf
         [Category("Behavior"), DefaultValue(true), Description("A value indicating whether the Save As dialog box displays a warning if the user specifies a file name that already exists.")]
         public bool OverwritePrompt
         {
-            get
-            {
-                if( DownlevelDialog != null )
-                    return ((SaveFileDialog)DownlevelDialog).OverwritePrompt;
-                return GetOption(FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT);
-            }
+            get => DownlevelDialog != null
+                    ? ((SaveFileDialog)DownlevelDialog).OverwritePrompt
+                    : GetOption(FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT);
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((SaveFileDialog)DownlevelDialog).OverwritePrompt = value;
                 else
                     SetOption(FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT, value);
@@ -128,7 +120,7 @@ namespace Ookii.Dialogs.Wpf
         public override void Reset()
         {
             base.Reset();
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
                 OverwritePrompt = true;
             }
@@ -141,7 +133,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
         public System.IO.Stream OpenFile()
         {
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 return ((SaveFileDialog)DownlevelDialog).OpenFile();
             else
             {
@@ -164,17 +156,17 @@ namespace Ookii.Dialogs.Wpf
             // the fact that these flags only works on open file dialogs, and then prompts manually. Similarly, the 
             // FOS_CREATEPROMPT and FOS_FILEMUSTEXIST flags don't actually work on IFileSaveDialog, so we have to implement 
             // the prompt manually.
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
-                if( CheckFileExists && !File.Exists(FileName) )
+                if (CheckFileExists && !File.Exists(FileName))
                 {
                     PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.FileNotFound, Path.GetFileName(FileName)), MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.OK);
                     e.Cancel = true;
                     return;
                 }
-                if( CreatePrompt && !File.Exists(FileName) )
+                if (CreatePrompt && !File.Exists(FileName))
                 {
-                    if( !PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.CreatePrompt, Path.GetFileName(FileName)), MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) )
+                    if (!PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.CreatePrompt, Path.GetFileName(FileName)), MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No))
                     {
                         e.Cancel = true;
                         return;

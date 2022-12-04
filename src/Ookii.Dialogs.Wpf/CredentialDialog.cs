@@ -52,8 +52,6 @@ namespace Ookii.Dialogs.Wpf
     public partial class CredentialDialog : Component
     {
         private string _confirmTarget;
-        private NetworkCredential _credentials = new NetworkCredential();
-        private byte[] _additionalEntropy;
         private BOOL _isSaveChecked;
         private string _target;
 
@@ -87,8 +85,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="container">The <see cref="IContainer"/> to add the component to.</param>
         public CredentialDialog(IContainer container)
         {
-            if (container != null)
-                container.Add(this);
+            container?.Add(this);
 
             InitializeComponent();
         }
@@ -139,7 +136,7 @@ namespace Ookii.Dialogs.Wpf
         [Category("Appearance"), Description("Indicates whether the \"Save password\" checkbox is checked."), DefaultValue(false)]
         public bool IsSaveChecked
         {
-            get { return _isSaveChecked; }
+            get => _isSaveChecked;
             set
             {
                 _confirmTarget = null;
@@ -156,11 +153,11 @@ namespace Ookii.Dialogs.Wpf
         [Browsable(false)]
         public string Password
         {
-            get { return _credentials.Password; }
+            get => Credentials.Password;
             private set
             {
                 _confirmTarget = null;
-                _credentials.Password = value;
+                Credentials.Password = value;
                 OnPasswordChanged(EventArgs.Empty);
             }
         }
@@ -174,17 +171,7 @@ namespace Ookii.Dialogs.Wpf
         /// The default value is <see langword="null" /> for no added complexity.
         /// </value>
         [Browsable(false)]
-        public byte[] AdditionalEntropy
-        {
-            get
-            {
-                return _additionalEntropy;
-            }
-            set
-            {
-                _additionalEntropy = value;
-            }
-        }
+        public byte[] AdditionalEntropy { get; set; }
 
         /// <summary>
         /// Gets the user-specified user name and password in a <see cref="NetworkCredential"/> object.
@@ -193,10 +180,7 @@ namespace Ookii.Dialogs.Wpf
         /// A <see cref="NetworkCredential"/> instance containing the user name and password specified on the dialog.
         /// </value>
         [Browsable(false)]
-        public NetworkCredential Credentials
-        {
-            get { return _credentials; }
-        }
+        public NetworkCredential Credentials { get; } = new NetworkCredential();
 
         /// <summary>
         /// Gets the user name the user entered in the dialog.
@@ -208,11 +192,11 @@ namespace Ookii.Dialogs.Wpf
         [Browsable(false)]
         public string UserName
         {
-            get { return _credentials.UserName ?? string.Empty; }
+            get => Credentials.UserName ?? string.Empty;
             private set
             {
                 _confirmTarget = null;
-                _credentials.UserName = value;
+                Credentials.UserName = value;
                 OnUserNameChanged(EventArgs.Empty);
             }
         }
@@ -231,7 +215,7 @@ namespace Ookii.Dialogs.Wpf
         [Category("Behavior"), Description("The target for the credentials, typically the server name prefixed by an application-specific identifier."), DefaultValue("")]
         public string Target
         {
-            get { return _target ?? string.Empty; }
+            get => _target ?? string.Empty;
             set
             {
                 _target = value;
@@ -254,8 +238,8 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("The title of the credentials dialog."), DefaultValue("")]
         public string WindowTitle
         {
-            get { return _windowTitle ?? string.Empty; }
-            set { _windowTitle = value; }
+            get => _windowTitle ?? string.Empty;
+            set => _windowTitle = value;
         }
 
         /// <summary>
@@ -278,8 +262,8 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("A brief message that will be displayed in the dialog box."), DefaultValue("")]
         public string MainInstruction
         {
-            get { return _caption ?? string.Empty; }
-            set { _caption = value; }
+            get => _caption ?? string.Empty;
+            set => _caption = value;
         }
 
         /// <summary>
@@ -300,8 +284,8 @@ namespace Ookii.Dialogs.Wpf
         [Localizable(true), Category("Appearance"), Description("Additional text to display in the dialog."), DefaultValue(""), Editor(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string Content
         {
-            get { return _text ?? string.Empty; }
-            set { _text = value; }
+            get => _text ?? string.Empty;
+            set => _text = value;
         }
 
         /// <summary>
@@ -490,11 +474,9 @@ namespace Ookii.Dialogs.Wpf
                 storedCredentials = true;
             }
 
-            bool result;
-            if (NativeMethods.IsWindowsVistaOrLater)
-                result = PromptForCredentialsCredUIWin(ownerHandle, storedCredentials);
-            else
-                result = PromptForCredentialsCredUI(ownerHandle, storedCredentials);
+            bool result = NativeMethods.IsWindowsVistaOrLater
+                ? PromptForCredentialsCredUIWin(ownerHandle, storedCredentials)
+                : PromptForCredentialsCredUI(ownerHandle, storedCredentials);
             return result;
         }
 
@@ -536,11 +518,7 @@ namespace Ookii.Dialogs.Wpf
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public bool ShowDialog(Window owner)
         {
-            IntPtr ownerHandle;
-            if (owner == null)
-                ownerHandle = NativeMethods.GetActiveWindow();
-            else
-                ownerHandle = new WindowInteropHelper(owner).Handle;
+            IntPtr ownerHandle = owner == null ? (IntPtr)NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
             return ShowDialog(ownerHandle);
         }
 
@@ -612,11 +590,11 @@ namespace Ookii.Dialogs.Wpf
         public unsafe static void StoreCredential(string target, NetworkCredential credential, byte[] additionalEntropy = null)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (target.Length == 0)
-                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
+                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, nameof(target));
             if (credential == null)
-                throw new ArgumentNullException("credential");
+                throw new ArgumentNullException(nameof(credential));
 
             fixed (char* userNamePtr = credential.UserName)
             fixed (char* targetPtr = target)
@@ -666,9 +644,9 @@ namespace Ookii.Dialogs.Wpf
         public unsafe static NetworkCredential RetrieveCredential(string target, byte[] additionalEntropy = null)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (target.Length == 0)
-                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
+                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, nameof(target));
 
             NetworkCredential cred = RetrieveCredentialFromApplicationInstanceCache(target);
             if (cred != null)
@@ -693,10 +671,7 @@ namespace Ookii.Dialogs.Wpf
             }
             else
             {
-                if (error == (int)WIN32_ERROR.ERROR_NOT_FOUND)
-                    return null;
-                else
-                    throw new CredentialException(error);
+                return error == (int)WIN32_ERROR.ERROR_NOT_FOUND ? null : throw new CredentialException(error);
             }
         }
 
@@ -716,9 +691,9 @@ namespace Ookii.Dialogs.Wpf
         public static NetworkCredential RetrieveCredentialFromApplicationInstanceCache(string target)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (target.Length == 0)
-                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
+                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, nameof(target));
 
             lock (_applicationInstanceCredentialCache)
             {
@@ -749,9 +724,9 @@ namespace Ookii.Dialogs.Wpf
         public static bool DeleteCredential(string target)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (target.Length == 0)
-                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
+                throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, nameof(target));
 
             bool found = false;
             lock (_applicationInstanceCredentialCache)
@@ -778,8 +753,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="EventArgs"/> containing data for the event.</param>
         protected virtual void OnUserNameChanged(EventArgs e)
         {
-            if (UserNameChanged != null)
-                UserNameChanged(this, e);
+            UserNameChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -788,8 +762,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="EventArgs"/> containing data for the event.</param>
         protected virtual void OnPasswordChanged(EventArgs e)
         {
-            if (PasswordChanged != null)
-                PasswordChanged(this, e);
+            PasswordChanged?.Invoke(this, e);
         }
 
         private unsafe bool PromptForCredentialsCredUI(HWND owner, bool storedCredentials)
@@ -928,13 +901,9 @@ namespace Ookii.Dialogs.Wpf
                 switch (DownlevelTextMode)
                 {
                     case DownlevelTextMode.MainInstructionAndContent:
-                        string text;
-                        if (MainInstruction.Length == 0)
-                            text = Content;
-                        else if (Content.Length == 0)
-                            text = MainInstruction;
-                        else
-                            text = MainInstruction + Environment.NewLine + Environment.NewLine + Content;
+                        string text = MainInstruction.Length == 0
+                                    ? Content
+                                    : Content.Length == 0 ? MainInstruction : MainInstruction + Environment.NewLine + Environment.NewLine + Content;
 
                         fixed (char* pText = text)
                             info.pszMessageText = pText;

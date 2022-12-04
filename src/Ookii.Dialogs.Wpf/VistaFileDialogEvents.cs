@@ -20,21 +20,18 @@ namespace Ookii.Dialogs.Wpf
 {
     class VistaFileDialogEvents : IFileDialogEvents, IFileDialogControlEvents
     {
-        private VistaFileDialog _dialog;
+        private readonly VistaFileDialog _dialog;
 
         public VistaFileDialogEvents(VistaFileDialog dialog)
         {
-            _dialog = dialog ?? throw new ArgumentNullException("dialog");
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
         }
 
         #region IFileDialogEvents Members
 
         HRESULT IFileDialogEvents.OnFileOk(IFileDialog pfd)
         {
-            if (_dialog.DoFileOk(pfd))
-                return HRESULT.S_OK;
-            else
-                return HRESULT.S_FALSE;
+            return _dialog.DoFileOk(pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
         }
 
         HRESULT IFileDialogEvents.OnFolderChanging(IFileDialog pfd, IShellItem psiFolder) => HRESULT.S_OK;

@@ -27,7 +27,7 @@ namespace Ookii.Dialogs.Wpf.Interop
 {
     class Win32Resources : IDisposable
     {
-        private SafeHandle _moduleHandle;
+        private readonly SafeHandle _moduleHandle;
         private const int _bufferSize = 500;
 
         public Win32Resources(string module)

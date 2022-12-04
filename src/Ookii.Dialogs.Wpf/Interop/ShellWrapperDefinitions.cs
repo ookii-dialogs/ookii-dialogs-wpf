@@ -31,7 +31,7 @@ namespace Ookii.Dialogs.Wpf.Interop
     // straightforward way. Behind the scenes, the C# compiler
     // morphs all 'new CoClass()' calls to 'new CoClassWrapper()'
     [ComImport,
-    Guid(IIDGuid.IFileOpenDialog), 
+    Guid(IIDGuid.IFileOpenDialog),
     CoClass(typeof(FileOpenDialogRCW))]
     internal interface NativeFileOpenDialog : IFileOpenDialog
     {

@@ -59,7 +59,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         public VistaOpenFileDialog()
         {
-            if( !IsVistaFileDialogSupported )
+            if (!IsVistaFileDialogSupported)
                 DownlevelDialog = new OpenFileDialog();
         }
 
@@ -74,14 +74,8 @@ namespace Ookii.Dialogs.Wpf
         [DefaultValue(true), Description("A value indicating whether the dialog box displays a warning if the user specifies a file name that does not exist.")]
         public override bool CheckFileExists
         {
-            get
-            {
-                return base.CheckFileExists;
-            }
-            set
-            {
-                base.CheckFileExists = value;
-            }
+            get => base.CheckFileExists;
+            set => base.CheckFileExists = value;
         }
 
         /// <summary>
@@ -94,15 +88,12 @@ namespace Ookii.Dialogs.Wpf
         [Description("A value indicating whether the dialog box allows multiple files to be selected."), DefaultValue(false), Category("Behavior")]
         public bool Multiselect
         {
-            get
-            {
-                if( DownlevelDialog != null )
-                    return ((OpenFileDialog)DownlevelDialog).Multiselect;
-                return GetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT);
-            }
+            get => DownlevelDialog != null
+                    ? ((OpenFileDialog)DownlevelDialog).Multiselect
+                    : GetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT);
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).Multiselect = value;
 
                 SetOption(FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT, value);
@@ -122,15 +113,10 @@ namespace Ookii.Dialogs.Wpf
         [Description("A value indicating whether the dialog box contains a read-only check box."), Category("Behavior"), DefaultValue(false)]
         public bool ShowReadOnly
         {
-            get
-            {
-                if( DownlevelDialog != null )
-                    return ((OpenFileDialog)DownlevelDialog).ShowReadOnly;
-                return _showReadOnly;
-            }
+            get => DownlevelDialog != null ? ((OpenFileDialog)DownlevelDialog).ShowReadOnly : _showReadOnly;
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).ShowReadOnly = value;
                 else
                     _showReadOnly = value;
@@ -146,21 +132,16 @@ namespace Ookii.Dialogs.Wpf
         [DefaultValue(false), Description("A value indicating whether the read-only check box is selected."), Category("Behavior")]
         public bool ReadOnlyChecked
         {
-            get
-            {
-                if( DownlevelDialog != null )
-                    return ((OpenFileDialog)DownlevelDialog).ReadOnlyChecked;
-                return _readOnlyChecked;
-            }
+            get => DownlevelDialog != null ? ((OpenFileDialog)DownlevelDialog).ReadOnlyChecked : _readOnlyChecked;
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).ReadOnlyChecked = value;
                 else
                     _readOnlyChecked = value;
             }
         }
-	
+
         #endregion
 
         #region Public Methods
@@ -171,7 +152,7 @@ namespace Ookii.Dialogs.Wpf
         public override void Reset()
         {
             base.Reset();
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
                 CheckFileExists = true;
                 _showReadOnly = false;
@@ -186,7 +167,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
         public System.IO.Stream OpenFile()
         {
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 return ((OpenFileDialog)DownlevelDialog).OpenFile();
             else
             {
@@ -207,7 +188,7 @@ namespace Ookii.Dialogs.Wpf
         internal override void SetDialogProperties(IFileDialog dialog)
         {
             base.SetDialogProperties(dialog);
-            if( _showReadOnly )
+            if (_showReadOnly)
             {
                 IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
                 customize.EnableOpenDropDown(_openDropDownId);
@@ -218,15 +199,15 @@ namespace Ookii.Dialogs.Wpf
 
         internal unsafe override void GetResult(IFileDialog dialog)
         {
-            if( Multiselect )
+            if (Multiselect)
             {
                 ((IFileOpenDialog)dialog).GetResults(out var results);
                 results.GetCount(out uint count);
                 string[] fileNames = new string[count];
-                for( uint x = 0; x < count; ++x )
+                for (uint x = 0; x < count; ++x)
                 {
                     results.GetItemAt(x, out IShellItem item);
-                    item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH,out var ptr);
+                    item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var ptr);
                     fileNames[x] = ptr.ToString();
                 }
                 FileNamesInternal = fileNames;
@@ -235,12 +216,12 @@ namespace Ookii.Dialogs.Wpf
             else
                 FileNamesInternal = null;
 
-            if( ShowReadOnly )
+            if (ShowReadOnly)
             {
                 IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
                 uint selected;
                 customize.GetSelectedControlItem(_openDropDownId, &selected);
-                _readOnlyChecked = (selected == _readOnlyItemId);
+                _readOnlyChecked = selected == _readOnlyItemId;
             }
 
             base.GetResult(dialog);

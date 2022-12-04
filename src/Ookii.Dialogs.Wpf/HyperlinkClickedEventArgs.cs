@@ -26,7 +26,6 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class HyperlinkClickedEventArgs : EventArgs
     {
-        private string _href;
 
         /// <summary>
         /// Creates a new instance of the <see cref="HyperlinkClickedEventArgs"/> class with the specified URL.
@@ -34,7 +33,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="href">The URL of the hyperlink.</param>
         public HyperlinkClickedEventArgs(string href)
         {
-            _href = href;
+            Href = href;
         }
 
         /// <summary>
@@ -43,10 +42,7 @@ namespace Ookii.Dialogs.Wpf
         /// <value>
         /// The value of the href attribute of the hyperlink.
         /// </value>
-        public string Href
-        {
-            get { return _href; }
-        }
-	
+        public string Href { get; private set; }
+
     }
 }

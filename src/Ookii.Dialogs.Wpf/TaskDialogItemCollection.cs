@@ -28,7 +28,7 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class TaskDialogItemCollection<T> : Collection<T> where T : TaskDialogItem
     {
-        private TaskDialog _owner;
+        private readonly TaskDialog _owner;
 
         internal TaskDialogItemCollection(TaskDialog owner)
         {
@@ -40,7 +40,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         protected override void ClearItems()
         {
-            foreach( T item in this )
+            foreach (T item in this)
             {
                 item.Owner = null;
             }
@@ -69,10 +69,10 @@ namespace Ookii.Dialogs.Wpf
         /// </exception>
         protected override void InsertItem(int index, T item)
         {
-            if( item == null )
-                throw new ArgumentNullException("item");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
 
-            if( item.Owner != null )
+            if (item.Owner != null)
                 throw new ArgumentException(Properties.Resources.TaskDialogItemHasOwnerError);
 
             item.Owner = _owner;
@@ -80,7 +80,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 item.CheckDuplicate(null);
             }
-            catch( InvalidOperationException )
+            catch (InvalidOperationException)
             {
                 item.Owner = null;
                 throw;
@@ -132,19 +132,19 @@ namespace Ookii.Dialogs.Wpf
         /// </exception>
         protected override void SetItem(int index, T item)
         {
-            if( item == null )
-                throw new ArgumentNullException("item");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
 
-            if( base[index] != item )
+            if (base[index] != item)
             {
-                if( item.Owner != null )
+                if (item.Owner != null)
                     throw new ArgumentException(Properties.Resources.TaskDialogItemHasOwnerError);
                 item.Owner = _owner;
                 try
                 {
                     item.CheckDuplicate(base[index]);
                 }
-                catch( InvalidOperationException )
+                catch (InvalidOperationException)
                 {
                     item.Owner = null;
                     throw;

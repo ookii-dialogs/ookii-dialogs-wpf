@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 
 namespace Ookii.Dialogs.Wpf
 {
-    sealed class ComCtlv6ActivationContext : IDisposable 
+    sealed class ComCtlv6ActivationContext : IDisposable
     {
         // Private data
         private nuint _cookie;
@@ -31,11 +31,11 @@ namespace Ookii.Dialogs.Wpf
 
         public ComCtlv6ActivationContext(bool enable)
         {
-            if( enable && NativeMethods.IsWindowsXPOrLater )
+            if (enable && NativeMethods.IsWindowsXPOrLater)
             {
-                if( EnsureActivateContextCreated() )
+                if (EnsureActivateContextCreated())
                 {
-                    if( !NativeMethods.ActivateActCtx(_activationContext, out _cookie) )
+                    if (!NativeMethods.ActivateActCtx(_activationContext, out _cookie))
                     {
                         // Be sure cookie always zero if activation failed
                         _cookie = 0;
@@ -57,9 +57,9 @@ namespace Ookii.Dialogs.Wpf
 
         private void Dispose(bool disposing)
         {
-            if( _cookie != 0 )
+            if (_cookie != 0)
             {
-                if( NativeMethods.DeactivateActCtx(0, _cookie) )
+                if (NativeMethods.DeactivateActCtx(0, _cookie))
                 {
                     // deactivation succeeded...
                     _cookie = 0;
