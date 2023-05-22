@@ -853,7 +853,7 @@ namespace Ookii.Dialogs.Wpf
 
             if (cancellationRequestedByUser && !cancellationRequestedByCode)
             {
-                cancellationTokenSource.Cancel();
+                cancellationTokenSource?.Cancel();
             }
 
             _cancellationPending = cancellationRequestedByUser || cancellationRequestedByCode;
