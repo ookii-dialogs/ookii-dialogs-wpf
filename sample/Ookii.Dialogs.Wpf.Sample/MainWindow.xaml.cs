@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using System;
-using System.Windows;
-using System.Threading;
 using System.ComponentModel;
+using System.Threading;
+using System.Windows;
 
 namespace Ookii.Dialogs.Wpf.Sample
 {
@@ -24,7 +24,7 @@ namespace Ookii.Dialogs.Wpf.Sample
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ProgressDialog _sampleProgressDialog = new ProgressDialog()
+        private readonly ProgressDialog _sampleProgressDialog = new ProgressDialog()
             {
                 WindowTitle = "Progress dialog sample",
                 Text = "This is a sample progress dialog...",

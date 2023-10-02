@@ -15,8 +15,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -26,7 +24,7 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class ExpandButtonClickedEventArgs : EventArgs
     {
-        private bool _expanded;
+        private readonly bool _expanded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpandButtonClickedEventArgs"/> class with the specified expanded state.

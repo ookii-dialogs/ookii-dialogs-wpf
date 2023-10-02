@@ -16,15 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Security.Permissions;
+using System.ComponentModel;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -52,7 +51,7 @@ namespace Ookii.Dialogs.Wpf
     public partial class CredentialDialog : Component
     {
         private string _confirmTarget;
-        private NetworkCredential _credentials = new NetworkCredential();
+        private readonly NetworkCredential _credentials = new NetworkCredential();
         private byte[] _additionalEntropy;
         private BOOL _isSaveChecked;
         private string _target;

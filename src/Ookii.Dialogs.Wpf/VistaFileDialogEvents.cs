@@ -20,7 +20,7 @@ namespace Ookii.Dialogs.Wpf
 {
     class VistaFileDialogEvents : IFileDialogEvents, IFileDialogControlEvents
     {
-        private VistaFileDialog _dialog;
+        private readonly VistaFileDialog _dialog;
 
         public VistaFileDialogEvents(VistaFileDialog dialog)
         {

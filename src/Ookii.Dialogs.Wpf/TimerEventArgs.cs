@@ -15,8 +15,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -26,7 +24,7 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class TimerEventArgs : EventArgs
     {
-        private int _tickCount;
+        private readonly int _tickCount;
         private bool _resetTickCount;
 
         /// <summary>

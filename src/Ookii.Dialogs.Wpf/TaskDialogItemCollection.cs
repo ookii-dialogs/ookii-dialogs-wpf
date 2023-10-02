@@ -15,8 +15,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections.ObjectModel;
 
 namespace Ookii.Dialogs.Wpf
@@ -28,7 +26,7 @@ namespace Ookii.Dialogs.Wpf
     /// <threadsafety instance="false" static="true" />
     public class TaskDialogItemCollection<T> : Collection<T> where T : TaskDialogItem
     {
-        private TaskDialog _owner;
+        private readonly TaskDialog _owner;
 
         internal TaskDialogItemCollection(TaskDialog owner)
         {
