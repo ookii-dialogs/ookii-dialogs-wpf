@@ -303,9 +303,10 @@ namespace Ookii.Dialogs.Wpf
         private unsafe bool RunDialogDownlevel(HWND owner)
         {
             IntPtr resultItemIdList = IntPtr.Zero;
-            if (NativeMethods.SHGetSpecialFolderLocation(owner, (int)RootFolder, out ITEMIDLIST* rootItemIdList) != HRESULT.S_OK)
+            ITEMIDLIST* rootItemIdList;
+            if (NativeMethods.SHGetSpecialFolderLocation(owner, (int)RootFolder, &rootItemIdList) != HRESULT.S_OK)
             {
-                if (NativeMethods.SHGetSpecialFolderLocation(owner, 0, out rootItemIdList) != 0)
+                if (NativeMethods.SHGetSpecialFolderLocation(owner, 0, &rootItemIdList) != 0)
                 {
                     throw new InvalidOperationException(Properties.Resources.FolderBrowserDialogNoRootFolder);
                 }
