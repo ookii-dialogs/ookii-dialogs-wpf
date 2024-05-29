@@ -25,7 +25,7 @@ namespace Ookii.Dialogs.Wpf
         // Private data
         private nuint _cookie;
         private static ACTCTXW _enableThemingActivationContext;
-        private static SafeFileHandle _activationContext;
+        private static ReleaseActCtxSafeHandle _activationContext;
         private static bool _contextCreationSucceeded;
         private static readonly object _contextCreationLock = new object();
 

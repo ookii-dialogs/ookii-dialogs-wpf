@@ -76,7 +76,7 @@ namespace Ookii.Dialogs.Wpf
 
         internal FreeLibrarySafeHandle LoadLibrary()
         {
-            var handle = NativeMethods.LoadLibraryEx(ResourceFile, default, Windows.Win32.System.LibraryLoader.LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
+            var handle = NativeMethods.LoadLibraryEx(ResourceFile, Windows.Win32.System.LibraryLoader.LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
             if( handle.IsInvalid )
             {
                 int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
