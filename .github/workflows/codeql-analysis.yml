@@ -16,7 +16,7 @@ jobs:
   analyse:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4.1.5
+      - uses: actions/checkout@v4.1.7
         with:
           fetch-depth: 2
       - uses: github/codeql-action/init@v3
