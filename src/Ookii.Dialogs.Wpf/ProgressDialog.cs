@@ -149,7 +149,7 @@ namespace Ookii.Dialogs.Wpf
                 unsafe
                 {
                     if (_dialog != null)
-                        _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                        _dialog.SetLine(1, Text, UseCompactPathsForText);
                 }
             }
         }
@@ -181,7 +181,7 @@ namespace Ookii.Dialogs.Wpf
                 unsafe
                 {
                     if ( _dialog != null )
-                    _dialog.SetLine(1, Text, UseCompactPathsForText, default);
+                    _dialog.SetLine(1, Text, UseCompactPathsForText);
                 }
             }
         }
@@ -212,7 +212,7 @@ namespace Ookii.Dialogs.Wpf
                 unsafe
                 {
                     if (_dialog != null)
-                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                        _dialog.SetLine(2, Description, UseCompactPathsForDescription);
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace Ookii.Dialogs.Wpf
                 unsafe
                 {
                     if (_dialog != null)
-                        _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                        _dialog.SetLine(2, Description, UseCompactPathsForDescription);
                 }
             }
         }
@@ -772,9 +772,9 @@ namespace Ookii.Dialogs.Wpf
                 _dialog.SetAnimation(_currentAnimationModuleHandle, (ushort)Animation.ResourceId);
 
             if( CancellationText.Length > 0 )
-                _dialog.SetCancelMsg(CancellationText, null);
-            _dialog.SetLine(1, Text, UseCompactPathsForText, default);
-            _dialog.SetLine(2, Description, UseCompactPathsForDescription, default);
+                _dialog.SetCancelMsg(CancellationText);
+            _dialog.SetLine(1, Text, UseCompactPathsForText);
+            _dialog.SetLine(2, Description, UseCompactPathsForDescription);
 
             uint flags = NativeMethods.PROGDLG_NORMAL;
             if( owner != IntPtr.Zero )
