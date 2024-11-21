@@ -32,7 +32,7 @@ namespace Ookii.Dialogs.Wpf.Interop
 
         public Win32Resources(string module)
         {
-            _moduleHandle = NativeMethods.LoadLibraryEx(module, default, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
+            _moduleHandle = NativeMethods.LoadLibraryEx(module, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE);
             if (_moduleHandle.IsInvalid)
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
         }
