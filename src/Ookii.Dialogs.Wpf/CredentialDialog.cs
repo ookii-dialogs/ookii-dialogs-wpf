@@ -674,7 +674,7 @@ namespace Ookii.Dialogs.Wpf
             if (cred != null)
                 return cred;
 
-            var result = NativeMethods.CredRead(target, (uint)CRED_TYPE.CRED_TYPE_GENERIC, 0, out var credential);
+            var result = NativeMethods.CredRead(target, (uint)CRED_TYPE.CRED_TYPE_GENERIC, out var credential);
             int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
             if (result)
             {
@@ -759,7 +759,7 @@ namespace Ookii.Dialogs.Wpf
                 found = _applicationInstanceCredentialCache.Remove(target);
             }
 
-            if (NativeMethods.CredDelete(target, (uint)CRED_TYPE.CRED_TYPE_GENERIC, 0))
+            if (NativeMethods.CredDelete(target, (uint)CRED_TYPE.CRED_TYPE_GENERIC))
             {
                 found = true;
             }
@@ -805,7 +805,7 @@ namespace Ookii.Dialogs.Wpf
             Password.AsSpan().CopyTo(pwSpan);
             WIN32_ERROR result;
             fixed (BOOL* b = &_isSaveChecked)
-                result = (WIN32_ERROR)NativeMethods.CredUIPromptForCredentials(info, Target, ref Unsafe.AsRef<SecHandle>((void*)0), 0, ref userSpan, NativeMethods.CREDUI_MAX_USERNAME_LENGTH, ref pwSpan, NativeMethods.CREDUI_MAX_PASSWORD_LENGTH, b, flags);
+                result = (WIN32_ERROR)NativeMethods.CredUIPromptForCredentials(info, Target, 0, ref userSpan, NativeMethods.CREDUI_MAX_USERNAME_LENGTH, ref pwSpan, NativeMethods.CREDUI_MAX_PASSWORD_LENGTH, b, flags);
 
             switch (result)
             {
