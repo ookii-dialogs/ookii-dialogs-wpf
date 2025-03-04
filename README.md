@@ -84,11 +84,11 @@ The `Ookii.Dialogs.Wpf.VistaOpenFileDialog`, `Ookii.Dialogs.Wpf.VistaSaveFileDia
 
 The classes have been designed to resemble the original WPF classes to make it easy to switch. When the classes are used on Windows XP, they will automatically fall back to the old style dialog; this is also true for the `VistaFolderBrowserDialog`; that class provides a complete implementation of a folder browser dialog for WPF, old as well as new style.
 
-## .NET Core 3.1 & .NET 5 pre-requisites **before** Ookii.Dialogs.Wpf v3.1.0
+## .NET 5 pre-requisites **before** Ookii.Dialogs.Wpf v3.1.0
 
-> **NOTE: Starting with Ookii.Dialogs.Wpf v3.1.0 an app.manifest is no longer required when using in .NET 5 or .NET Core 3.1 apps**
+> **NOTE: Starting with Ookii.Dialogs.Wpf v3.1.0 an app.manifest is no longer required when using in .NET 5 apps**
 
-Ookii Dialogs leverages the components and visual styles of the Windows Common Controls library (`comctl32.dll`), and WPF applications targeting .NET Core 3.1 and/or .NET 5 must add an [application manifest](https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests) (`app.manifest`) to their projects with a reference to `Microsoft.Windows.Common-Controls`.
+Ookii Dialogs leverages the components and visual styles of the Windows Common Controls library (`comctl32.dll`), and WPF applications targeting .NET 5 must add an [application manifest](https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests) (`app.manifest`) to their projects with a reference to `Microsoft.Windows.Common-Controls`.
 
 Without the application manifest, you'll get an error with a message similar to the below:
 
