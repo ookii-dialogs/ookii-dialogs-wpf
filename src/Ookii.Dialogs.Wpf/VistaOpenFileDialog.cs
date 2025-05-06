@@ -238,8 +238,7 @@ namespace Ookii.Dialogs.Wpf
             if( ShowReadOnly )
             {
                 IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
-                uint selected;
-                customize.GetSelectedControlItem(_openDropDownId, &selected);
+                customize.GetSelectedControlItem(_openDropDownId, out var selected);
                 _readOnlyChecked = (selected == _readOnlyItemId);
             }
 
